@@ -221,7 +221,7 @@ export default function Sidebar({
   const isActive = (p) => location.pathname === p;
 
   return (
-    <aside className={`sidebar ${isOpen ? "open" : ""}`}>
+    <aside className={`sidebar ${isOpen ? "active" : ""}`}>
       {/* Close button */}
       <button
         className="sidebar-close"
