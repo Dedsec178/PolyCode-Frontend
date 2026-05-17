@@ -50,24 +50,11 @@ export default function CategoryPage({ selectedLanguage }) {
         <span className="active-path">{formatCategory(category)}</span>
       </nav>
 
-      <div style={{ marginBottom: "64px" }}>
-        <h1
-          className="page-title"
-          style={{
-            fontSize: "clamp(3rem, 6vw, 5rem)",
-            fontWeight: 800,
-            letterSpacing: "-0.02em",
-            lineHeight: 1.1,
-            color: "#fff",
-            marginBottom: "8px",
-          }}
-        >
+      <div className="page-header-block">
+        <h1 className="page-title page-title-hero">
           {formatCategory(category)}
         </h1>
-        <p
-          className="page-subtitle"
-          style={{ fontSize: "0.9rem", color: "var(--txt-2)" }}
-        >
+        <p className="page-subtitle" style={{ marginBottom: 0 }}>
           {total > 0 ? `${total} technical archives in this domain` : "\u00A0"}
         </p>
       </div>
@@ -87,35 +74,16 @@ export default function CategoryPage({ selectedLanguage }) {
 
           {/* Pagination */}
           {total > LIMIT && (
-            <div
-              style={{
-                display: "flex",
-                gap: "8px",
-                justifyContent: "center",
-                marginTop: "32px",
-              }}
-            >
+            <div className="search-pagination" style={{ marginTop: "32px" }}>
               {Array.from(
                 { length: Math.ceil(total / LIMIT) },
                 (_, i) => i + 1,
               ).map((p) => (
                 <button
                   key={p}
+                  type="button"
+                  className={`page-btn-num ${p === page ? "active" : ""}`}
                   onClick={() => setPage(p)}
-                  style={{
-                    padding: "8px 14px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    border:
-                      p === page
-                        ? "1px solid var(--accent)"
-                        : "1px solid var(--border)",
-                    background:
-                      p === page ? "rgba(0,212,255,0.1)" : "var(--bg-card)",
-                    color:
-                      p === page ? "var(--accent)" : "var(--text-secondary)",
-                    fontFamily: "Sora, sans-serif",
-                  }}
                 >
                   {p}
                 </button>

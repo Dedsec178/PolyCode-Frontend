@@ -90,19 +90,9 @@ export default function MarkdownRenderer({
 
       {relatedCode && relatedCode.length > 0 && (
         <div className="related-code-section">
-          <div style={{ textAlign: 'left', marginBottom: '40px', paddingLeft: '20px', borderLeft: '4px solid var(--accent)' }}>
-            <span style={{
-              fontSize: '0.75rem',
-              color: 'var(--text-muted)',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.2em',
-              display: 'block',
-              marginBottom: '8px'
-            }}>
-              Core Implementation
-            </span>
-            <h2 style={{ fontSize: '1.6rem', margin: 0, fontWeight: 800 }}>
+          <div className="related-code-intro">
+            <span className="related-code-label">Core Implementation</span>
+            <h2>
               {relatedCode.length === 1 ? 'Source Code Reference' : 'Integrated Logic Modules'}
             </h2>
           </div>
@@ -113,13 +103,8 @@ export default function MarkdownRenderer({
               const codeLang = normalizeDocLanguage(rawLang);
               const ext = extensionFromLanguage(codeLang);
               return (
-                <div key={index} className="related-code-item" style={{ marginBottom: '32px' }}>
-                  <div style={{
-                    background: 'rgba(5, 8, 16, 0.5)',
-                    border: '1px solid var(--border)',
-                    padding: '0',
-                    borderRadius: 'var(--radius)'
-                  }}>
+                <div key={index} className="related-code-item">
+                  <div className="related-code-wrap">
                     <CodeBlock
                       language={codeLang}
                       code={codeDoc.content}

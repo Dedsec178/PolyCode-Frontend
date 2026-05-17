@@ -101,7 +101,7 @@ export default function LanguageSelectPage({ onLanguageSelect, continueLanguage 
       {/* ── Language Selection Grid ── */}
       <section>
         <div className="section-header" style={{ justifyContent: 'center', marginBottom: '30px' }}>
-          <span className="section-title" style={{ fontSize: '1.2rem', color: 'var(--txt-1)' }}>Choose Your Stack</span>
+          <span className="section-title stack-picker-section-title" style={{ fontSize: '1.2rem' }}>Choose Your Stack</span>
         </div>
 
         <div className="lang-grid">

@@ -58,6 +58,7 @@
 }
 
 :root[data-theme='light'] {
+  --bg: #f1f5f9;
   --ink: #f1f5f9;
   --ink-2: #ffffff;
   --ink-3: #f8fafc;
@@ -1390,6 +1391,114 @@ body {
   font-weight: 300;
 }
 
+.page-title-hero {
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--txt-0);
+  margin-bottom: 8px;
+}
+
+.page-header-block {
+  margin-bottom: 64px;
+}
+
+.search-page-form {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 64px;
+  flex-wrap: wrap;
+}
+
+.search-page-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 16px 24px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--txt-0);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-page-input:focus {
+  border-color: var(--acid);
+  box-shadow: 0 0 0 3px var(--acid-dim);
+}
+
+.search-page-input::placeholder {
+  color: var(--txt-3);
+}
+
+.search-page-select {
+  padding: 16px 24px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--txt-0);
+  font-family: var(--font-mono);
+  outline: none;
+  cursor: pointer;
+}
+
+.search-page-meta {
+  margin-bottom: 20px;
+  color: var(--txt-2);
+  font-size: 0.9rem;
+}
+
+.search-page-meta strong {
+  color: var(--acid);
+}
+
+.search-page-meta .query-text {
+  color: var(--txt-0);
+}
+
+.search-page-empty {
+  text-align: center;
+  padding: 60px;
+  color: var(--txt-2);
+}
+
+.search-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 64px;
+  flex-wrap: wrap;
+}
+
+.search-page-btn-round {
+  border-radius: 12px;
+}
+
+.page-btn-num {
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--txt-2);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  transition: all 0.15s;
+}
+
+.page-btn-num:hover {
+  color: var(--txt-0);
+  border-color: var(--border-2);
+}
+
+.page-btn-num.active {
+  border-color: var(--acid);
+  background: var(--acid-dim);
+  color: var(--acid);
+}
+
 /* ══════════════════════════════════════════════
    DIVIDER
 ══════════════════════════════════════════════ */
@@ -1802,8 +1911,39 @@ body {
   border: 1px solid var(--border);
 }
 
+.related-code-intro {
+  text-align: left;
+  margin-bottom: 40px;
+  padding-left: 20px;
+  border-left: 4px solid var(--accent);
+}
+
+.related-code-label {
+  font-size: 0.75rem;
+  color: var(--txt-3);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.related-code-intro h2 {
+  font-size: 1.6rem;
+  margin: 0;
+  font-weight: 800;
+  color: var(--txt-0);
+}
+
+.related-code-wrap {
+  background: rgba(5, 8, 16, 0.5);
+  border: 1px solid var(--border);
+  padding: 0;
+  border-radius: var(--radius);
+}
+
 .related-code-item {
-  margin-bottom: 52px;
+  margin-bottom: 32px;
 }
 
 .related-code-item:last-child {
@@ -2392,10 +2532,16 @@ body {
   letter-spacing: -0.04em;
   line-height: 1.1;
   margin-bottom: 20px;
+  color: var(--txt-0);
+}
+
+/* Gradient title only in dark mode (light mode uses solid text) */
+.app:not(.theme-light) .doc-header h1 {
   background: linear-gradient(to bottom, #fff, #aaa);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .doc-badge-row {

@@ -331,6 +331,25 @@ textarea {
   scrollbar-color: rgba(15, 23, 42, 0.18) #f1f5f9;
 }
 
+:root[data-theme="light"] .auth-page {
+  background: var(--ink, #f1f5f9);
+}
+
+:root[data-theme="light"] .auth-card {
+  background: var(--ink-2, #ffffff);
+  border-color: var(--border, rgba(15, 23, 42, 0.1));
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+}
+
+:root[data-theme="light"] .auth-field input:focus {
+  border-color: #047857;
+  box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.15);
+}
+
+:root[data-theme="light"] .auth-link {
+  color: #047857;
+}
+
 /* User avatar button */
 .navbar-user {
   position: relative;
