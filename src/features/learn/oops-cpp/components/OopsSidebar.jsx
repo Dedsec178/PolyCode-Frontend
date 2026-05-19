@@ -1,0 +1,94 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CHAPTERS } from "../data/oopsCurriculum";
+
+export default function OopsSidebar({ currentLessonId, progress }) {
+  const navigate = useNavigate();
+  const [collapsed, setCollapsed] = useState(false);
+
+  // Which chapters are expanded — default: expand current chapter
+  const currentChapter = CHAPTERS.find((ch) =>
+    ch.lessons.some((l) => l.id === currentLessonId),
+  );
+  const [expanded, setExpanded] = useState(
+    () => new Set(currentChapter ? [currentChapter.id] : []),
+  );
+
+  function toggleChapter(id) {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  return (
+    <aside
+      className={`oops-sidebar ${collapsed ? "oops-sidebar-collapsed" : ""}`}
+    >
+      <div className="oops-sidebar-header">
+        {!collapsed && <span className="oops-sidebar-title">OOP in C++</span>}
+        <button
+          className="oops-sidebar-toggle"
+          onClick={() => setCollapsed(!collapsed)}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? "›" : "‹"}
+        </button>
+      </div>
+
+      {!collapsed && (
+        <nav className="oops-sidebar-nav">
+          {CHAPTERS.map((ch) => {
+            const isOpen = expanded.has(ch.id);
+            const doneLessons = ch.lessons.filter((l) => progress[l.id]).length;
+            const allDone = doneLessons === ch.lessons.length;
+
+            return (
+              <div key={ch.id} className="oops-sidebar-chapter">
+                <button
+                  className={`oops-sidebar-chapter-btn ${allDone ? "done" : ""}`}
+                  style={{ "--ch-color": ch.color }}
+                  onClick={() => toggleChapter(ch.id)}
+                >
+                  <span className="oops-sb-icon">{ch.icon}</span>
+                  <span className="oops-sb-title">{ch.title}</span>
+                  <span className="oops-sb-count">
+                    {doneLessons}/{ch.lessons.length}
+                  </span>
+                  <span className="oops-sb-caret">{isOpen ? "▾" : "▸"}</span>
+                </button>
+
+                {isOpen && (
+                  <ul className="oops-sidebar-lessons">
+                    {ch.lessons.map((l) => {
+                      const isDone = !!progress[l.id];
+                      const isCurrent = l.id === currentLessonId;
+                      return (
+                        <li key={l.id}>
+                          <button
+                            className={`oops-sidebar-lesson-btn ${isDone ? "done" : ""} ${isCurrent ? "current" : ""}`}
+                            style={{ "--ch-color": ch.color }}
+                            onClick={() => navigate(`/learn/oops-cpp/${l.id}`)}
+                          >
+                            <span className="oops-sb-check">
+                              {isDone ? "✓" : "○"}
+                            </span>
+                            <span>{l.title}</span>
+                            {!isDone && (
+                              <span className="oops-sb-xp">+{l.xp}</span>
+                            )}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+            );
+          })}
+        </nav>
+      )}
+    </aside>
+  );
+}
