@@ -2,6 +2,11 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import { executeCode, resolveEngine } from "../services/BrowserExecutor";
 import { STARTERS } from "../constants/playgroundStarters";
+import {
+  definePolycodeMonacoTheme,
+  getVSCodeEditorOptions,
+  POLYCODE_VSCODE_THEME,
+} from "../../../shared/utils/monacoTheme";
 import "./CodePlayground.css";
 
 // ── Language selector groups ──────────────────────────────────────────────────
@@ -216,8 +221,6 @@ export default function CodePlayground({
   const langInfo = resolveEngine(language);
   const isServerBased = langInfo.engine === "server";
   const hasPreview = previewHTML !== null;
-  const isLightTheme = theme === "light";
-
   return (
     <div className="playground-root">
       {/* ── Toolbar ── */}
@@ -359,27 +362,13 @@ export default function CodePlayground({
               height="100%"
               language={langInfo.mono}
               value={code}
+              beforeMount={definePolycodeMonacoTheme}
               onChange={(v) => updateWorkspace(language, { code: v || "" })}
-              theme={isLightTheme ? "vs" : "vs-dark"}
+              theme={POLYCODE_VSCODE_THEME}
               key={`editor-${theme}-${language}`}
               options={{
+                ...getVSCodeEditorOptions({ fontSize, wordWrap }),
                 fontSize,
-                fontFamily:
-                  "'JetBrains Mono','Fira Code','Cascadia Code',monospace",
-                fontLigatures: true,
-                minimap: { enabled: false },
-                scrollBeyondLastLine: false,
-                wordWrap: wordWrap ? "on" : "off",
-                lineNumbers: "on",
-                renderLineHighlight: "gutter",
-                bracketPairColorization: { enabled: true },
-                guides: { bracketPairs: true },
-                smoothScrolling: true,
-                cursorBlinking: "smooth",
-                cursorSmoothCaretAnimation: "on",
-                tabSize: 2,
-                automaticLayout: true,
-                padding: { top: 16, bottom: 16 },
               }}
             />
           </div>

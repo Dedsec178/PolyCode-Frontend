@@ -37,7 +37,7 @@ export default function useOopsProgress() {
 
   useEffect(() => {
     let cancelled = false;
-
+    console.log(localVersion, "refreshing local");
     if (!token) {
       setRemoteProgress(null);
       setSyncState("local");
@@ -60,27 +60,27 @@ export default function useOopsProgress() {
     return () => {
       cancelled = true;
     };
-  }, [token]);
+  }, [token, localVersion]);
 
   const completedMap = useMemo(() => {
     if (remoteProgress) return progressToMap(remoteProgress);
     return readJson(LOCAL_KEY, {});
-  }, [remoteProgress, localVersion]);
+  }, [remoteProgress]);
 
   const savedCodeMap = useMemo(() => {
     if (remoteProgress) return savedCodeToMap(remoteProgress);
     return readJson(LOCAL_CODE_KEY, {});
-  }, [remoteProgress, localVersion]);
+  }, [remoteProgress]);
 
   const notesMap = useMemo(() => {
     if (remoteProgress) return notesToMap(remoteProgress);
     return readJson(LOCAL_NOTES_KEY, {});
-  }, [remoteProgress, localVersion]);
+  }, [remoteProgress]);
 
   const bookmarks = useMemo(() => {
     if (remoteProgress) return remoteProgress.bookmarks || [];
     return readJson(LOCAL_BOOKMARKS_KEY, []);
-  }, [remoteProgress, localVersion]);
+  }, [remoteProgress]);
 
   const lastLessonId = remoteProgress
     ? remoteProgress.lastLessonId

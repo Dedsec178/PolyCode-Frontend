@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from "react";
+import Editor from "@monaco-editor/react";
+import {
+  definePolycodeMonacoTheme,
+  getVSCodeEditorOptions,
+  POLYCODE_VSCODE_THEME,
+} from "../../../../shared/utils/monacoTheme";
 
 export default function CodeChallenge({
   challenge,
@@ -149,20 +155,26 @@ export default function CodeChallenge({
           </div>
         </div>
 
-        <textarea
-          className="oops-editor"
-          value={showSolution ? challenge.solutionCode : code}
-          onChange={(e) => {
-            if (!showSolution) {
-              setCode(e.target.value);
-              onCodeChange?.(e.target.value);
-            }
-          }}
-          readOnly={showSolution}
-          spellCheck={false}
-          autoComplete="off"
-          autoCorrect="off"
-        />
+        <div className="oops-editor">
+          <Editor
+            height="100%"
+            language="cpp"
+            value={showSolution ? challenge.solutionCode : code}
+            beforeMount={definePolycodeMonacoTheme}
+            theme={POLYCODE_VSCODE_THEME}
+            onChange={(value) => {
+              if (!showSolution) {
+                const nextCode = value || "";
+                setCode(nextCode);
+                onCodeChange?.(nextCode);
+              }
+            }}
+            options={getVSCodeEditorOptions({
+              fontSize: 14,
+              readOnly: showSolution,
+            })}
+          />
+        </div>
 
         {/* Run bar */}
         <div className="oops-run-bar">
