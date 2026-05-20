@@ -15,6 +15,36 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <script>
+      (function () {
+        var resizeObserverLoopMessages = [
+          "ResizeObserver loop completed with undelivered notifications.",
+          "ResizeObserver loop limit exceeded",
+        ];
+
+        window.addEventListener(
+          "error",
+          function (event) {
+            if (resizeObserverLoopMessages.indexOf(event.message) !== -1) {
+              event.stopImmediatePropagation();
+            }
+          },
+          true,
+        );
+
+        window.addEventListener(
+          "unhandledrejection",
+          function (event) {
+            var reason = event.reason || {};
+            var message = reason.message || String(reason);
+            if (resizeObserverLoopMessages.indexOf(message) !== -1) {
+              event.preventDefault();
+            }
+          },
+          true,
+        );
+      })();
+    </script>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.

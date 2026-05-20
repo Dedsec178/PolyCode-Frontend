@@ -12,14 +12,14 @@ window.addEventListener("error", (event) => {
   if (resizeObserverLoopMessages.includes(event.message)) {
     event.stopImmediatePropagation();
   }
-});
+}, true);
 
 window.addEventListener("unhandledrejection", (event) => {
   const message = event.reason?.message || String(event.reason || "");
   if (resizeObserverLoopMessages.includes(message)) {
     event.preventDefault();
   }
-});
+}, true);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
