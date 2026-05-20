@@ -60,7 +60,8 @@ export default function CodeChallenge({
         );
         const passed = solutionKeywords.every((kw) =>
           typeof kw === "string"
-            ? code.includes(kw)
+            ? code.includes(kw) ||
+              code.replace(/\s+/g, "").includes(kw.replace(/\s+/g, ""))
             : kw?.pattern
               ? new RegExp(kw.pattern, kw.flags || "").test(code)
               : true,
@@ -283,10 +284,15 @@ export default function CodeChallenge({
 
   function collectKnownValues(source) {
     const values = new Map();
+    const arrays = new Map();
     const declarations =
       /\b(?:string|int|double|float|char|bool|auto)\s+([A-Za-z_]\w*)\s*=\s*("[^"]*"|'[^']*'|[-+]?\d+(?:\.\d+)?|true|false)/g;
+    const arrayDeclarations =
+      /\b(?:int|double|float|char|bool|string)\s+([A-Za-z_]\w*)\s*\[\s*\]\s*=\s*\{([^}]*)\}/g;
     const pointerDeclarations =
-      /\b(?:int|double|float|char|bool|string)\s*\*\s*([A-Za-z_]\w*)\s*=\s*(nullptr|&\s*[A-Za-z_]\w*)/g;
+      /\b(?:int|double|float|char|bool|string)\s*\*\s*([A-Za-z_]\w*)\s*=\s*(nullptr|&\s*[A-Za-z_]\w*|[A-Za-z_]\w*)/g;
+    const newPointerDeclarations =
+      /\b(?:int|double|float|char|bool|string)\s*\*\s*([A-Za-z_]\w*)\s*=\s*new\s+(?:int|double|float|char|bool|string)\s*\(([^)]*)\)/g;
     const pointerAssignments =
       /(^|[^\w*])([A-Za-z_]\w*)\s*=\s*&\s*([A-Za-z_]\w*)/gm;
     const memberAssignments =
@@ -297,13 +303,28 @@ export default function CodeChallenge({
     for (const match of source.matchAll(declarations)) {
       values.set(match[1], cleanLiteral(match[2]));
     }
+    for (const match of source.matchAll(arrayDeclarations)) {
+      const arrayName = match[1];
+      const items = splitArgs(match[2]).map((item) => cleanLiteral(item));
+      arrays.set(arrayName, items);
+      items.forEach((item, index) => {
+        values.set(`${arrayName}[${index}]`, item);
+      });
+    }
     for (const match of source.matchAll(pointerDeclarations)) {
       const pointerName = match[1];
       const target = match[2].replace(/&\s*/, "").trim();
       values.set(pointerName, match[2].trim());
-      if (target !== "nullptr" && values.has(target)) {
+      if (arrays.has(target)) {
+        values.set(`@array:${pointerName}`, target);
+      } else if (target !== "nullptr" && values.has(target)) {
         values.set(`*${pointerName}`, values.get(target));
       }
+    }
+    for (const match of source.matchAll(newPointerDeclarations)) {
+      const pointerName = match[1];
+      values.set(pointerName, "heap allocation");
+      values.set(`*${pointerName}`, cleanLiteral(match[2]));
     }
     for (const match of source.matchAll(pointerAssignments)) {
       const pointerName = match[2];
@@ -335,6 +356,15 @@ export default function CodeChallenge({
       return cleanLiteral(token);
     }
     if (/^[-+]?\d+(\.\d+)?$/.test(token)) return token;
+    const pointerArrayAccess = token.match(
+      /^\*\s*\(\s*([A-Za-z_]\w*)\s*\+\s*(\d+)\s*\)$/,
+    );
+    if (pointerArrayAccess) {
+      const [, pointerName, index] = pointerArrayAccess;
+      const arrayName = values.get(`@array:${pointerName}`);
+      const arrayValue = values.get(`${arrayName}[${index}]`);
+      if (arrayValue !== undefined) return arrayValue;
+    }
     if (values.has(token)) return values.get(token);
     return "";
   }

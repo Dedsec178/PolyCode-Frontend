@@ -472,7 +472,11 @@ int main() {
 }`,
           tests: [
             { id: 1, label: "new allocates an int", keywords: ["new int"] },
-            { id: 2, label: "Pointer is dereferenced for output", keywords: ["cout", "*value"] },
+            {
+              id: 2,
+              label: "Pointer is dereferenced for output",
+              keywords: ["cout", { pattern: "<<\\s*\\*\\s*[A-Za-z_]\\w*" }],
+            },
             { id: 3, label: "delete releases memory", keywords: ["delete"] },
             { id: 4, label: "Pointer is reset to nullptr", keywords: ["nullptr"] },
           ],
