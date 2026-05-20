@@ -209,6 +209,7 @@ export default function ProfilePage() {
     Object.keys(pointers.completedMap).length;
   const totalLessons = ALL_LESSONS.length + POINTER_LESSONS.length;
   const totalPct = Math.round((totalCompleted / totalLessons) * 100) || 0;
+  const totalStreak = oops.remoteProgress?.currentStreak || 0;
   const [activityWidth, setActivityWidth] = React.useState(0);
   const activityWrapRef = React.useRef(null);
   const activityDayCount = getResponsiveActivityDays(activityWidth);
@@ -239,8 +240,8 @@ export default function ProfilePage() {
           <p>{user?.email || "Progress is saved locally on this device."}</p>
         </div>
         <div className="profile-total-progress">
-          <span>Total Progress</span>
-          <strong>{totalPct}%</strong>
+          <span>Current Streak</span>
+          <strong>{totalStreak} days</strong>
         </div>
       </section>
 
@@ -260,8 +261,8 @@ export default function ProfilePage() {
           <strong>{pointers.bookmarks.length}</strong>
         </div>
         <div>
-          <span>OOPs Streak</span>
-          <strong>{oops.remoteProgress?.currentStreak || 0} days</strong>
+          <span>Total Progress</span>
+          <strong>{totalPct}%</strong>
         </div>
       </section>
 
