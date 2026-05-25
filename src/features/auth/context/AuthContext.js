@@ -8,7 +8,11 @@ import React, {
 
 const AuthContext = createContext(null);
 
-const API = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API = (
+  process.env.REACT_APP_API_URL || "http://localhost:5000/api"
+)
+  .trim()
+  .replace(/\/$/, "");
 
 async function readApiResponse(res, fallbackMessage) {
   const text = await res.text();
@@ -48,12 +52,13 @@ export function AuthProvider({ children }) {
         const data = await res.json();
         setUser(data.user);
       } else {
-        // Token invalid / expired
         localStorage.removeItem("token");
         setToken(null);
+        setUser(null);
       }
     } catch {
-      // Network error — keep token but clear user
+      // Backend unreachable — treat as signed out for UI until /auth/me succeeds
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -104,9 +109,19 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
+  const isAuthenticated = !loading && Boolean(user && token);
+
   return (
     <AuthContext.Provider
-      value={{ user, token, loading, login, register, logout }}
+      value={{
+        user,
+        token,
+        loading,
+        isAuthenticated,
+        login,
+        register,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

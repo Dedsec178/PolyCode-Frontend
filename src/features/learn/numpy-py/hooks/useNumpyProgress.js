@@ -16,25 +16,27 @@ function readJson(key, fallback) {
 }
 
 export default function useNumpyProgress() {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [, setLocalVersion] = useState(0);
   const refreshLocal = useCallback(() => setLocalVersion((v) => v + 1), []);
 
-  const completedMap = readJson(LOCAL_KEY, {});
-  const savedCodeMap = readJson(LOCAL_CODE_KEY, {});
+  const localCompletedMap = readJson(LOCAL_KEY, {});
+  const completedMap = isAuthenticated ? localCompletedMap : {};
+  const savedCodeMap = isAuthenticated ? readJson(LOCAL_CODE_KEY, {}) : {};
   const notesMap = readJson(LOCAL_NOTES_KEY, {});
   const bookmarks = readJson(LOCAL_BOOKMARKS_KEY, []);
   const lastLessonId = localStorage.getItem(LOCAL_LAST_KEY);
 
   const completeLesson = useCallback(
     async (lesson) => {
+      if (!isAuthenticated) return;
       const current = readJson(LOCAL_KEY, {});
       current[lesson.id] = { xp: lesson.xp, at: Date.now() };
       localStorage.setItem(LOCAL_KEY, JSON.stringify(current));
       localStorage.setItem(LOCAL_LAST_KEY, lesson.id);
       refreshLocal();
     },
-    [refreshLocal],
+    [isAuthenticated, refreshLocal],
   );
 
   const rememberLesson = useCallback(
@@ -47,12 +49,13 @@ export default function useNumpyProgress() {
 
   const saveCode = useCallback(
     async (lessonId, code) => {
+      if (!isAuthenticated) return;
       const current = readJson(LOCAL_CODE_KEY, {});
       current[lessonId] = code;
       localStorage.setItem(LOCAL_CODE_KEY, JSON.stringify(current));
       refreshLocal();
     },
-    [refreshLocal],
+    [isAuthenticated, refreshLocal],
   );
 
   const saveNote = useCallback(
@@ -81,7 +84,8 @@ export default function useNumpyProgress() {
 
   return {
     user,
-    syncState: "local",
+    isAuthenticated,
+    syncState: isAuthenticated ? "local" : "guest",
     remoteProgress: null,
     completedMap,
     savedCodeMap,

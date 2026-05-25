@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import Editor from "@monaco-editor/react";
+import { useAuth } from "../../../auth/context/AuthContext";
 import { executeCode } from "../../../playground/services/BrowserExecutor";
 import {
   definePolycodeMonacoTheme,
@@ -124,6 +126,9 @@ export default function PythonCodeChallenge({
   initialCode,
   onCodeChange,
 }) {
+  const { loading: authLoading, isAuthenticated } = useAuth();
+  const canRun = isAuthenticated && !authLoading;
+
   const [code, setCode] = useState(initialCode || challenge.starterCode);
   const [results, setResults] = useState(null);
   const [output, setOutput] = useState(null);
@@ -151,7 +156,7 @@ export default function PythonCodeChallenge({
   }, [challenge.id, challenge.starterCode, initialCode]);
 
   function runTests() {
-    if (running || showSolution) return;
+    if (!canRun || running || showSolution) return;
 
     setRunning(true);
     setResults(null);
@@ -262,7 +267,7 @@ export default function PythonCodeChallenge({
 
   function handleEditorMount(editor, monaco) {
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-      runTestsRef.current?.();
+      if (canRun) runTestsRef.current?.();
     });
   }
 
@@ -279,13 +284,33 @@ export default function PythonCodeChallenge({
       <div className="oops-problem-panel">
         <div className="oops-problem-header">
           <h3 className="oops-problem-title">{challenge.title}</h3>
-          {isCompleted && (
+          {canRun && isCompleted && (
             <span className="oops-problem-solved" style={{ color: accentColor }}>
               ✓ Solved
             </span>
           )}
         </div>
         <p className="oops-problem-desc">{challenge.description}</p>
+
+        {!canRun && (
+          <div className="oops-auth-gate">
+            <p>
+              You can write code in the editor. Sign in or create an account to
+              run, submit, save progress, and mark lessons complete.
+            </p>
+            <div className="oops-auth-gate-actions">
+              <Link to="/login" className="oops-auth-gate-btn">
+                Sign in
+              </Link>
+              <Link
+                to="/signup"
+                className="oops-auth-gate-btn oops-auth-gate-btn-primary"
+              >
+                Sign up
+              </Link>
+            </div>
+          </div>
+        )}
 
         <div className="oops-test-cases">
           <div className="oops-test-cases-label">Acceptance Tests</div>
@@ -339,6 +364,7 @@ export default function PythonCodeChallenge({
               type="button"
               className="oops-editor-action"
               onClick={() => setShowSolution(!showSolution)}
+              disabled={!canRun}
             >
               {showSolution ? "Hide Solution" : "💡 Solution"}
             </button>
@@ -357,7 +383,7 @@ export default function PythonCodeChallenge({
               if (!showSolution) {
                 const next = value || "";
                 setCode(next);
-                onCodeChange?.(next);
+                if (isAuthenticated) onCodeChange?.(next);
               }
             }}
             options={getVSCodeEditorOptions({
@@ -382,9 +408,20 @@ export default function PythonCodeChallenge({
             className="oops-run-btn"
             style={{ "--accent": accentColor }}
             onClick={runTests}
-            disabled={running || showSolution}
+            disabled={!canRun || running || showSolution}
+            title={
+              !canRun
+                ? "Sign in or sign up to run and submit"
+                : undefined
+            }
           >
-            {running ? "⟳ Running…" : "▶ Run & Submit"}
+            {authLoading
+              ? "Checking sign-in…"
+              : running
+                ? "⟳ Running…"
+                : canRun
+                  ? "▶ Run & Submit"
+                  : "Sign in to run & submit"}
           </button>
         </div>
       </div>

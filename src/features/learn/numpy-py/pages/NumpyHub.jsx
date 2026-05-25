@@ -20,7 +20,12 @@ export default function NumpyHub() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
-  const { completedMap: progress, bookmarks, lastLessonId } = useNumpyProgress();
+  const {
+    isAuthenticated,
+    completedMap: progress,
+    bookmarks,
+    lastLessonId,
+  } = useNumpyProgress();
 
   const completedCount = Object.keys(progress).length;
   const earnedXP = NUMPY_LESSONS.filter((lesson) => progress[lesson.id]).reduce(
@@ -81,18 +86,46 @@ export default function NumpyHub() {
           <div className="oops-xp-bar-wrap">
             <div className="oops-xp-meta">
               <span>
-                {completedCount}/{NUMPY_LESSONS.length} lessons · {earnedXP}/
-                {NUMPY_TOTAL_XP} XP
+                {isAuthenticated
+                  ? `${completedCount}/${NUMPY_LESSONS.length} lessons · ${earnedXP}/${NUMPY_TOTAL_XP} XP`
+                  : `Sign in to track progress · ${NUMPY_LESSONS.length} lessons`}
               </span>
-              <span>{pct}%</span>
+              <span>{isAuthenticated ? `${pct}%` : "—"}</span>
             </div>
             <div className="oops-xp-track">
-              <div className="oops-xp-fill" style={{ width: `${pct}%` }} />
+              <div
+                className="oops-xp-fill"
+                style={{ width: isAuthenticated ? `${pct}%` : "0%" }}
+              />
             </div>
           </div>
 
+          {!isAuthenticated && (
+            <div className="oops-auth-gate oops-auth-gate-hub">
+              <p>
+                Create a free account to run challenges, earn XP, and save your
+                place in the course.
+              </p>
+              <div className="oops-auth-gate-actions">
+                <Link to="/login" className="oops-auth-gate-btn">
+                  Sign in
+                </Link>
+                <Link
+                  to="/signup"
+                  className="oops-auth-gate-btn oops-auth-gate-btn-primary"
+                >
+                  Sign up
+                </Link>
+              </div>
+            </div>
+          )}
+
           <div className="oops-resume-panel">
-            <span className="oops-sync-pill">Progress saved on this device</span>
+            <span className="oops-sync-pill">
+              {isAuthenticated
+                ? "Progress saved to your account"
+                : "Browse lessons — sign in to save progress"}
+            </span>
             <h2>{resumeLesson.title}</h2>
             <p>
               {resumeLesson.chapterTitle} · {resumeLesson.xp} XP

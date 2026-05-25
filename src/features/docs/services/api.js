@@ -1,7 +1,9 @@
 import axios from "axios";
 import { toDocumentApiPath } from "../../../shared/utils/docPaths";
 
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API_BASE = (process.env.REACT_APP_API_URL || "http://localhost:5000/api")
+  .trim()
+  .replace(/\/$/, "");
 
 // ── In-memory cache with TTL ──────────────────────────────────────────────────
 const cache = new Map();

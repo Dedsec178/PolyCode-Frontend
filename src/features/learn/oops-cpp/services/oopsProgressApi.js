@@ -1,4 +1,6 @@
-const API = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API = (process.env.REACT_APP_API_URL || "http://localhost:5000/api")
+  .trim()
+  .replace(/\/$/, "");
 
 async function request(path, token, options = {}) {
   const res = await fetch(`${API}/auth/learn/oops-cpp/progress${path}`, {

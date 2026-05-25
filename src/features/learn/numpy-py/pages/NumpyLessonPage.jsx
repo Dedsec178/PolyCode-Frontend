@@ -59,6 +59,7 @@ export default function NumpyLessonPage() {
   const [confidence, setConfidence] = useState("");
   const {
     user,
+    isAuthenticated,
     completedMap: progress,
     savedCodeMap,
     notesMap,
@@ -125,7 +126,7 @@ export default function NumpyLessonPage() {
     );
   }
 
-  const isCompleted = !!progress[lessonId];
+  const isCompleted = isAuthenticated && !!progress[lessonId];
   const isBookmarked = bookmarks.includes(lessonId);
   const completedCount = Object.keys(progress).length;
   const earnedXP = NUMPY_LESSONS.filter((item) => progress[item.id]).reduce(
@@ -197,7 +198,11 @@ export default function NumpyLessonPage() {
           <LearnProfileMenu
             user={user}
             trackTitle="NumPy · py"
-            syncLabel="NumPy progress saved locally"
+            syncLabel={
+              isAuthenticated
+                ? "NumPy progress saved to your account"
+                : "Sign in to save progress"
+            }
             completedCount={completedCount}
             totalLessons={NUMPY_LESSONS.length}
             earnedXP={earnedXP}
