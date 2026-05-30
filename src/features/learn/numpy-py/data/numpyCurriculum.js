@@ -17,11 +17,28 @@ export const NUMPY_CHAPTERS = [
             type: "text",
             content:
               "**NumPy** (say: “num-pie”) is a free Python tool for working with **lots of numbers at once**. If you ever add up test scores, daily steps, or prices in a list — NumPy makes that fast and easy.",
+            code: {
+              lang: "python",
+              label: "Add 500 steps to each day in one line",
+              content: `import numpy as np
+
+steps = np.array([4000, 5200, 6100])
+print(steps + 500)   # every day gets +500`,
+            },
           },
           {
             type: "text",
             content:
               "The main thing NumPy gives you is an **ndarray** (a number array). Think of it like a neat row or table of numbers — not mixed with text, just numbers ready for math.",
+            code: {
+              lang: "python",
+              label: "A small table: rows = students, columns = subjects",
+              content: `import numpy as np
+
+grades = np.array([[78, 85],
+                   [92, 88]])
+print(grades.shape)   # (2, 2) = 2 rows, 2 columns`,
+            },
           },
           {
             type: "diagram",
@@ -46,25 +63,6 @@ export const NUMPY_CHAPTERS = [
                 items: ["Data science", "Machine learning basics"],
               },
             ],
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "Add 500 steps to each day in one line",
-            content: `import numpy as np
-
-steps = np.array([4000, 5200, 6100])
-print(steps + 500)   # every day gets +500`,
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "A small table: rows = students, columns = subjects",
-            content: `import numpy as np
-
-grades = np.array([[78, 85],
-                   [92, 88]])
-print(grades.shape)   # (2, 2) = 2 rows, 2 columns`,
           },
           {
             type: "callout",
@@ -129,11 +127,27 @@ print(temps + 3)`,
             type: "text",
             content:
               "A Python **list** can hold anything: numbers, words, even other lists. That's flexible — but when you only have numbers and want to do math on hundreds of them, lists get slow and wordy.",
+            code: {
+              lang: "python",
+              label: "List way — write a loop",
+              content: `numbers = [1, 2, 3, 4]
+doubled = [n * 2 for n in numbers]
+print(doubled)   # [2, 4, 6, 8]`,
+            },
           },
           {
             type: "text",
             content:
               "A NumPy **array** is like a dedicated number box: same type, stored together, built for speed. One line like `numbers * 2` doubles every value — no loop needed.",
+            code: {
+              lang: "python",
+              label: "NumPy way — one line, no loop",
+              content: `import numpy as np
+
+numbers = np.array([1, 2, 3, 4])
+doubled = numbers * 2
+print(doubled)   # [2 4 6 8]`,
+            },
           },
           {
             type: "callout",
@@ -158,24 +172,6 @@ print(temps + 3)`,
                 items: ["Numbers of one type", "Math on the whole group", "Fast for big data"],
               },
             ],
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "List way — write a loop",
-            content: `numbers = [1, 2, 3, 4]
-doubled = [n * 2 for n in numbers]
-print(doubled)   # [2, 4, 6, 8]`,
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "NumPy way — one line, no loop",
-            content: `import numpy as np
-
-numbers = np.array([1, 2, 3, 4])
-doubled = numbers * 2
-print(doubled)   # [2 4 6 8]`,
           },
           {
             type: "callout",
@@ -234,12 +230,16 @@ print(arr)`,
           {
             type: "text",
             content:
-              "Every NumPy array has a **shape** — how many rows and columns it has. `[10, 20, 30]` has shape `(3,)` (three numbers in a row). A table of grades might have shape `(5, 4)` — five students, four subjects.",
-          },
-          {
-            type: "text",
-            content:
-              "**dtype** tells you what kind of number is inside: whole numbers (`int64`), decimals (`float64`), or True/False (`bool`). You don't need to memorize names — just know each array picks one type.",
+              "Every NumPy array has a **shape** — how many rows and columns it has. `[10, 20, 30]` has shape `(3,)` (three numbers in a row). A table of grades might have shape `(5, 4)` — five students, four subjects. **dtype** tells you what kind of number is inside: whole numbers (`int64`), decimals (`float64`), or True/False (`bool`).",
+            code: {
+              lang: "python",
+              label: "Check shape and dtype",
+              content: `import numpy as np
+
+scores = np.array([88, 92, 75, 100, 85])
+print(scores.shape)   # (5,) — five scores
+print(scores.dtype)   # usually int64`,
+            },
           },
           {
             type: "diagram",
@@ -260,30 +260,65 @@ print(arr)`,
             ],
           },
           {
-            type: "code",
-            lang: "python",
-            label: "Check shape and dtype",
-            content: `import numpy as np
-
-scores = np.array([88, 92, 75, 100, 85])
-print(scores.shape)   # (5,) — five scores
-print(scores.dtype)   # usually int64`,
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "Add 5 to every score — no loop",
-            content: `import numpy as np
+            type: "text",
+            content:
+              "**Vector math** means doing one math action on a **whole row of numbers at once**. Picture five test scores: instead of adding 5 points to each score in a slow loop, you add 5 to the entire row in one go. That row of numbers is called a **vector** — just a fancy word for an ordered list of numbers.",
+            code: {
+              lang: "python",
+              label: "Add a number to every score — no loop",
+              content: `import numpy as np
 
 scores = np.array([88, 92, 75, 100, 85])
 print(scores + 5)     # each score + 5
 print(scores * 2)     # each score doubled`,
+            },
+          },
+          {
+            type: "text",
+            content:
+              "In NumPy, a 1D array **is** your vector. Write `scores + 5` and NumPy adds 5 to **every** score. Write `a + b` when both arrays are the same length, and NumPy adds matching pairs: first + first, second + second, and so on. Same idea works for `-`, `*`, and `/` — that's **element-wise** (or **vectorized**) math.",
+            code: {
+              lang: "python",
+              label: "Add two arrays — same length, pair by pair",
+              content: `import numpy as np
+
+monday = np.array([4000, 5200, 6100])    # steps each day
+tuesday = np.array([4500, 4800, 5900])
+total = monday + tuesday                 # pair by pair
+print(total)   # [8500 10000 12000]`,
+            },
+          },
+          {
+            type: "diagram",
+            title: "Vector math in NumPy",
+            nodes: [
+              {
+                id: "idea",
+                label: "What vector math means",
+                color: "#6366f1",
+                items: [
+                  "One operation on many numbers",
+                  "No for-loop needed",
+                  "Like filling a whole Excel column at once",
+                ],
+              },
+              {
+                id: "numpy",
+                label: "How NumPy does it",
+                color: "#4f46e5",
+                items: [
+                  "scores + 5 → add 5 to each score",
+                  "scores * 2 → double every score",
+                  "a + b → add matching pairs (same length)",
+                ],
+              },
+            ],
           },
           {
             type: "callout",
             variant: "tip",
             content:
-              "When you write `scores + 5`, NumPy adds 5 to **every** score at once. That one-line trick is called **vectorization** — and it's why NumPy feels like magic.",
+              "When you write `scores + 5` or `a + b`, NumPy applies the math to **every** element at once. That one-line trick is called **vectorization** — and it's why NumPy feels like magic compared to writing loops.",
           },
           {
             type: "quiz",
@@ -291,6 +326,19 @@ print(scores * 2)     # each score doubled`,
             options: ["(3, 1)", "(3,)", "(1, 3)", "3 alone with no comma"],
             answer: 1,
             explanation: "A 1D array of length 3 has shape `(3,)`. The comma means 'one dimension'.",
+          },
+          {
+            type: "quiz",
+            question: "What does `np.array([2, 4, 6]) + np.array([1, 1, 1])` give you?",
+            options: [
+              "One single number: 15",
+              "[3, 5, 7] — each pair added",
+              "An error — you can't add arrays",
+              "[2, 4, 6, 1, 1, 1] — glued together",
+            ],
+            answer: 1,
+            explanation:
+              "NumPy adds matching positions: 2+1, 4+1, 6+1 → [3, 5, 7]. Both arrays must be the same length.",
           },
         ],
         challenge: {
