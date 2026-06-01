@@ -87,7 +87,7 @@ export const languageCourses = {
       description:
         "ndarray basics, shape, dtype, vector math, and hands-on Python challenges with NumPy.",
       href: "/learn/numpy-py",
-      accent: "#4dabcf",
+      accent: "#4dabdc",
     },
     {
       title: "Pandas · py",

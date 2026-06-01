@@ -128,7 +128,10 @@ export default function NumpyLessonPage() {
   }
 
   const isCompleted = isAuthenticated && !!progress[lessonId];
-  const isIntroChapter = lesson.chapterId === "intro";
+  const useFriendlyTheory =
+    lesson.chapterId === "intro" ||
+    lesson.chapterId === "creation" ||
+    lesson.chapterId === "indexing";
   const isBookmarked = bookmarks.includes(lessonId);
   const completedCount = Object.keys(progress).length;
   const earnedXP = NUMPY_LESSONS.filter((item) => progress[item.id]).reduce(
@@ -233,7 +236,7 @@ export default function NumpyLessonPage() {
 
         <div className="oops-lesson-content">
           {tab === "theory" ? (
-            isIntroChapter ? (
+            useFriendlyTheory ? (
               <NumpyIntroTheory
                 lesson={lesson}
                 noteDraft={noteDraft}

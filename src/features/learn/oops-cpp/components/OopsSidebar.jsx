@@ -9,6 +9,7 @@ export default function OopsSidebar({
   chapters = CHAPTERS,
   basePath = "/learn/oops-cpp",
   title = "OOP in C++",
+  brandLogo = null,
 }) {
   const navigate = useNavigate();
   const { menuOpen, closeMenu } = useLearnNav();
@@ -42,7 +43,11 @@ export default function OopsSidebar({
       }`}
     >
       <div className="oops-sidebar-header">
-        {!collapsed && <span className="oops-sidebar-title">{title}</span>}
+        {!collapsed && brandLogo ? (
+          <div className="oops-sidebar-brand">{brandLogo}</div>
+        ) : (
+          !collapsed && <span className="oops-sidebar-title">{title}</span>
+        )}
         <button
           type="button"
           className="oops-sidebar-close-mobile"

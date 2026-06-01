@@ -7337,6 +7337,33 @@ body {
 
 /* ── NumPy Chapter 1 — friendly theory layout ───────────────── */
 
+.oops-sidebar-brand {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.numpy-hub .numpy-hero {
+  background:
+    linear-gradient(135deg, rgba(77, 119, 207, 0.18), transparent 48%),
+    linear-gradient(180deg, rgba(85, 193, 231, 0.08), transparent 60%),
+    var(--vscode-panel, #252526);
+}
+
+.numpy-hub .oops-hero-accent {
+  color: #4dabdc;
+}
+
+.numpy-hub .numpy-hero::before {
+  background: radial-gradient(
+    circle,
+    rgba(77, 171, 207, 0.1) 0%,
+    transparent 70%
+  );
+}
+
 .numpy-intro-theory {
   max-width: 780px;
   margin: 0 auto;
@@ -7359,7 +7386,7 @@ body {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--numpy-accent, #818cf8);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .numpy-lesson-title {
@@ -7449,6 +7476,20 @@ body {
   line-height: 1.7;
   color: var(--txt-1, #c0c8e0);
   margin: 0;
+}
+
+.numpy-concept-card .numpy-step-text {
+  margin-bottom: 0;
+}
+
+.numpy-concept-code {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.numpy-concept-code .numpy-code-caption {
+  margin-bottom: 8px;
 }
 
 .numpy-inline-code {

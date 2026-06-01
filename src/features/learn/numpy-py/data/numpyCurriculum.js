@@ -17,11 +17,28 @@ export const NUMPY_CHAPTERS = [
             type: "text",
             content:
               "**NumPy** (say: “num-pie”) is a free Python tool for working with **lots of numbers at once**. If you ever add up test scores, daily steps, or prices in a list — NumPy makes that fast and easy.",
+            code: {
+              lang: "python",
+              label: "Add 500 steps to each day in one line",
+              content: `import numpy as np
+
+steps = np.array([4000, 5200, 6100])
+print(steps + 500)   # every day gets +500`,
+            },
           },
           {
             type: "text",
             content:
               "The main thing NumPy gives you is an **ndarray** (a number array). Think of it like a neat row or table of numbers — not mixed with text, just numbers ready for math.",
+            code: {
+              lang: "python",
+              label: "A small table: rows = students, columns = subjects",
+              content: `import numpy as np
+
+grades = np.array([[78, 85],
+                   [92, 88]])
+print(grades.shape)   # (2, 2) = 2 rows, 2 columns`,
+            },
           },
           {
             type: "diagram",
@@ -46,25 +63,6 @@ export const NUMPY_CHAPTERS = [
                 items: ["Data science", "Machine learning basics"],
               },
             ],
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "Add 500 steps to each day in one line",
-            content: `import numpy as np
-
-steps = np.array([4000, 5200, 6100])
-print(steps + 500)   # every day gets +500`,
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "A small table: rows = students, columns = subjects",
-            content: `import numpy as np
-
-grades = np.array([[78, 85],
-                   [92, 88]])
-print(grades.shape)   # (2, 2) = 2 rows, 2 columns`,
           },
           {
             type: "callout",
@@ -129,11 +127,27 @@ print(temps + 3)`,
             type: "text",
             content:
               "A Python **list** can hold anything: numbers, words, even other lists. That's flexible — but when you only have numbers and want to do math on hundreds of them, lists get slow and wordy.",
+            code: {
+              lang: "python",
+              label: "List way — write a loop",
+              content: `numbers = [1, 2, 3, 4]
+doubled = [n * 2 for n in numbers]
+print(doubled)   # [2, 4, 6, 8]`,
+            },
           },
           {
             type: "text",
             content:
               "A NumPy **array** is like a dedicated number box: same type, stored together, built for speed. One line like `numbers * 2` doubles every value — no loop needed.",
+            code: {
+              lang: "python",
+              label: "NumPy way — one line, no loop",
+              content: `import numpy as np
+
+numbers = np.array([1, 2, 3, 4])
+doubled = numbers * 2
+print(doubled)   # [2 4 6 8]`,
+            },
           },
           {
             type: "callout",
@@ -158,24 +172,6 @@ print(temps + 3)`,
                 items: ["Numbers of one type", "Math on the whole group", "Fast for big data"],
               },
             ],
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "List way — write a loop",
-            content: `numbers = [1, 2, 3, 4]
-doubled = [n * 2 for n in numbers]
-print(doubled)   # [2, 4, 6, 8]`,
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "NumPy way — one line, no loop",
-            content: `import numpy as np
-
-numbers = np.array([1, 2, 3, 4])
-doubled = numbers * 2
-print(doubled)   # [2 4 6 8]`,
           },
           {
             type: "callout",
@@ -234,12 +230,16 @@ print(arr)`,
           {
             type: "text",
             content:
-              "Every NumPy array has a **shape** — how many rows and columns it has. `[10, 20, 30]` has shape `(3,)` (three numbers in a row). A table of grades might have shape `(5, 4)` — five students, four subjects.",
-          },
-          {
-            type: "text",
-            content:
-              "**dtype** tells you what kind of number is inside: whole numbers (`int64`), decimals (`float64`), or True/False (`bool`). You don't need to memorize names — just know each array picks one type.",
+              "Every NumPy array has a **shape** — how many rows and columns it has. `[10, 20, 30]` has shape `(3,)` (three numbers in a row). A table of grades might have shape `(5, 4)` — five students, four subjects. **dtype** tells you what kind of number is inside: whole numbers (`int64`), decimals (`float64`), or True/False (`bool`).",
+            code: {
+              lang: "python",
+              label: "Check shape and dtype",
+              content: `import numpy as np
+
+scores = np.array([88, 92, 75, 100, 85])
+print(scores.shape)   # (5,) — five scores
+print(scores.dtype)   # usually int64`,
+            },
           },
           {
             type: "diagram",
@@ -260,30 +260,65 @@ print(arr)`,
             ],
           },
           {
-            type: "code",
-            lang: "python",
-            label: "Check shape and dtype",
-            content: `import numpy as np
-
-scores = np.array([88, 92, 75, 100, 85])
-print(scores.shape)   # (5,) — five scores
-print(scores.dtype)   # usually int64`,
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "Add 5 to every score — no loop",
-            content: `import numpy as np
+            type: "text",
+            content:
+              "**Vector math** means doing one math action on a **whole row of numbers at once**. Picture five test scores: instead of adding 5 points to each score in a slow loop, you add 5 to the entire row in one go. That row of numbers is called a **vector** — just a fancy word for an ordered list of numbers.",
+            code: {
+              lang: "python",
+              label: "Add a number to every score — no loop",
+              content: `import numpy as np
 
 scores = np.array([88, 92, 75, 100, 85])
 print(scores + 5)     # each score + 5
 print(scores * 2)     # each score doubled`,
+            },
+          },
+          {
+            type: "text",
+            content:
+              "In NumPy, a 1D array **is** your vector. Write `scores + 5` and NumPy adds 5 to **every** score. Write `a + b` when both arrays are the same length, and NumPy adds matching pairs: first + first, second + second, and so on. Same idea works for `-`, `*`, and `/` — that's **element-wise** (or **vectorized**) math.",
+            code: {
+              lang: "python",
+              label: "Add two arrays — same length, pair by pair",
+              content: `import numpy as np
+
+monday = np.array([4000, 5200, 6100])    # steps each day
+tuesday = np.array([4500, 4800, 5900])
+total = monday + tuesday                 # pair by pair
+print(total)   # [8500 10000 12000]`,
+            },
+          },
+          {
+            type: "diagram",
+            title: "Vector math in NumPy",
+            nodes: [
+              {
+                id: "idea",
+                label: "What vector math means",
+                color: "#6366f1",
+                items: [
+                  "One operation on many numbers",
+                  "No for-loop needed",
+                  "Like filling a whole Excel column at once",
+                ],
+              },
+              {
+                id: "numpy",
+                label: "How NumPy does it",
+                color: "#4f46e5",
+                items: [
+                  "scores + 5 → add 5 to each score",
+                  "scores * 2 → double every score",
+                  "a + b → add matching pairs (same length)",
+                ],
+              },
+            ],
           },
           {
             type: "callout",
             variant: "tip",
             content:
-              "When you write `scores + 5`, NumPy adds 5 to **every** score at once. That one-line trick is called **vectorization** — and it's why NumPy feels like magic.",
+              "When you write `scores + 5` or `a + b`, NumPy applies the math to **every** element at once. That one-line trick is called **vectorization** — and it's why NumPy feels like magic compared to writing loops.",
           },
           {
             type: "quiz",
@@ -291,6 +326,19 @@ print(scores * 2)     # each score doubled`,
             options: ["(3, 1)", "(3,)", "(1, 3)", "3 alone with no comma"],
             answer: 1,
             explanation: "A 1D array of length 3 has shape `(3,)`. The comma means 'one dimension'.",
+          },
+          {
+            type: "quiz",
+            question: "What does `np.array([2, 4, 6]) + np.array([1, 1, 1])` give you?",
+            options: [
+              "One single number: 15",
+              "[3, 5, 7] — each pair added",
+              "An error — you can't add arrays",
+              "[2, 4, 6, 1, 1, 1] — glued together",
+            ],
+            answer: 1,
+            explanation:
+              "NumPy adds matching positions: 2+1, 4+1, 6+1 → [3, 5, 7]. Both arrays must be the same length.",
           },
         ],
         challenge: {
@@ -349,32 +397,190 @@ print(result.shape)`,
           {
             type: "text",
             content:
-              "This lesson will show how to build arrays with `np.array()`. Full lesson content is coming soon.",
+              "You already know **Python lists** — great for mixing names, numbers, and text. But when your data is **only numbers** (scores, prices, sensor readings), staying on a plain list makes math awkward: Python does not add a number to **every** item in one step.",
+            code: {
+              lang: "python",
+              label: "List problem — you need a loop for simple math",
+              content: `scores = [88, 92, 75, 100]
+
+# scores + 5  → TypeError! Can't add int to whole list
+
+boosted = [s + 5 for s in scores]   # loop required
+print(boosted)   # [93, 97, 80, 105]`,
+            },
+          },
+          {
+            type: "text",
+            content:
+              "That is why we **convert** a list with **`np.array()`**. Same numbers, but now they live in an **ndarray** — one type, stored together, built for fast **vector math** (add, multiply, or divide the whole row at once).",
+            code: {
+              lang: "python",
+              label: "Convert once, then math without a loop",
+              content: `import numpy as np
+
+scores = [88, 92, 75, 100]
+arr = np.array(scores)   # list → ndarray
+
+print(arr + 5)   # [93 97 80 105] — every score + 5
+print(arr * 2)   # [176 184 150 200] — every score doubled`,
+            },
+          },
+          {
+            type: "diagram",
+            title: "Why convert with np.array()?",
+            nodes: [
+              {
+                id: "list",
+                label: "Python list",
+                color: "#f43f5e",
+                items: [
+                  "Flexible (any types)",
+                  "Loops for numeric math",
+                  "Slower on large data",
+                ],
+              },
+              {
+                id: "ndarray",
+                label: "After np.array()",
+                color: "#4f46e5",
+                items: [
+                  "Numbers of one type",
+                  "Math on the whole array",
+                  "Much faster at scale",
+                ],
+              },
+            ],
+          },
+          {
+            type: "text",
+            content:
+              "The most common way to make a NumPy array is **`np.array()`**. Pass it a Python list (or lists inside lists) and NumPy turns it into a fast **ndarray** — ready for math.",
+            code: {
+              lang: "python",
+              label: "Turn a list into a 1D array",
+              content: `import numpy as np
+
+scores = [88, 92, 75, 100]
+arr = np.array(scores)
+print(arr)          # [ 88  92  75 100]
+print(type(arr))    # <class 'numpy.ndarray'>`,
+            },
+          },
+          {
+            type: "text",
+            content:
+              "Nest lists to build a **2D table** — like rows of students and columns of subjects. NumPy stores it as one array with shape `(rows, columns)`.",
+            code: {
+              lang: "python",
+              label: "Build a 2×3 grade table",
+              content: `import numpy as np
+
+grades = np.array([[78, 85, 90],
+                   [92, 88, 95]])
+print(grades)
+print(grades.shape)   # (2, 3) = 2 rows, 3 columns`,
+            },
+          },
+          {
+            type: "diagram",
+            title: "Ways to fill np.array()",
+            nodes: [
+              {
+                id: "1d",
+                label: "1D array",
+                color: "#6366f1",
+                items: ["One flat list", "Like a single row of numbers", "shape (5,) for 5 items"],
+              },
+              {
+                id: "2d",
+                label: "2D array",
+                color: "#4f46e5",
+                items: ["List of lists", "Rows and columns", "shape (2, 3) for 2×3 table"],
+              },
+            ],
+          },
+          {
+            type: "text",
+            content:
+              "You can also tell NumPy the **dtype** when you create the array — for example `float64` for decimals or `int32` for smaller whole numbers. If you skip it, NumPy picks a sensible default.",
+            code: {
+              lang: "python",
+              label: "Create floats from whole numbers",
+              content: `import numpy as np
+
+prices = np.array([10, 20, 30], dtype=float)
+print(prices)       # [10. 20. 30.]
+print(prices.dtype) # float64`,
+            },
+          },
+          {
+            type: "callout",
+            variant: "info",
+            content:
+              "**Rule of thumb:** keep a **list** when data is small or mixed (names + ages). Use **`np.array(your_list)`** when you have lots of numbers and want quick math without writing loops.",
+          },
+          {
+            type: "callout",
+            variant: "tip",
+            content:
+              "Always start with `import numpy as np`. Then `np.array(your_list)` is the go-to when you already have data in Python lists.",
+          },
+          {
+            type: "quiz",
+            question: "Why convert `[10, 20, 30]` with `np.array()` before doing math?",
+            options: [
+              "Lists cannot store integers",
+              "ndarrays allow math on every element at once, without a loop",
+              "np.array() sorts the numbers automatically",
+              "Python lists are read-only",
+            ],
+            answer: 1,
+            explanation:
+              "A list holds values, but NumPy arrays are built for fast element-wise math on the whole group.",
+          },
+          {
+            type: "quiz",
+            question: "What does `np.array([[1, 2], [3, 4]]).shape` return?",
+            options: ["(4,)", "(2, 2)", "(2,)", "4"],
+            answer: 1,
+            explanation: "Two rows and two columns → shape `(2, 2)`.",
           },
         ],
         challenge: {
-          title: "Coming Soon",
+          title: "Build a 1D Array",
           description:
-            "This challenge will be added when the lesson content is ready.",
-          starterCode: `# Lesson content coming soon
+            "Import NumPy as `np`, create `arr = np.array([5, 10, 15, 20])`, and print `arr` and `arr.shape`.",
+          starterCode: `import numpy as np
+
+# Create arr and print arr and arr.shape
 
 `,
           solutionCode: `import numpy as np
 
-arr = np.array([1, 2, 3])
-print(arr)`,
+arr = np.array([5, 10, 15, 20])
+print(arr)
+print(arr.shape)`,
           tests: [
             {
               id: 1,
               label: "Uses np.array",
-              hint: "np.array([1, 2, 3])",
+              hint: "np.array([5, 10, 15, 20])",
               keywords: [{ pattern: "np\\.array\\s*\\(" }],
             },
             {
               id: 2,
               label: "Prints the array",
               hint: "print(arr)",
-              keywords: [{ pattern: "print\\s*\\(" }],
+              keywords: [{ pattern: "print\\s*\\(\\s*arr\\s*\\)" }],
+            },
+            {
+              id: 3,
+              label: "Prints shape",
+              hint: "print(arr.shape)",
+              keywords: [
+                { pattern: "arr\\.shape" },
+                { pattern: "print\\s*\\(" },
+              ],
             },
           ],
         },
@@ -387,37 +593,123 @@ print(arr)`,
           {
             type: "text",
             content:
-              "Need evenly spaced numbers? **`np.arange(start, stop, step)`** is like a timeline with fixed steps — but **stop is exclusive** (like Python ranges). **`np.linspace(start, stop, num)`** picks exactly `num` points **including both endpoints**.",
+              "In the last lesson, **`np.array()`** was for numbers you **already have** — like typing `[5, 10, 15, 20]` by hand. But what if you need **many numbers in a pattern** and do not want to type them all? That is when **`np.arange`** and **`np.linspace`** help — they **generate** the sequence for you.",
+            code: {
+              lang: "python",
+              label: "np.array() — you supply every number",
+              content: `import numpy as np
+
+# You already know the values → use np.array()
+hours = np.array([0, 2, 4, 6, 8])
+print(hours)`,
+            },
           },
           {
-            type: "code",
-            lang: "python",
-            label: "arange — step-based",
-            content: `import numpy as np
+            type: "text",
+            content:
+              "**`np.arange(start, stop, step)`** is like **`range()`**, but it gives you a NumPy array. You pick where to start, where to stop, and the **gap** between numbers. The **stop value is left out** — same rule as Python `range()`.",
+            code: {
+              lang: "python",
+              label: "Generate 0, 2, 4, 6, 8 — no typing each number",
+              content: `import numpy as np
 
-# 0, 2, 4, 6, 8  (10 is excluded)
-print(np.arange(0, 10, 2))`,
+# Same as [0, 2, 4, 6, 8] but generated automatically
+steps = np.arange(0, 10, 2)
+print(steps)   # [0 2 4 6 8]  (10 is excluded)`,
+            },
           },
           {
-            type: "code",
-            lang: "python",
-            label: "linspace — count-based",
-            content: `import numpy as np
+            type: "text",
+            content:
+              "**`np.linspace(start, stop, num)`** picks exactly **`num`** evenly spaced values **including both ends**. Use it when you care about **how many points** you want between two numbers — perfect for smooth charts.",
+            code: {
+              lang: "python",
+              label: "Five values from 0.0 to 1.0 — both ends included",
+              content: `import numpy as np
 
-# 5 evenly spaced values from 0.0 to 1.0 inclusive
-print(np.linspace(0, 1, 5))
+points = np.linspace(0, 1, 5)
+print(points)
 # [0.   0.25 0.5  0.75 1.  ]`,
+            },
+          },
+          {
+            type: "diagram",
+            title: "Which one should I use?",
+            nodes: [
+              {
+                id: "array",
+                label: "np.array()",
+                color: "#10b981",
+                items: [
+                  "You already have the numbers",
+                  "Small, fixed lists",
+                  "Example: test scores [88, 92, 75]",
+                ],
+              },
+              {
+                id: "arange",
+                label: "np.arange",
+                color: "#6366f1",
+                items: [
+                  "You know the step (gap)",
+                  "Stop value excluded",
+                  "Example: 0, 2, 4, 6, 8",
+                ],
+              },
+              {
+                id: "linspace",
+                label: "np.linspace",
+                color: "#4f46e5",
+                items: [
+                  "You know how many points",
+                  "Both ends included",
+                  "Example: 5 values from 0 to 10",
+                ],
+              },
+            ],
+          },
+          {
+            type: "text",
+            content:
+              "Same goal — get a row of numbers — but different tools. **`np.array()`** copies what you typed. **`arange`** counts by steps. **`linspace`** splits a range into equal pieces.",
+            code: {
+              lang: "python",
+              label: "Three ways to get similar data",
+              content: `import numpy as np
+
+a = np.array([0, 2, 4, 6, 8])      # type them yourself
+b = np.arange(0, 10, 2)            # generate with step 2
+c = np.linspace(0, 8, 5)           # 5 points from 0 to 8
+
+print(a)
+print(b)
+print(c)`,
+            },
           },
           {
             type: "callout",
             variant: "info",
             content:
-              "Use **arange** when you know the step size. Use **linspace** when you know how many points you want — great for plotting smooth curves.",
+              "**Simple pick:** already have data → **`np.array()`**. Need every 2nd or 5th number → **`arange`**. Need exactly 50 points for a graph → **`linspace`**.",
+          },
+          {
+            type: "callout",
+            variant: "tip",
+            content:
+              "Common mistake: expecting `arange(0, 10, 2)` to include 10. It will not. If you need 10 as the last value, use `linspace(0, 10, 6)` instead.",
+          },
+          {
+            type: "quiz",
+            question: "You already wrote `[1, 2, 3, 4, 5]`. Which function fits best?",
+            options: ["np.arange", "np.linspace", "np.array()", "np.zeros"],
+            answer: 2,
+            explanation:
+              "When you already have the full list, `np.array([1, 2, 3, 4, 5])` is the right choice.",
           },
           {
             type: "quiz",
             question: "Which function includes the stop value by default?",
-            options: ["arange", "linspace", "zeros", "reshape"],
+            options: ["arange", "linspace", "np.array", "zeros"],
             answer: 1,
             explanation: "linspace always includes both endpoints; arange excludes stop like range().",
           },
@@ -458,40 +750,166 @@ print(arr)`,
           {
             type: "text",
             content:
-              "Starting a blank **spreadsheet**? Factory functions fill arrays for you: **`zeros`** (all 0s), **`ones`** (all 1s), and **`eye`** (identity matrix — 1s on the diagonal, 0s elsewhere).",
+              "So far you used **`np.array()`** when you already had numbers, and **`arange` / `linspace`** when you wanted a pattern. But sometimes you do **not** have real data yet — you only know the **size** of a table. That is when **`zeros`**, **`ones`**, and **`eye`** help: they **build the shape for you** and fill it with a simple value.",
+            code: {
+              lang: "python",
+              label: "Typing every zero by hand gets old fast",
+              content: `import numpy as np
+
+# 7 days of scores — all empty (0) for now
+week = np.array([0, 0, 0, 0, 0, 0, 0])   # fine for 7 numbers...
+
+# But 100 or 1000 zeros? Use np.zeros instead — one line!`,
+            },
           },
           {
-            type: "code",
-            lang: "python",
-            label: "Blank grids",
-            content: `import numpy as np
+            type: "text",
+            content:
+              "**Why `np.zeros`?** Think of a **blank spreadsheet** — you want the rows and columns ready, then you fill in scores later. **`np.zeros(shape)`** makes that empty grid in one line. Every cell starts at **0**.",
+            code: {
+              lang: "python",
+              label: "A 2×3 blank table (six zeros)",
+              content: `import numpy as np
 
-z = np.zeros((2, 3))   # 2×3 grid of zeros
-o = np.ones(4)         # four ones in a row
-print(z.shape)         # (2, 3)
-print(o)               # [1. 1. 1. 1.]`,
+scores = np.zeros((2, 3))   # 2 rows, 3 columns — all 0.0
+print(scores)
+print(scores.shape)   # (2, 3)`,
+            },
           },
           {
-            type: "code",
-            lang: "python",
-            label: "Identity matrix",
-            content: `import numpy as np
+            type: "text",
+            content:
+              "**Why `np.ones`?** Sometimes you need a starting value of **1** everywhere — like \"each item counts as 1 at first\" or you will multiply later. **`np.ones(shape)`** is the same idea as zeros, but every cell is **1.0**.",
+            code: {
+              lang: "python",
+              label: "Four slots that each start at 1",
+              content: `import numpy as np
 
-i = np.eye(3)
-print(i)
+slots = np.ones(4)
+print(slots)   # [1. 1. 1. 1.]
+
+# Later you might do: slots * 10  → [10. 10. 10. 10.]`,
+            },
+          },
+          {
+            type: "text",
+            content:
+              "**Why `np.eye`?** **`np.eye(n)`** creates a **square** array with **1s on the diagonal** and **0s everywhere else**. It is called an **identity matrix** and is mainly used in advanced mathematics, machine learning, and matrix operations. In simple terms: multiplying by it is like multiplying a number by **1** — the matrix stays the same.",
+            code: {
+              lang: "python",
+              label: "3×3 identity — 1s on the diagonal, 0s elsewhere",
+              content: `import numpy as np
+
+identity = np.eye(3)
+print(identity)
 # [[1. 0. 0.]
 #  [0. 1. 0.]
 #  [0. 0. 1.]]`,
+            },
+          },
+          {
+            type: "diagram",
+            title: "Why would I use these?",
+            nodes: [
+              {
+                id: "zeros",
+                label: "np.zeros",
+                color: "#6366f1",
+                items: [
+                  "Empty table before real data",
+                  "Reset or clear values to 0",
+                  "Example: 5×5 grid to fill in a loop",
+                ],
+              },
+              {
+                id: "ones",
+                label: "np.ones",
+                color: "#8b5cf6",
+                items: [
+                  "Every cell starts at 1",
+                  "Easy to scale later (× 10, × 0.5)",
+                  "Example: default weights",
+                ],
+              },
+              {
+                id: "eye",
+                label: "np.eye",
+                color: "#4f46e5",
+                items: [
+                  "Square matrix only",
+                  "1s on diagonal, 0 elsewhere",
+                  "Example: \"do nothing\" in matrix math",
+                ],
+              },
+            ],
+          },
+          {
+            type: "diagram",
+            title: "Pick the right tool",
+            nodes: [
+              {
+                id: "array",
+                label: "np.array()",
+                color: "#10b981",
+                items: ["You already know every number"],
+              },
+              {
+                id: "arange",
+                label: "arange / linspace",
+                color: "#f59e0b",
+                items: ["You want a number pattern"],
+              },
+              {
+                id: "factory",
+                label: "zeros / ones / eye",
+                color: "#4f46e5",
+                items: ["You only know the shape + fill value"],
+              },
+            ],
+          },
+          {
+            type: "text",
+            content:
+              "Bonus: **`np.full(shape, value)`** fills every cell with **any** number you choose — not just 0 or 1. Handy when you want a whole grid of 7s or -1s.",
+            code: {
+              lang: "python",
+              label: "Every cell is 7",
+              content: `import numpy as np
+
+board = np.full((2, 2), 7)
+print(board)
+# [[7 7]
+#  [7 7]]`,
+            },
+          },
+          {
+            type: "callout",
+            variant: "info",
+            content:
+              "**Remember:** `np.array()` = you type the data. `arange` / `linspace` = generate a sequence. **`zeros` / `ones` / `eye`** = build an empty or starter grid when you only care about **size and fill value**.",
           },
           {
             type: "callout",
             variant: "tip",
             content:
-              "Identity matrices are the 'do nothing' of linear algebra — multiply any matrix by `I` and you get the same matrix back.",
+              "For `zeros` and `ones`, use a **tuple** for 2D: `(rows, cols)` like `(2, 3)`. For 1D, just pass one number: `np.ones(5)`.",
           },
           {
             type: "quiz",
-            question: "Which function creates a matrix with 1s on the diagonal?",
+            question: "You need a 4×4 table of zeros before filling it with sensor data. Best choice?",
+            options: [
+              "np.array([[0,0,...]]) typed by hand",
+              "np.zeros((4, 4))",
+              "np.linspace(0, 0, 16)",
+              "np.eye(4)",
+            ],
+            answer: 1,
+            explanation:
+              "np.zeros((4, 4)) builds the right shape filled with 0 in one line.",
+          },
+          {
+            type: "quiz",
+            question: "Which function creates a matrix with 1s on the diagonal only?",
             options: ["np.ones", "np.zeros", "np.eye", "np.full"],
             answer: 2,
             explanation: "`np.eye(n)` builds an n×n identity matrix.",
@@ -539,47 +957,85 @@ print(m)`,
           {
             type: "text",
             content:
-              "Picture a **pizza cut into a grid**: rows and columns. NumPy slicing works like Python lists — `a[start:stop:step]` — but 2D arrays use `a[row, col]`. Grab a whole row with `a[1, :]` or a whole column with `a[:, 0]`.",
+              "Once you have an array, you rarely need **every** number at once. **Indexing and slicing** let you grab one value, a row, a column, or a piece of a list — just like cutting a slice from a longer list in plain Python.",
+            code: {
+              lang: "python",
+              label: "1D slice — same idea as a Python list",
+              content: `import numpy as np
+
+temps = np.array([68, 72, 75, 80, 65])
+print(temps[0])      # first day → 68
+print(temps[1:4])    # middle days → [72 75 80]
+print(temps[-1])     # last day → 65`,
+            },
+          },
+          {
+            type: "text",
+            content:
+              "A **2D array** is a table (rows and columns). Use **`array[row, col]`** for one cell. Use **`array[row, :]`** for a full row and **`array[:, col]`** for a full column. The **`:`** means \"all\" along that side.",
+            code: {
+              lang: "python",
+              label: "Pick a cell, a row, or a column",
+              content: `import numpy as np
+
+grid = np.array([[10, 20, 30],
+                 [40, 50, 60],
+                 [70, 80, 90]])
+
+print(grid[1, 2])    # row 1, col 2 → 60
+print(grid[1, :])    # whole middle row → [40 50 60]
+print(grid[:, 0])    # first column → [10 40 70]`,
+            },
           },
           {
             type: "diagram",
-            title: "2D indexing",
+            title: "2D indexing cheat sheet",
             nodes: [
               {
                 id: "cell",
-                label: "Single cell",
+                label: "One cell",
                 color: "#8b5cf6",
-                items: ["m[1, 2]", "row 1, col 2"],
+                items: ["grid[1, 2]", "row 1, column 2"],
               },
               {
                 id: "row",
                 label: "Whole row",
                 color: "#6366f1",
-                items: ["m[1, :]", "m[1]"],
+                items: ["grid[1, :]", "or grid[1]"],
               },
               {
                 id: "col",
                 label: "Whole column",
                 color: "#4f46e5",
-                items: ["m[:, 0]", "all rows, col 0"],
+                items: ["grid[:, 0]", "every row, column 0"],
               },
             ],
           },
           {
-            type: "code",
-            lang: "python",
-            label: "Slice rows and columns",
-            content: `import numpy as np
+            type: "text",
+            content:
+              "**Negative indices** count from the end — `-1` is the last row or last item. Handy when you do not want to count how long the array is.",
+            code: {
+              lang: "python",
+              label: "Last row without knowing the size",
+              content: `import numpy as np
 
-m = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-print(m[1, :])   # middle row → [4 5 6]
-print(m[:, 0])   # first column → [1 4 7]`,
+grid = np.array([[1, 2], [3, 4], [5, 6]])
+print(grid[-1])      # last row → [5 6]
+print(grid[-1, 0])   # last row, first col → 5`,
+            },
+          },
+          {
+            type: "callout",
+            variant: "info",
+            content:
+              "Slicing uses **`start:stop`** — the **stop index is left out**, just like Python lists. `temps[0:3]` gives indices 0, 1, 2.",
           },
           {
             type: "callout",
             variant: "tip",
             content:
-              "Negative indices work too! `m[-1]` is the last row, just like Python lists.",
+              "For 2D arrays, always think **row first, then column**: `grid[row, col]`.",
           },
           {
             type: "quiz",
@@ -625,46 +1081,95 @@ print(grid[1])`,
           {
             type: "text",
             content:
-              "A **boolean mask** is a True/False filter — like highlighting only high **game scores** in a spreadsheet. Write a condition (`scores > 90`) and use it inside brackets: `arr[arr > 0]`.",
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "Filter positives",
-            content: `import numpy as np
+              "**Slicing** picks items by **position** (first, second, row 1). A **boolean mask** picks items by a **rule** — like \"only scores above 90\" or \"only even numbers\". You write a True/False test, then put it inside brackets: **`arr[arr > 90]`**.",
+            code: {
+              lang: "python",
+              label: "Keep only values greater than 0",
+              content: `import numpy as np
 
 a = np.array([-1, 3, 0, 7, -2])
 positives = a[a > 0]
-print(positives)  # [3 7]`,
+print(positives)   # [3 7]`,
+            },
           },
           {
-            type: "code",
-            lang: "python",
-            label: "See the mask itself",
-            content: `import numpy as np
+            type: "text",
+            content:
+              "First NumPy builds a **mask** — an array of **True** and **False** (one per element). Then it returns only the values where the mask is **True**. The **original array does not change**.",
+            code: {
+              lang: "python",
+              label: "See the mask, then use it",
+              content: `import numpy as np
 
 scores = np.array([55, 92, 78, 100, 63])
 mask = scores >= 90
-print(mask)              # [False  True False  True False]
-print(scores[mask])      # [ 92 100]`,
+print(mask)           # [False  True False  True False]
+print(scores[mask])   # [ 92 100]`,
+            },
+          },
+          {
+            type: "diagram",
+            title: "Slice vs boolean mask",
+            nodes: [
+              {
+                id: "slice",
+                label: "Slicing",
+                color: "#6366f1",
+                items: [
+                  "By position: [1:4]",
+                  "Fixed rows or columns",
+                  "Example: grid[1, :]",
+                ],
+              },
+              {
+                id: "mask",
+                label: "Boolean mask",
+                color: "#8b5cf6",
+                items: [
+                  "By condition: arr > 90",
+                  "Keeps matching values only",
+                  "Example: scores[scores >= 60]",
+                ],
+              },
+            ],
+          },
+          {
+            type: "text",
+            content:
+              "You can combine rules with **`&`** (and), **`|`** (or), and **`~`** (not). Put each part in **parentheses** — for example, evens between 10 and 50.",
+            code: {
+              lang: "python",
+              label: "Even numbers only",
+              content: `import numpy as np
+
+nums = np.array([1, 2, 3, 4, 5, 6])
+evens = nums[nums % 2 == 0]
+print(evens)   # [2 4 6]`,
+            },
           },
           {
             type: "callout",
             variant: "info",
             content:
-              "Masks never change the original array — they return a **new selection**. The original stays untouched.",
+              "A mask **never edits** the original array. It returns a **new selection** you can print or use in the next step.",
+          },
+          {
+            type: "callout",
+            variant: "tip",
+            content:
+              "Read **`arr[arr > 5]`** as: \"give me every element in `arr` where the condition is True.\"",
           },
           {
             type: "quiz",
             question: "What does `arr[arr > 5]` return?",
             options: [
               "All elements greater than 5",
-              "A boolean array",
+              "A boolean array only",
               "The index of 5",
               "An error",
             ],
             answer: 0,
-            explanation: "The condition creates a mask; bracket indexing returns only elements where True.",
+            explanation: "The condition builds a mask; bracket indexing returns only elements where True.",
           },
         ],
         challenge: {
@@ -703,38 +1208,84 @@ print(nums[nums % 2 == 0])`,
           {
             type: "text",
             content:
-              "**`np.where(condition, x, y)`** is an if/else for arrays: where True, pick from `x`; where False, pick from `y`. **Fancy indexing** uses a list of indices to grab specific positions — like picking players #2, #5, and #7 from a roster.",
-          },
-          {
-            type: "code",
-            lang: "python",
-            label: "np.where — replace values",
-            content: `import numpy as np
+              "Sometimes you do not only want to **filter** values — you want to **replace** them. **`np.where(condition, x, y)`** works like **if/else for the whole array**: where the condition is **True**, take from **`x`**; where **False**, take from **`y`**.",
+            code: {
+              lang: "python",
+              label: "Passing scores stay, failing scores become 0",
+              content: `import numpy as np
 
 scores = np.array([45, 88, 52, 95, 70])
-# Pass if score >= 60, else 'retry'
 result = np.where(scores >= 60, scores, 0)
-print(result)  # [ 0 88  0 95 70]`,
+print(result)   # [ 0 88  0 95 70]`,
+            },
           },
           {
-            type: "code",
-            lang: "python",
-            label: "Fancy indexing",
-            content: `import numpy as np
+            type: "text",
+            content:
+              "**Fancy indexing** means picking items by a **list of positions** — not a slice range. Like choosing player #0, #2, and #5 from a roster instead of \"players 0 through 2\".",
+            code: {
+              lang: "python",
+              label: "Pick specific days by index",
+              content: `import numpy as np
 
 temps = np.array([72, 68, 75, 80, 65, 90])
-pick = temps[[0, 2, 5]]   # Mon, Wed, Sat readings
-print(pick)  # [72 75 90]`,
+pick = temps[[0, 2, 5]]   # Mon, Wed, Sat
+print(pick)   # [72 75 90]`,
+            },
+          },
+          {
+            type: "diagram",
+            title: "Three ways to select data",
+            nodes: [
+              {
+                id: "slice",
+                label: "Slicing",
+                color: "#6366f1",
+                items: ["Continuous range", "arr[1:4]"],
+              },
+              {
+                id: "mask",
+                label: "Boolean mask",
+                color: "#8b5cf6",
+                items: ["By rule", "arr[arr > 60]"],
+              },
+              {
+                id: "where",
+                label: "np.where",
+                color: "#4f46e5",
+                items: ["Replace by rule", "np.where(cond, x, y)"],
+              },
+            ],
+          },
+          {
+            type: "text",
+            content:
+              "With **one argument**, **`np.where(condition)`** returns the **indices** where True — useful when you need positions, not just values.",
+            code: {
+              lang: "python",
+              label: "Find where scores passed",
+              content: `import numpy as np
+
+scores = np.array([45, 88, 52, 95, 70])
+passed_at = np.where(scores >= 60)
+print(passed_at)   # (array([1, 3, 4]),)  → indices 1, 3, 4`,
+            },
+          },
+          {
+            type: "callout",
+            variant: "info",
+            content:
+              "**Quick pick:** filter only → **`arr[condition]`**. replace values → **`np.where(cond, x, y)`**. pick exact positions → **`arr[[0, 2, 5]]`**.",
           },
           {
             type: "callout",
             variant: "tip",
             content:
-              "Call `np.where(condition)` with one argument to get **indices** where True — handy for finding positions.",
+              "`x` and `y` in `np.where` can be numbers or arrays the same shape as your data.",
           },
           {
             type: "quiz",
-            question: "What does np.where(arr > 0, arr, -1) do?",
+            question: "What does `np.where(arr > 0, arr, -1)` do?",
             options: [
               "Keeps positives, replaces others with -1",
               "Removes negative values",
@@ -743,6 +1294,18 @@ print(pick)  # [72 75 90]`,
             ],
             answer: 0,
             explanation: "Three-argument where is element-wise: positive values stay, rest become -1.",
+          },
+          {
+            type: "quiz",
+            question: "You want readings on days 0, 2, and 4 from `temps`. Best approach?",
+            options: [
+              "temps[0:4]",
+              "temps[[0, 2, 4]]",
+              "temps > 0",
+              "np.where(temps)",
+            ],
+            answer: 1,
+            explanation: "Double brackets with a list of indices is fancy indexing.",
           },
         ],
         challenge: {

@@ -71,7 +71,7 @@ export default function NumpyHub() {
         >
           ← Python courses
         </Link>
-        <div className="oops-hero-badge">NUMPY · PYTHON TRACK</div>
+        <div className="oops-hero-badge">PYTHON DATA TRACK</div>
         <h1 className="oops-hero-title">
           NumPy
           <br />

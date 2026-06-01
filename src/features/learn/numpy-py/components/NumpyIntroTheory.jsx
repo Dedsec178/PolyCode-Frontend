@@ -31,16 +31,32 @@ function NumpyTheoryBlock({ block, step, accentColor }) {
 
   if (block.type === "text") {
     return (
-      <article className="numpy-step-card">
+      <article
+        className={`numpy-step-card ${block.code ? "numpy-concept-card" : ""}`}
+      >
         <div className="numpy-step-head">
           <span className="numpy-step-num" style={{ background: accentColor }}>
             {step}
           </span>
-          <span className="numpy-step-label">In simple words</span>
+          <span className="numpy-step-label">
+            {block.code ? "Learn & try" : "In simple words"}
+          </span>
         </div>
         <p className="numpy-step-text">
           <InlineText text={block.content} />
         </p>
+        {block.code && (
+          <div className="numpy-concept-code">
+            {block.code.label && (
+              <p className="numpy-code-caption">{block.code.label}</p>
+            )}
+            <RunnableCodeBlock
+              block={block.code}
+              accentColor={accentColor}
+              language={block.code.lang || "python"}
+            />
+          </div>
+        )}
       </article>
     );
   }
@@ -172,7 +188,9 @@ export default function NumpyIntroTheory({
     <div className="numpy-intro-theory">
       <header className="numpy-lesson-hero" style={{ "--numpy-accent": accentColor }}>
         <span className="numpy-chapter-badge">{lesson.chapterTitle}</span>
-        <h2 className="numpy-lesson-title">{lesson.title}</h2>
+        <h2 className="numpy-lesson-title" id="numpy-lesson-heading">
+          {lesson.title}
+        </h2>
         <p className="numpy-lesson-hook">
           {plainText(firstText?.content) ||
             "We'll explain this idea in plain English — no jargon overload."}
@@ -182,7 +200,7 @@ export default function NumpyIntroTheory({
       <div className="numpy-learn-path">
         <div className="numpy-path-label">
           <span>Your learning path</span>
-          <small>Read → run code → check yourself</small>
+          <small>Read the idea, then run the code right below it</small>
         </div>
 
         {lesson.theory.map((block, index) => {
