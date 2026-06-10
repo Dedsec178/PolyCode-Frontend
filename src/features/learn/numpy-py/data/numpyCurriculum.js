@@ -2122,35 +2122,77 @@ print(finals)   # [[86.], [79.]] — one final per student`,
           {
             type: "text",
             content:
-              "**Same idea with numbers:** array **A** is 2×2, array **B** is 2×2. Each cell in the answer is one **row from A** dotted with one **column from B**.",
+              "**Same idea with plain numbers.** Array **A** is **2×2** and array **B** is **2×2**. Rule for `@`: pick one **row from A**, pick one **column from B** (read **down** the column), multiply matching pairs, then add. Do that for every result cell.",
+          },
+          {
+            type: "text",
+            content:
+              "**Columns of B** (read down, not across): **Col 0** = [2, 1], **Col 1** = [0, 2]. That is what each row of A gets dotted with.",
           },
           {
             type: "matrices",
-            title: "2×2 example — A, B, and the result",
+            title: "Complete 2×2 example — A, B, and A @ B",
             left: {
-              label: "A",
+              label: "A  (2 rows × 2 cols)",
               data: [
                 [1, 2],
                 [3, 4],
               ],
+              rowLabels: ["Row 0", "Row 1"],
+              colLabels: ["Col 0", "Col 1"],
             },
             operator: "@",
             right: {
-              label: "B",
+              label: "B  (2 rows × 2 cols)",
               data: [
                 [2, 0],
                 [1, 2],
               ],
+              rowLabels: ["Row 0", "Row 1"],
+              colLabels: ["Col 0", "Col 1"],
+              footnote: "For @, use **columns** of B: Col 0 = [2,1], Col 1 = [0,2]",
             },
             result: {
-              label: "A @ B",
+              label: "A @ B  (result)",
               data: [
                 [4, 4],
                 [10, 8],
               ],
+              rowLabels: ["Row 0", "Row 1"],
+              colLabels: ["Col 0", "Col 1"],
             },
             caption:
-              "Top-left **4** = row [1,2] · col [2,1] → 1×2 + 2×1. Each result cell uses one row and one column.",
+              "Each result cell = **one row of A** · **one column of B**. Below shows all **four** cells step by step.",
+            steps: [
+              {
+                position: "Result [0,0] top-left",
+                row: "[1, 2]  (Row 0 of A)",
+                col: "[2, 1]  (Col 0 of B)",
+                formula: "1×2 + 2×1",
+                value: 4,
+              },
+              {
+                position: "Result [0,1] top-right",
+                row: "[1, 2]  (Row 0 of A)",
+                col: "[0, 2]  (Col 1 of B)",
+                formula: "1×0 + 2×2",
+                value: 4,
+              },
+              {
+                position: "Result [1,0] bottom-left",
+                row: "[3, 4]  (Row 1 of A)",
+                col: "[2, 1]  (Col 0 of B)",
+                formula: "3×2 + 4×1",
+                value: 10,
+              },
+              {
+                position: "Result [1,1] bottom-right",
+                row: "[3, 4]  (Row 1 of A)",
+                col: "[0, 2]  (Col 1 of B)",
+                formula: "3×0 + 4×2",
+                value: 8,
+              },
+            ],
             leftAccent: "#ec4899",
             rightAccent: "#f472b6",
             resultAccent: "#db2777",

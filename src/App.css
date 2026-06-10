@@ -7675,13 +7675,41 @@ body {
   text-transform: uppercase;
 }
 
-.numpy-matrix-grid {
-  display: grid;
-  gap: 6px;
+.numpy-matrix-table {
   padding: 10px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.numpy-matrix-col-labels,
+.numpy-matrix-data-row {
+  display: grid;
+  gap: 6px;
+  align-items: center;
+}
+
+.numpy-matrix-col-labels {
+  margin-bottom: 6px;
+}
+
+.numpy-matrix-corner {
+  display: block;
+}
+
+.numpy-matrix-col-label,
+.numpy-matrix-row-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--txt-2, #8b95b0);
+  text-align: center;
+}
+
+.numpy-matrix-row-label {
+  text-align: right;
+  padding-right: 4px;
 }
 
 .numpy-matrix-cell {
@@ -7693,11 +7721,75 @@ body {
   padding: 6px 10px;
   border-radius: 8px;
   border: 1px solid;
-  background: rgba(255, 255, 255, 0.04);
   color: var(--txt-0, #f0f0ff);
   font-variant-numeric: tabular-nums;
   font-weight: 600;
   font-size: 0.95rem;
+}
+
+.numpy-matrix-footnote {
+  margin: 8px 0 0;
+  max-width: 220px;
+  text-align: center;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--txt-2, #8b95b0);
+}
+
+.numpy-matrix-steps {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.numpy-matrix-steps-title {
+  margin: 0 0 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--txt-0, #f0f0ff);
+  text-align: center;
+}
+
+.numpy-matrix-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.numpy-matrix-step-card {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.numpy-matrix-step-pos {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(236, 72, 153, 0.15);
+  color: #f9a8d4;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.numpy-matrix-step-line {
+  margin: 0 0 4px;
+  font-size: 0.82rem;
+  color: var(--txt-1, #c0c8e0);
+  line-height: 1.45;
+}
+
+.numpy-matrix-step-formula {
+  margin: 8px 0 0;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  font-size: 0.88rem;
+  color: var(--txt-0, #f0f0ff);
+  font-variant-numeric: tabular-nums;
 }
 
 .numpy-matrix-operator {

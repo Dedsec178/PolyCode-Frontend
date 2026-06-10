@@ -26,30 +26,67 @@ function InlineText({ text }) {
   );
 }
 
-function NumpyMatrixGrid({ label, data = [], accentColor }) {
+function NumpyMatrixGrid({
+  label,
+  data = [],
+  accentColor,
+  rowLabels,
+  colLabels,
+  footnote,
+}) {
   const colCount = Math.max(...data.map((row) => row.length), 1);
+  const hasRowLabels = Array.isArray(rowLabels) && rowLabels.length > 0;
+  const hasColLabels = Array.isArray(colLabels) && colLabels.length > 0;
 
   return (
     <div className="numpy-matrix-panel">
       <span className="numpy-matrix-label" style={{ color: accentColor }}>
         {label}
       </span>
-      <div
-        className="numpy-matrix-grid"
-        style={{ gridTemplateColumns: `repeat(${colCount}, minmax(44px, 1fr))` }}
-      >
-        {data.map((row, rowIndex) =>
-          row.map((cell, colIndex) => (
-            <span
-              key={`${rowIndex}-${colIndex}`}
-              className="numpy-matrix-cell"
-              style={{ borderColor: `${accentColor}44` }}
-            >
-              {cell}
-            </span>
-          )),
-        )}
+      <div className="numpy-matrix-table">
+        {hasColLabels ? (
+          <div
+            className="numpy-matrix-col-labels"
+            style={{
+              gridTemplateColumns: `${hasRowLabels ? "52px " : ""}repeat(${colCount}, minmax(44px, 1fr))`,
+            }}
+          >
+            {hasRowLabels ? <span className="numpy-matrix-corner" /> : null}
+            {colLabels.map((colLabel) => (
+              <span key={colLabel} className="numpy-matrix-col-label">
+                {colLabel}
+              </span>
+            ))}
+          </div>
+        ) : null}
+        {data.map((row, rowIndex) => (
+          <div
+            key={`row-${rowIndex}`}
+            className="numpy-matrix-data-row"
+            style={{
+              gridTemplateColumns: `${hasRowLabels ? "52px " : ""}repeat(${colCount}, minmax(44px, 1fr))`,
+            }}
+          >
+            {hasRowLabels ? (
+              <span className="numpy-matrix-row-label">{rowLabels[rowIndex]}</span>
+            ) : null}
+            {row.map((cell, colIndex) => (
+              <span
+                key={`${rowIndex}-${colIndex}`}
+                className="numpy-matrix-cell"
+                style={{ borderColor: `${accentColor}55`, background: `${accentColor}12` }}
+              >
+                {cell}
+              </span>
+            ))}
+          </div>
+        ))}
       </div>
+      {footnote ? (
+        <p className="numpy-matrix-footnote">
+          <InlineText text={footnote} />
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -62,7 +99,14 @@ function NumpyMatrixOpVisual({ block, accentColor }) {
   return (
     <div className="numpy-matrix-op-wrap">
       <div className="numpy-matrix-op-row">
-        <NumpyMatrixGrid label={block.left.label} data={block.left.data} accentColor={leftAccent} />
+        <NumpyMatrixGrid
+          label={block.left.label}
+          data={block.left.data}
+          accentColor={leftAccent}
+          rowLabels={block.left.rowLabels}
+          colLabels={block.left.colLabels}
+          footnote={block.left.footnote}
+        />
         <span className="numpy-matrix-operator" style={{ color: accentColor }}>
           {block.operator || "@"}
         </span>
@@ -70,6 +114,9 @@ function NumpyMatrixOpVisual({ block, accentColor }) {
           label={block.right.label}
           data={block.right.data}
           accentColor={rightAccent}
+          rowLabels={block.right.rowLabels}
+          colLabels={block.right.colLabels}
+          footnote={block.right.footnote}
         />
         {block.result ? (
           <>
@@ -80,6 +127,9 @@ function NumpyMatrixOpVisual({ block, accentColor }) {
               label={block.result.label}
               data={block.result.data}
               accentColor={resultAccent}
+              rowLabels={block.result.rowLabels}
+              colLabels={block.result.colLabels}
+              footnote={block.result.footnote}
             />
           </>
         ) : null}
@@ -88,6 +138,27 @@ function NumpyMatrixOpVisual({ block, accentColor }) {
         <p className="numpy-matrix-caption">
           <InlineText text={block.caption} />
         </p>
+      ) : null}
+      {block.steps?.length > 0 ? (
+        <div className="numpy-matrix-steps">
+          <p className="numpy-matrix-steps-title">How every result cell is built</p>
+          <div className="numpy-matrix-steps-grid">
+            {block.steps.map((step) => (
+              <div key={step.position} className="numpy-matrix-step-card">
+                <span className="numpy-matrix-step-pos">{step.position}</span>
+                <p className="numpy-matrix-step-line">
+                  <strong>Row from A:</strong> {step.row}
+                </p>
+                <p className="numpy-matrix-step-line">
+                  <strong>Col from B:</strong> {step.col}
+                </p>
+                <p className="numpy-matrix-step-formula">
+                  {step.formula} = <strong>{step.value}</strong>
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       ) : null}
     </div>
   );
