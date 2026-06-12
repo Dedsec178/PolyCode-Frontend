@@ -14,7 +14,13 @@ function getAuthHeaders() {
   return headers;
 }
 
-export async function postAssistantChat({ message, history, session_id, context }) {
+export async function postAssistantChat({
+  message,
+  history,
+  session_id,
+  context,
+  assistant_message_id,
+}) {
   const url = `${getApiBase()}/chat/assistant`;
 
   const res = await fetch(url, {
@@ -25,6 +31,7 @@ export async function postAssistantChat({ message, history, session_id, context 
       history,
       session_id,
       context: context || {},
+      assistant_message_id,
     }),
   });
 
@@ -68,6 +75,48 @@ export async function fetchAssistantSession(sessionId) {
   } catch {
     // Backend offline, CORS, or network issue — fall back to local session
     return null;
+  }
+}
+
+export async function postAssistantFeedback({
+  session_id,
+  message_id,
+  rating,
+  user_message,
+  assistant_message,
+  context,
+}) {
+  const url = `${getApiBase()}/chat/assistant/feedback`;
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        session_id,
+        message_id,
+        rating,
+        user_message,
+        assistant_message,
+        context: context || {},
+      }),
+    });
+
+    if (!res.ok) {
+      let detail = res.statusText;
+      try {
+        const errBody = await res.json();
+        detail = errBody.error || detail;
+      } catch {
+        /* ignore */
+      }
+      throw new Error(detail || `Feedback failed (${res.status})`);
+    }
+
+    return res.json();
+  } catch (err) {
+    if (err instanceof Error) throw err;
+    throw new Error("Could not save feedback.");
   }
 }
 
