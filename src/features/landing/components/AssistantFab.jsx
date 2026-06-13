@@ -71,9 +71,10 @@ function saveSession(session) {
               .slice(-(MAX_STORED_MESSAGES - 1)),
           ]
         : session.messages;
+    const messagesForStorage = trimmed.map(({ stream, ...message }) => message);
     localStorage.setItem(
       ASSISTANT_CONFIG.storageKey,
-      JSON.stringify({ ...session, messages: trimmed }),
+      JSON.stringify({ ...session, messages: messagesForStorage }),
     );
   } catch {
     /* ignore */
@@ -137,12 +138,18 @@ function MentorReply({
   showFeedback,
   onRate,
   feedbackSaving,
+  onStreamComplete,
 }) {
-  const isNew = msg.id.startsWith("assistant-");
-  const shouldStream = isNew && !reduceMotion;
+  const shouldStream = Boolean(msg.stream) && !reduceMotion;
   const { displayed, done } = useTypewriter(msg.content, shouldStream);
   const visible = shouldStream ? displayed : msg.content;
   const canRate = showFeedback && done && msg.content && msg.id !== "welcome";
+
+  useEffect(() => {
+    if (shouldStream && done && onStreamComplete) {
+      onStreamComplete(msg.id);
+    }
+  }, [shouldStream, done, msg.id, onStreamComplete]);
 
   return (
     <article style={{ position: "relative", paddingLeft: "1.25rem" }}>
@@ -367,6 +374,15 @@ export default function AssistantFab() {
     [assistantContext],
   );
 
+  const handleStreamComplete = useCallback((messageId) => {
+    setSession((prev) => ({
+      ...prev,
+      messages: prev.messages.map((message) =>
+        message.id === messageId ? { ...message, stream: false } : message,
+      ),
+    }));
+  }, []);
+
   const sendText = useCallback(
     async (text) => {
       if (!text.trim() || sending) return;
@@ -401,6 +417,7 @@ export default function AssistantFab() {
           role: "assistant",
           content: res.response,
           feedback: null,
+          stream: true,
         };
         setSession((prev) => ({
           ...prev,
@@ -542,6 +559,7 @@ export default function AssistantFab() {
                       reduceMotion={reduceMotion}
                       showFeedback
                       feedbackSaving={feedbackSavingId === msg.id}
+                      onStreamComplete={handleStreamComplete}
                       onRate={(rating) =>
                         handleFeedback(msg.id, rating, messageContent(msg))
                       }
