@@ -68,13 +68,18 @@ function NumpyMatrixGrid({
             }}
           >
             {hasRowLabels ? (
-              <span className="numpy-matrix-row-label">{rowLabels[rowIndex]}</span>
+              <span className="numpy-matrix-row-label">
+                {rowLabels[rowIndex]}
+              </span>
             ) : null}
             {row.map((cell, colIndex) => (
               <span
                 key={`${rowIndex}-${colIndex}`}
                 className="numpy-matrix-cell"
-                style={{ borderColor: `${accentColor}55`, background: `${accentColor}12` }}
+                style={{
+                  borderColor: `${accentColor}55`,
+                  background: `${accentColor}12`,
+                }}
               >
                 {cell}
               </span>
@@ -120,7 +125,10 @@ function NumpyMatrixOpVisual({ block, accentColor }) {
         />
         {block.result ? (
           <>
-            <span className="numpy-matrix-operator" style={{ color: accentColor }}>
+            <span
+              className="numpy-matrix-operator"
+              style={{ color: accentColor }}
+            >
               =
             </span>
             <NumpyMatrixGrid
@@ -141,7 +149,9 @@ function NumpyMatrixOpVisual({ block, accentColor }) {
       ) : null}
       {block.steps?.length > 0 ? (
         <div className="numpy-matrix-steps">
-          <p className="numpy-matrix-steps-title">How every result cell is built</p>
+          <p className="numpy-matrix-steps-title">
+            How every result cell is built
+          </p>
           <div className="numpy-matrix-steps-grid">
             {block.steps.map((step) => (
               <div key={step.position} className="numpy-matrix-step-card">
@@ -179,7 +189,10 @@ function NumpyVisualTable({ block }) {
                 {col}
               </th>
             ))}
-            <th className="numpy-vt-row-total-head" style={{ color: rowAccent }}>
+            <th
+              className="numpy-vt-row-total-head"
+              style={{ color: rowAccent }}
+            >
               Total
             </th>
           </tr>
@@ -195,21 +208,30 @@ function NumpyVisualTable({ block }) {
               ))}
               <td
                 className="numpy-vt-row-total"
-                style={{ background: `${rowAccent}22`, borderColor: `${rowAccent}55` }}
+                style={{
+                  background: `${rowAccent}22`,
+                  borderColor: `${rowAccent}55`,
+                }}
               >
                 {block.rowTotals[rowIndex]}
               </td>
             </tr>
           ))}
           <tr className="numpy-vt-col-total-row">
-            <th className="numpy-vt-col-total-head" style={{ color: colAccent }}>
+            <th
+              className="numpy-vt-col-total-head"
+              style={{ color: colAccent }}
+            >
               Total
             </th>
             {block.colTotals.map((total, colIndex) => (
               <td
                 key={`col-total-${colIndex}`}
                 className="numpy-vt-col-total"
-                style={{ background: `${colAccent}22`, borderColor: `${colAccent}55` }}
+                style={{
+                  background: `${colAccent}22`,
+                  borderColor: `${colAccent}55`,
+                }}
               >
                 {total}
               </td>
@@ -220,11 +242,17 @@ function NumpyVisualTable({ block }) {
       </table>
       <div className="numpy-vt-legend">
         <span className="numpy-vt-legend-item" style={{ color: rowAccent }}>
-          <span className="numpy-vt-legend-swatch" style={{ background: rowAccent }} />
+          <span
+            className="numpy-vt-legend-swatch"
+            style={{ background: rowAccent }}
+          />
           {block.rowTotalLabel || "axis=1 → add across each row"}
         </span>
         <span className="numpy-vt-legend-item" style={{ color: colAccent }}>
-          <span className="numpy-vt-legend-swatch" style={{ background: colAccent }} />
+          <span
+            className="numpy-vt-legend-swatch"
+            style={{ background: colAccent }}
+          />
           {block.colTotalLabel || "axis=0 ↓ add down each column"}
         </span>
       </div>
@@ -268,7 +296,11 @@ function NumpyTheoryBlock({ block, step, accentColor }) {
   }
 
   if (block.type === "callout") {
-    const labels = { info: "Good to know", tip: "Helpful tip", warning: "Watch out" };
+    const labels = {
+      info: "Good to know",
+      tip: "Helpful tip",
+      warning: "Watch out",
+    };
     const icons = { info: "💡", tip: "✨", warning: "⚠️" };
     return (
       <aside className={`numpy-tip-box numpy-tip-${block.variant}`}>
@@ -287,10 +319,10 @@ function NumpyTheoryBlock({ block, step, accentColor }) {
     return (
       <div className="numpy-step-code">
         <div className="numpy-step-head">
-          <span className="numpy-step-num numpy-step-num-code" style={{ color: accentColor }}>
-            ▶
-          </span>
-          <span className="numpy-step-label">Try it yourself</span>
+          <span
+            className="numpy-step-num numpy-step-num-code"
+            style={{ color: accentColor }}
+          ></span>
         </div>
         {block.label && <p className="numpy-code-caption">{block.label}</p>}
         <RunnableCodeBlock
@@ -364,7 +396,9 @@ function NumpyTheoryBlock({ block, step, accentColor }) {
     const correct = selectedQuiz === block.answer;
 
     return (
-      <article className={`numpy-quiz-card ${answered ? (correct ? "correct" : "wrong") : ""}`}>
+      <article
+        className={`numpy-quiz-card ${answered ? (correct ? "correct" : "wrong") : ""}`}
+      >
         <div className="numpy-step-head">
           <span className="numpy-step-num" style={{ background: accentColor }}>
             ?
@@ -420,7 +454,10 @@ export default function NumpyIntroTheory({
 
   return (
     <div className="numpy-intro-theory">
-      <header className="numpy-lesson-hero" style={{ "--numpy-accent": accentColor }}>
+      <header
+        className="numpy-lesson-hero"
+        style={{ "--numpy-accent": accentColor }}
+      >
         <span className="numpy-chapter-badge">{lesson.chapterTitle}</span>
         <h2 className="numpy-lesson-title" id="numpy-lesson-heading">
           {lesson.title}
