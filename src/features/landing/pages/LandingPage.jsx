@@ -6,6 +6,7 @@ import LanguagePickerSection from "../components/LanguagePickerSection";
 import Navbar from "../components/Navbar";
 import StatsSection from "../components/StatsSection";
 import ModulesSection from "../components/ModulesSection";
+import CourseSlider from "../components/CourseSlider";
 
 import "../landing.css";
 
@@ -22,6 +23,7 @@ export default function LandingPage({ onLanguageSelect, continueLanguage }) {
           <Hero />
 
           <ModulesSection />
+          <CourseSlider />
           <StatsSection />
           <LanguagePickerSection
             onLanguageSelect={onLanguageSelect}

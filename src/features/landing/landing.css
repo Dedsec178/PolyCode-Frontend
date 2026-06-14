@@ -166,28 +166,217 @@
 NAVBAR
 ========================================== */
 
+/* ══════════════════════════════════════════════
+   LANDING NAVBAR UPGRADE
+   Paste this into your landing.css (or import
+   as a separate file) — overrides existing rules
+══════════════════════════════════════════════ */
+
 .landing-navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  z-index: 100;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
 
-  z-index: 1000;
+.landing-navbar--scrolled {
+  background: rgba(3, 5, 10, 0.75);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 32px rgba(0, 0, 0, 0.4);
+}
 
-  background: rgba(3, 5, 10, 0.8);
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+.landing-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .landing-navbar-inner {
-  height: 76px;
-
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 2.5rem;
+}
+
+/* ── Brand ── */
+.landing-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.landing-brand-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 229, 102, 0.08);
+  border: 1px solid rgba(255, 229, 102, 0.2);
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s,
+    border-color 0.25s;
+}
+
+.landing-brand:hover .landing-brand-mark {
+  transform: rotate(-6deg) scale(1.08);
+  border-color: rgba(255, 229, 102, 0.55);
+  box-shadow: 0 0 18px rgba(255, 229, 102, 0.22);
+}
+
+.landing-logo {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.landing-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.landing-logo-text {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #f0f0ff;
+  letter-spacing: -0.02em;
+}
+
+.landing-logo-sub {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--acid, #ffe566);
+  opacity: 0.75;
+}
+
+/* ── Nav links ── */
+.landing-navbar {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.landing-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  flex: 1;
+}
+
+.landing-nav-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.landing-nav-link {
+  position: relative;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #8896b0;
+  text-decoration: none;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.landing-nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 14px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--acid, #ffe566);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.landing-nav-link {
+  position: relative;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #8896b0;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  border-bottom: 2px solid transparent;
+  transition:
+    color 0.15s,
+    background 0.15s,
+    border-color 0.2s;
+}
+
+/* DELETE the ::after rule entirely */
+
+.landing-nav-link:hover {
+  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 229, 102, 0.08) 0%,
+    rgba(255, 229, 102, 0.03) 100%
+  );
+  border-bottom-color: var(--acid, #ffe566);
+}
+/* ── Primary CTA button ── */
+.landing-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1.15rem;
+  border-radius: 9px;
+  background: var(--acid, #ffe566);
+  color: #03050a;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    opacity 0.15s,
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.landing-btn-primary:hover {
+  opacity: 0.92;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255, 229, 102, 0.32);
+}
+
+.landing-btn-primary:active {
+  transform: translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .landing-nav-links {
+    display: none;
+  }
+
+  .landing-navbar-inner {
+    justify-content: space-between;
+  }
 }
 
 /* ==========================================
@@ -3245,4 +3434,495 @@ NAVBAR
   .landing-stat-card p {
     font-size: 0.9rem;
   }
+}
+/* ══════════════════════════════════════════════
+   ADDITIONS — Simplified landing page
+══════════════════════════════════════════════ */
+
+/* Hero quick links */
+.polycode-landing .landing-hero-quick-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.polycode-landing .landing-hero-quick-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--border, #1e2433);
+  background: var(--glass, rgba(255, 255, 255, 0.03));
+  color: var(--v2-txt0, #f0f0ff);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.15s;
+}
+
+.polycode-landing .landing-hero-quick-card:hover {
+  border-color: var(--acid, #ffe566);
+  background: var(--acid-dim, rgba(255, 229, 102, 0.08));
+  transform: translateX(4px);
+}
+
+/* Actions grid (4 cards) */
+.polycode-landing .landing-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.polycode-landing .landing-module-card--clickable {
+  cursor: pointer;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  width: 100%;
+}
+
+.polycode-landing .landing-module-card--orange {
+  border-top: 3px solid var(--v2-orange, #fb923c);
+}
+
+.polycode-landing .landing-module-icon--orange {
+  background: rgba(251, 146, 60, 0.1);
+  color: var(--v2-orange, #fb923c);
+}
+
+@media (max-width: 900px) {
+  .polycode-landing .landing-actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .polycode-landing .landing-actions-grid {
+    grid-template-columns: 1fr;
+  }
+  .polycode-landing .landing-hero-quick-links {
+    margin-top: 1.5rem;
+  }
+}
+
+/* Courses slider */
+.polycode-landing .landing-courses-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.polycode-landing .landing-slider-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.polycode-landing .landing-slider-controls button {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid var(--border, #1e2433);
+  background: var(--glass, rgba(255, 255, 255, 0.03));
+  color: var(--v2-txt0, #f0f0ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.polycode-landing .landing-slider-controls button:hover {
+  border-color: var(--acid, #ffe566);
+  color: var(--acid, #ffe566);
+}
+
+.polycode-landing .landing-courses-track {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.5rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.polycode-landing .landing-courses-track::-webkit-scrollbar {
+  display: none;
+}
+
+.polycode-landing .landing-course-card {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+  border: 1px solid var(--border, #1e2433);
+  border-top: 3px solid var(--course-accent, #ffe566);
+  border-radius: 14px;
+  background: var(--glass, rgba(255, 255, 255, 0.03));
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.polycode-landing .landing-course-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--course-accent, #ffe566);
+}
+
+.polycode-landing .landing-course-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--course-accent, #ffe566);
+  margin-bottom: 0.75rem;
+}
+
+.polycode-landing .landing-course-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--course-accent, #ffe566);
+  margin-bottom: 0.5rem;
+}
+
+.polycode-landing .landing-course-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--v2-txt0, #f0f0ff);
+  margin: 0 0 0.5rem;
+}
+
+.polycode-landing .landing-course-card p {
+  font-size: 0.85rem;
+  color: var(--v2-txt1, #c0c8e0);
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+.polycode-landing .landing-course-link {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--course-accent, #ffe566);
+}
+
+@media (max-width: 560px) {
+  .polycode-landing .landing-course-card {
+    flex: 0 0 240px;
+  }
+}
+/* ══════════════════════════════════════════════════════════
+   COURSES SLIDER  —  courses-slider.css
+══════════════════════════════════════════════════════════ */
+
+.cs-section {
+  padding: 5rem 0 4rem;
+}
+
+/* ── Header ── */
+.cs-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.cs-title {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 800;
+  color: var(--v2-txt0, #f0f0ff);
+  letter-spacing: -0.03em;
+  margin: 0.25rem 0 0;
+}
+
+/* ── Arrow buttons ── */
+.cs-controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.cs-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border, #1e2433);
+  background: transparent;
+  color: var(--v2-txt0, #f0f0ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.2s;
+}
+
+.cs-btn:hover {
+  border-color: var(--acid, #ffe566);
+  background: rgba(255, 229, 102, 0.08);
+  transform: scale(1.1);
+}
+
+/* ── Track ── */
+.cs-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 3 * 20px) / 3);
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.5rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.cs-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Card ── */
+.cs-card {
+  scroll-snap-align: start;
+  position: relative;
+  border: 1px solid var(--border, #1e2433);
+  border-radius: 18px;
+  background: rgba(13, 17, 23, 0.85);
+  padding: 1.75rem;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  outline: none;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  /* isolate stacking context so pseudo-elements don't bleed */
+  isolation: isolate;
+}
+
+/* top accent line */
+.cs-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent, #ffe566);
+  opacity: 0.5;
+  transition:
+    opacity 0.3s,
+    height 0.3s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* background glow fill on hover */
+.cs-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 60% 0%,
+    color-mix(in srgb, var(--accent) 14%, transparent) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+.cs-card:hover,
+.cs-card:focus-visible {
+  transform: translateY(-8px);
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent),
+    0 0 40px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.cs-card:hover::before,
+.cs-card:focus-visible::before {
+  opacity: 1;
+  height: 3px;
+}
+
+.cs-card:hover::after,
+.cs-card:focus-visible::after {
+  opacity: 1;
+}
+
+/* ensure card children sit above pseudo-elements */
+.cs-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Card internals ── */
+.cs-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.cs-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent, #ffe566);
+  flex-shrink: 0;
+  transition:
+    background 0.3s,
+    transform 0.3s;
+}
+
+.cs-card:hover .cs-icon {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  transform: scale(1.1) rotate(-4deg);
+}
+
+.cs-level {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border, #1e2433);
+  color: var(--v2-txt1, #c0c8e0);
+  transition:
+    border-color 0.3s,
+    color 0.3s;
+}
+
+.cs-card:hover .cs-level {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--accent);
+}
+
+.cs-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent, #ffe566);
+  opacity: 0.85;
+}
+
+.cs-card-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--v2-txt0, #f0f0ff);
+  letter-spacing: -0.025em;
+  margin: 0.1rem 0 0;
+  transition: color 0.2s;
+}
+
+.cs-card:hover .cs-card-title {
+  color: #fff;
+}
+
+.cs-card-desc {
+  font-size: 0.84rem;
+  color: var(--v2-txt1, #8896b0);
+  line-height: 1.65;
+  margin: 0.25rem 0 0;
+  flex: 1;
+}
+
+.cs-card-footer {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border, #1e2433);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: border-color 0.3s;
+}
+
+.cs-card:hover .cs-card-footer {
+  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.cs-cta {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent, #ffe566);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: gap 0.2s;
+}
+
+.cs-card:hover .cs-cta {
+  gap: 0.55rem;
+}
+
+/* ── Dot indicators ── */
+.cs-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 2rem;
+}
+
+.cs-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  border: none;
+  background: var(--border, #2a3040);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.3s;
+}
+
+.cs-dot--active {
+  width: 24px;
+  background: var(--acid, #ffe566);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .cs-track {
+    grid-auto-columns: calc((100% - 20px) / 2);
+  }
+}
+
+@media (max-width: 560px) {
+  .cs-track {
+    grid-auto-columns: 88%;
+  }
+
+  .cs-title {
+    font-size: 1.3rem;
+  }
+}
+.cs-header {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
