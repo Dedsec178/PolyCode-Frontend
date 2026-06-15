@@ -126,8 +126,12 @@ export default function CourseCertificate({
             <strong>Issued On</strong>
             <p>{issueDate}</p>
           </div>
-        </div>
 
+          <div>
+            <strong>Certificate ID</strong>
+            <p>{certificateId}</p>
+          </div>
+        </div>
         <div className="certificate-footer">
           <div className="signature-block">
             <img
