@@ -40,6 +40,9 @@ html {
   --assistant-feedback-warn-border: color-mix(in srgb, var(--acid) 35%, transparent);
   --assistant-feedback-warn-bg: var(--acid-dim);
   --assistant-feedback-warn-text: color-mix(in srgb, var(--acid) 80%, white);
+  --assistant-error-border: rgba(239, 68, 68, 0.25);
+  --assistant-error-bg: rgba(239, 68, 68, 0.1);
+  --assistant-error-text: #fca5a5;
 }
 
 html[data-theme="light"] {
@@ -79,4 +82,7 @@ html[data-theme="light"] {
   --assistant-feedback-warn-border: rgba(var(--acid-rgb), 0.28);
   --assistant-feedback-warn-bg: var(--acid-dim);
   --assistant-feedback-warn-text: var(--txt-1);
+  --assistant-error-border: rgba(220, 38, 38, 0.2);
+  --assistant-error-bg: rgba(254, 226, 226, 0.65);
+  --assistant-error-text: #b91c1c;
 }

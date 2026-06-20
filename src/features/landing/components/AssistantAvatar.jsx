@@ -2,31 +2,19 @@ import React from "react";
 import { ASSISTANT_CONFIG } from "../lib/assistantConfig";
 
 const SIZES = {
-  sm: { box: 28, img: 24 },
-  md: { box: 56, img: 48 },
-  lg: { box: 64, img: 56 },
+  sm: { box: 28, img: 24, cls: "assistant-avatar-wrap--sm" },
+  md: { box: 56, img: 48, cls: "assistant-avatar-wrap--md" },
+  lg: { box: 64, img: 56, cls: "assistant-avatar-wrap--lg" },
 };
 
-/** Renders the PolyMentor mascot with consistent framing on the dark landing UI. */
+/** Renders the PolyMentor mascot with theme-aware framing. */
 export default function AssistantAvatar({ size = "md", alt = "" }) {
   const dims = SIZES[size] || SIZES.md;
 
   return (
     <span
-      className="assistant-avatar-wrap"
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: dims.box,
-        height: dims.box,
-        flexShrink: 0,
-        overflow: "hidden",
-        borderRadius: size === "lg" ? "1rem" : "0.75rem",
-        border: "1px solid var(--border)",
-        background: "#ececef",
-        padding: 2,
-      }}
+      className={`assistant-avatar-wrap ${dims.cls}`}
+      style={{ width: dims.box, height: dims.box }}
     >
       <img
         src={ASSISTANT_CONFIG.avatarSrc}
@@ -34,12 +22,7 @@ export default function AssistantAvatar({ size = "md", alt = "" }) {
         width={dims.img}
         height={dims.img}
         className="assistant-avatar-img"
-        style={{
-          width: dims.img,
-          height: dims.img,
-          objectFit: "contain",
-          objectPosition: "center center",
-        }}
+        style={{ width: dims.img, height: dims.img }}
       />
     </span>
   );
