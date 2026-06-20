@@ -19,6 +19,7 @@ export async function postAssistantChat({
   history,
   session_id,
   context,
+  level,
   assistant_message_id,
 }) {
   const url = `${getApiBase()}/chat/assistant`;
@@ -31,6 +32,7 @@ export async function postAssistantChat({
       history,
       session_id,
       context: context || {},
+      level,
       assistant_message_id,
     }),
   });

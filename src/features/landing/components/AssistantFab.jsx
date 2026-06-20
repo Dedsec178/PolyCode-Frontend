@@ -31,6 +31,8 @@ const MAX_STORED_MESSAGES = 20;
 const DOCK_POSITION_KEY = "polycode_assistant_dock_position";
 const DOCK_MARGIN = 12;
 const DRAG_CLICK_THRESHOLD = 6;
+const ASSISTANT_LEVEL_KEY = "polycode_assistant_level";
+const ASSISTANT_LEVELS = ["beginner", "intermediate", "advanced"];
 
 const WELCOME_MESSAGE = {
   id: "welcome",
@@ -99,6 +101,23 @@ function clampDockPosition(position, size = { width: 220, height: 76 }) {
 function saveDockPosition(position) {
   try {
     localStorage.setItem(DOCK_POSITION_KEY, JSON.stringify(position));
+  } catch {
+    /* ignore */
+  }
+}
+
+function loadAssistantLevel() {
+  try {
+    const stored = localStorage.getItem(ASSISTANT_LEVEL_KEY);
+    return ASSISTANT_LEVELS.includes(stored) ? stored : "beginner";
+  } catch {
+    return "beginner";
+  }
+}
+
+function saveAssistantLevel(level) {
+  try {
+    localStorage.setItem(ASSISTANT_LEVEL_KEY, level);
   } catch {
     /* ignore */
   }
@@ -317,6 +336,7 @@ export default function AssistantFab() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(null);
   const [feedbackSavingId, setFeedbackSavingId] = useState(null);
+  const [assistantLevel, setAssistantLevel] = useState(() => loadAssistantLevel());
   const messagesEndRef = useRef(null);
   const messagesScrollRef = useRef(null);
   const inputRef = useRef(null);
@@ -399,6 +419,10 @@ export default function AssistantFab() {
   useEffect(() => {
     saveSession(session);
   }, [session]);
+
+  useEffect(() => {
+    saveAssistantLevel(assistantLevel);
+  }, [assistantLevel]);
 
   useEffect(() => {
     if (!open) return;
@@ -506,6 +530,7 @@ export default function AssistantFab() {
           history,
           session_id: currentSession.sessionId,
           context: assistantContext,
+          level: assistantLevel,
           assistant_message_id: assistantId,
         });
         const assistantMsg = {
@@ -529,7 +554,7 @@ export default function AssistantFab() {
         setSending(false);
       }
     },
-    [sending, assistantContext],
+    [sending, assistantContext, assistantLevel],
   );
 
   const send = useCallback(async () => {
@@ -700,6 +725,42 @@ export default function AssistantFab() {
                         {contextLabel}
                       </span>
                     ) : null}
+                    <label
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.4rem",
+                        marginTop: "0.55rem",
+                        fontSize: "0.68rem",
+                        fontWeight: 700,
+                        color: "#94a3b8",
+                      }}
+                    >
+                      Level
+                      <select
+                        value={assistantLevel}
+                        onChange={(event) => setAssistantLevel(event.target.value)}
+                        disabled={sending}
+                        aria-label="PolyMentor response level"
+                        style={{
+                          borderRadius: "0.45rem",
+                          border: "1px solid var(--border)",
+                          background: "#0a1018",
+                          color: "var(--acid)",
+                          padding: "0.25rem 0.45rem",
+                          fontSize: "0.7rem",
+                          fontWeight: 700,
+                          outline: "none",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {ASSISTANT_LEVELS.map((level) => (
+                          <option key={level} value={level}>
+                            {level}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
                   </div>
                 </div>
                 <div style={{ display: "flex", gap: "0.25rem" }}>
