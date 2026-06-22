@@ -3,11 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import CodePlayground from '../components/CodePlayground';
 import './PlaygroundPage.css';
 
-export default function PlaygroundPage({
-  theme,
-  onToggleSidebar,
-  sidebarOpen,
-}) {
+export default function PlaygroundPage() {
   const [searchParams] = useSearchParams();
   const initLang = searchParams.get('lang') || 'javascript';
   const initCode = searchParams.get('code')
@@ -20,11 +16,8 @@ export default function PlaygroundPage({
         <div className="pph-top">
           <h1><span className="pph-icon">⬡</span> Code Playground</h1>
           <p className="pph-sub">
-            Every language now opens its own connected IDE workspace. Switching preserves code, console, and preview per language.
+            Write code, run it in the browser or local simulation, and read output in the console below.
           </p>
-        </div>
-        <div className="pph-current">
-          Current IDE: <strong>{initLang}</strong>. Use the language chips inside the IDE panel below to switch quickly.
         </div>
       </div>
 
@@ -32,9 +25,6 @@ export default function PlaygroundPage({
         <CodePlayground
           initialLanguage={initLang}
           initialCode={initCode}
-          theme={theme}
-          onToggleSidebar={onToggleSidebar}
-          sidebarOpen={sidebarOpen}
         />
       </div>
     </div>

@@ -3,7 +3,7 @@
  * CRA bakes REACT_APP_* at build time; if production build still points at localhost,
  * we fall back to the deployed backend when the app runs on a non-local hostname.
  */
-const LOCAL_API = "http://localhost:5000/api";
+const LOCAL_API = "http://localhost:5000/api"; 
 const DEFAULT_PROD_API = "https://poly-code-backend.vercel.app/api";
 
 function normalizeBase(url = "") { //Removes trailing slashes from the URL.
@@ -15,7 +15,7 @@ function isLocalHostname(hostname = "") { //Checks if the app is running on your
 }
 
 /** Dev machine on LAN (e.g. http://192.168.x.x:3000 from `npm start`) */
-function isPrivateLanHostname(hostname = "") {
+function isPrivateLanHostname(hostname = "") { //Checks if the app is running on a private LAN. 192.168.x.x, 10.x.x.x, 172.16.x.x, etc.
   if (isLocalHostname(hostname)) return true;
   return /^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(hostname);
 }

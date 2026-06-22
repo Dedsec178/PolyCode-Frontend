@@ -7,6 +7,12 @@ import {
   getVSCodeEditorOptions,
   POLYCODE_VSCODE_THEME,
 } from "../../../../shared/utils/monacoTheme";
+// Assuming you have matching PHP runtime utilities in your shared folder:
+import {
+  formatPhpOutput,
+  getPhpRuntimeError,
+  runPhpCode,
+} from "../../shared/runPhp";
 import ChallengeCompleteCelebration from "../../shared/ChallengeCompleteCelebration";
 import { useChallengeCelebration } from "../../shared/useChallengeCelebration";
 
@@ -14,9 +20,8 @@ function normalizeWhitespace(value = "") {
   return value.replace(/\s+/g, "");
 }
 
-function testPasses(test, code, solutionCode) {
-  const keywords =
-    test.keywords || extractKeywords(solutionCode, test.id, [test]);
+function testPasses(test, code) {
+  const keywords = test.keywords || [];
   if (!keywords.length) return true;
 
   return keywords.every((keyword) => {
@@ -33,16 +38,7 @@ function testPasses(test, code, solutionCode) {
   });
 }
 
-function extractKeywords(solutionCode, testId) {
-  const lines = solutionCode
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line && !line.startsWith("//"));
-
-  return lines[testId - 1] ? [lines[testId - 1]] : [];
-}
-
-export default function CsharpCodeChallenge({
+export default function PhpFundamentalsCodeChallenge({
   challenge,
   accentColor,
   isCompleted,
@@ -88,31 +84,64 @@ export default function CsharpCodeChallenge({
     setResults(null);
     setOutput({
       status: "running",
-      stdout: "Compiling source structure and running .NET validation assertions…",
+      stdout: "Running PHP checks…",
     });
 
-    window.setTimeout(() => {
-      // Basic static analysis check mimicking runtime verification
-      const missingSemicolon = code.includes("Console.WriteLine") && 
-                              !new RegExp("Console\\.WriteLine\\s*\\(.*\\)\\s*;").test(code);
+    window.setTimeout(async () => {
+      let expectedOutput = "";
+      try {
+        const expectedRun = await runPhpCode(challenge.solutionCode);
+        expectedOutput = formatPhpOutput(expectedRun.result);
+      } catch {
+        expectedOutput = "";
+      }
 
-      if (missingSemicolon) {
+      let runPayload;
+      try {
+        runPayload = await runPhpCode(code);
+      } catch (error) {
         setResults({
           passed: false,
           tests: [
             {
               id: "runtime",
-              label: "C# source compiles without errors",
+              label: "PHP runs without syntax errors",
               passed: false,
-              hint: "Compilation Error (CS1002): ; expected",
+              hint: error.message || "Could not run PHP.",
             },
             ...challenge.tests.map((test) => ({ ...test, passed: false })),
           ],
         });
         setOutput({
           status: "fail",
-          stdout: "Compilation Error (CS1002): ; expected near end of line statement context.",
-          expected: "Program executable output stream logs.",
+          stdout: error.message || "Run failed",
+          expected: expectedOutput,
+        });
+        setRunning(false);
+        return;
+      }
+
+      const { result: runResult } = runPayload;
+      const runtimeError = getPhpRuntimeError(runResult);
+      const stdout = formatPhpOutput(runResult);
+
+      if (runtimeError) {
+        setResults({
+          passed: false,
+          tests: [
+            {
+              id: "runtime",
+              label: "PHP runs without runtime errors",
+              passed: false,
+              hint: "Fix the error in Output, then run again.",
+            },
+            ...challenge.tests.map((test) => ({ ...test, passed: false })),
+          ],
+        });
+        setOutput({
+          status: "fail",
+          stdout: runtimeError,
+          expected: expectedOutput,
         });
         setRunning(false);
         return;
@@ -120,26 +149,16 @@ export default function CsharpCodeChallenge({
 
       const testResults = challenge.tests.map((test) => ({
         ...test,
-        passed: testPasses(test, code, challenge.solutionCode),
+        passed: testPasses(test, code),
       }));
 
-      const acceptanceTests = testResults.filter((test) => test.id !== "runtime");
-      const allPassed = acceptanceTests.every((test) => test.passed);
-
-      // Simulating a parsed stdout window for visual continuity
-      let simulatedStdout = "";
-      if (allPassed) {
-        const match = challenge.solutionCode.match(/Console\.WriteLine\s*\(\s*["'](.*)["']\s*\)/);
-        simulatedStdout = match ? match[1] : "Process exited with code 0.";
-      } else {
-        simulatedStdout = "Test validation sequence failed. Mismatched code signatures.";
-      }
+      const allPassed = testResults.every((test) => test.passed);
 
       setResults({ passed: allPassed, tests: testResults });
       setOutput({
         status: allPassed ? "pass" : "fail",
-        stdout: simulatedStdout,
-        expected: challenge.tests[0]?.hint || "All conditions met.",
+        stdout: stdout || "Program ran (no printed output).",
+        expected: expectedOutput,
       });
 
       if (allPassed) {
@@ -216,49 +235,6 @@ export default function CsharpCodeChallenge({
                     <code>{block.content}</code>
                   </pre>
                 );
-              if (block.type === "callout")
-                return (
-                  <div
-                    key={i}
-                    style={{
-                      borderLeft: "3px solid #ffe566",
-                      padding: "8px 12px",
-                      background: "rgba(184,255,0,0.06)",
-                      borderRadius: "6px",
-                      margin: "8px 0",
-                      fontSize: "0.86rem",
-                    }}
-                  >
-                    {block.content}
-                  </div>
-                );
-              if (block.type === "expected")
-                return (
-                  <div key={i} style={{ marginTop: "10px" }}>
-                    <span
-                      style={{
-                        fontSize: "0.7rem",
-                        color: "#6e7891",
-                        textTransform: "uppercase",
-                        fontWeight: 700,
-                        letterSpacing: "0.08em",
-                      }}
-                    >
-                      {block.label}
-                    </span>
-                    <pre
-                      style={{
-                        background: "rgba(0,0,0,0.3)",
-                        padding: "8px 12px",
-                        borderRadius: "6px",
-                        fontSize: "0.82rem",
-                        marginTop: "5px",
-                      }}
-                    >
-                      <code>{block.content}</code>
-                    </pre>
-                  </div>
-                );
               return null;
             })}
           </div>
@@ -312,18 +288,18 @@ export default function CsharpCodeChallenge({
           }`}
         >
           <div className="oops-output-head">
-            <span>Console Output</span>
-            <small>{output ? "after last run" : "waiting for compilation"}</small>
+            <span>Output</span>
+            <small>{output ? "after last run" : "waiting for run"}</small>
           </div>
           <pre className="oops-output-body">
-            {output?.stdout || "Compile your source entry assembly to inspect output lines."}
+            {output?.stdout || "Run your code to see output here."}
           </pre>
         </div>
       </div>
 
       <div className="oops-editor-panel">
         <div className="oops-editor-topbar">
-          <span className="oops-editor-lang">C# · Program.cs</span>
+          <span className="oops-editor-lang">PHP · lesson.php</span>
           <div className="oops-editor-actions">
             <button
               type="button"
@@ -346,7 +322,7 @@ export default function CsharpCodeChallenge({
         <div className="oops-editor">
           <Editor
             height="100%"
-            language="csharp"
+            language="php"
             value={showSolution ? challenge.solutionCode : code}
             beforeMount={definePolycodeMonacoTheme}
             onMount={handleEditorMount}
@@ -371,8 +347,8 @@ export default function CsharpCodeChallenge({
               className={`oops-verdict ${results.passed ? "oops-verdict-pass" : "oops-verdict-fail"}`}
             >
               {results.passed
-                ? "✓ All compiler validations passed!"
-                : `${results.tests.filter((t) => t.passed && t.id !== "runtime").length}/${challenge.tests.length} tests passed`}
+                ? "✓ All tests passed!"
+                : `${results.tests.filter((t) => t.passed).length}/${challenge.tests.length} tests passed`}
             </div>
           )}
           <button
@@ -386,10 +362,10 @@ export default function CsharpCodeChallenge({
             {authLoading
               ? "Checking sign-in…"
               : running
-                ? "⟳ Compiling…"
+                ? "⟳ Running…"
                 : canRun
-                  ? "▶ Build & Run"
-                  : "Sign in to compile & run"}
+                  ? "▶ Run & Submit"
+                  : "Sign in to run & submit"}
           </button>
         </div>
       </div>

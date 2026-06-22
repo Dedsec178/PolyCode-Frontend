@@ -44,6 +44,15 @@ export const generalCourses = [
 export const languageCourses = {
   cpp: [
     {
+      title: "C++ Fundamentals",
+      tag: "Interactive Course",
+      icon: Terminal,
+      description:
+        "Beginner to advanced C++: variables, control flow, functions, arrays, pointers, structs, OOP preview, STL, and capstone projects.",
+      href: "/learn/cpp-fundamentals",
+      accent: "#f34b7d",
+    },
+    {
       title: "OOPs C++",
       tag: "Interactive Course",
       icon: Boxes,
@@ -63,6 +72,15 @@ export const languageCourses = {
     },
   ],
   "c++": [
+    {
+      title: "C++ Fundamentals",
+      tag: "Interactive Course",
+      icon: Terminal,
+      description:
+        "Beginner to advanced C++: variables, control flow, functions, arrays, pointers, structs, OOP preview, STL, and capstone projects.",
+      href: "/learn/cpp-fundamentals",
+      accent: "#f34b7d",
+    },
     {
       title: "OOPs C++",
       tag: "Interactive Course",
@@ -122,6 +140,17 @@ export const languageCourses = {
       accent: "#f59e0b",
     },
   ],
+  php: [
+    {
+      title: "PHP Fundamentals",
+      tag: "Interactive Course",
+      icon: Terminal,
+      description:
+        "Modern server-side PHP: strict types, control flow, match expressions, associative arrays, superglobals, OOP constructor property promotion, and custom REST API endpoints.",
+      href: "/learn/php-fundamentals",
+      accent: "#777bb4",
+    },
+  ],
   csharp: [
     {
       title: "C# Fundamentals",
@@ -144,15 +173,28 @@ export const languageCourses = {
       accent: "#179c24",
     },
   ],
+  ruby: [
+    {
+      title: "Ruby Fundamentals",
+      tag: "Interactive Course",
+      icon: Terminal,
+      description:
+        "Foundational Ruby Programming: expressive syntax, block-based iteration, dynamic typing, core object-oriented principles, modules and mixins, error handling, and file I/O operations.",
+      href: "/learn/ruby-fundamentals",
+      accent: "#701516",
+    }
+  ]
 };
 
 /** Navbar learn links per language (mirrors languageCourses). */
 export const learnNavByLanguage = {
   cpp: [
+    { label: "Basics", to: "/learn/cpp-fundamentals" },
     { label: "OOPs", to: "/learn/oops-cpp" },
     { label: "Pointers", to: "/learn/pointers-cpp" },
   ],
   "c++": [
+    { label: "Basics", to: "/learn/cpp-fundamentals" },
     { label: "OOPs", to: "/learn/oops-cpp" },
     { label: "Pointers", to: "/learn/pointers-cpp" },
   ],
@@ -162,11 +204,14 @@ export const learnNavByLanguage = {
     { label: "Matplotlib", to: "/learn/matplotlib-py" },
   ],
   javascript: [{ label: "JS Basics", to: "/learn/js-fundamentals" }],
+  php: [{ label: "PHP Basics", to: "/learn/php-fundamentals" }],
+  ruby: [{label: "Ruby Basics", to: "/learn/ruby-fundamentals"}]
 };
 
 /** Infer stack from an active /learn/* route when language is not set. */
 export function inferLanguageFromLearnPath(pathname = "") {
   if (
+    pathname.startsWith("/learn/cpp-fundamentals") ||
     pathname.startsWith("/learn/oops-cpp") ||
     pathname.startsWith("/learn/pointers-cpp")
   ) {
@@ -181,6 +226,12 @@ export function inferLanguageFromLearnPath(pathname = "") {
   }
   if (pathname.startsWith("/learn/js-fundamentals")) {
     return "javascript";
+  }
+  if (pathname.startsWith("/learn/php-fundamentals")) {
+    return "php";
+  }
+  if (pathname.startsWith("/learn/ruby-fundamentals")){
+    return "ruby";
   }
   return null;
 }

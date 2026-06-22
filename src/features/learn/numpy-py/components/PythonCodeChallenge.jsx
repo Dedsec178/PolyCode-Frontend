@@ -373,6 +373,7 @@ export default function PythonCodeChallenge({
             <span>Output</span>
             <small>{output ? "after last run" : "waiting for run"}</small>
           </div>
+<<<<<<< HEAD
           <PythonRunOutput
             stdout={output?.stdout}
             plotImages={output?.plotImages}
@@ -384,6 +385,11 @@ export default function PythonCodeChallenge({
               <code>{output.expected}</code>
             </div>
           )}
+=======
+          <pre className="oops-output-body">
+            {output?.stdout || "Run your code to see output here."}
+          </pre>
+>>>>>>> dae7980f9f2b878546f0555e06f639eeae04395e
         </div>
       </div>
 
