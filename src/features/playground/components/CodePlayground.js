@@ -11,7 +11,6 @@ import {
   savePlaygroundRun,
   savePlaygroundWorkspace,
   importPlaygroundWorkspace,
-  fetchPlaygroundRecentFiles,
   fetchPlaygroundRuns,
   deletePlaygroundRun,
   clearPlaygroundRuns,
@@ -31,15 +30,13 @@ import {
   defaultStarterContent,
   getActiveFile,
   mergeLocalWorkspace,
-  entriesFromCloudFiles,
-  entriesFromWorkspaces,
-  mergeRecentEntries,
   monacoLanguageForFile,
   nextFileNameInFolder,
   saveLocalWorkspaces,
 } from "../lib/playgroundFiles";
 import {
   buildFileTree,
+  basename,
   dirname,
   joinPath,
   normalizePath,
@@ -54,12 +51,6 @@ import {
 } from "../../../shared/utils/monacoTheme";
 import { isLightTheme } from "../../../shared/theme/themes";
 import { useDocumentThemeId } from "../hooks/useDocumentThemeId";
-import {
-  dismissRecentEntry,
-  filterDismissedRecentEntries,
-  loadDismissedRecentKeys,
-  recentEntryKey,
-} from "../lib/playgroundRecentDismiss";
 import "./CodePlayground.css";
 
 const LANG_GROUPS = [
@@ -250,20 +241,15 @@ export default function CodePlayground({
     buildInitialWorkspaces(normalizedInitialLanguage, initialCode),
   );
   const [runningLanguage, setRunningLanguage] = useState(null);
-  const [fontSize, setFontSize] = useState(14);
+  const [fontSize, setFontSize] = useState(15);
   const [wordWrap, setWordWrap] = useState(false);
   const [consoleRatio, setConsoleRatio] = useState(loadConsoleRatio);
   const [isResizingPanes, setIsResizingPanes] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [explorerOpen, setExplorerOpen] = useState(loadExplorerOpen);
-  const [recentFiles, setRecentFiles] = useState([]);
-  const [recentLoading, setRecentLoading] = useState(false);
   const [runHistory, setRunHistory] = useState([]);
   const [runHistoryLoading, setRunHistoryLoading] = useState(false);
   const [historyScope, setHistoryScope] = useState("all");
-  const [dismissedRecentKeys, setDismissedRecentKeys] = useState(() =>
-    loadDismissedRecentKeys(),
-  );
   const outputRef = useRef(null);
   const panesRef = useRef(null);
   const paneDragRef = useRef(null);
@@ -272,8 +258,6 @@ export default function CodePlayground({
   const saveTimerRef = useRef(null);
   const workspaceSaveTimerRef = useRef(null);
   const prevTokenRef = useRef(token);
-  const pendingRecentFileRef = useRef(null);
-  const refreshRecentRef = useRef(null);
   const visitedLanguagesRef = useRef(new Set([normalizedInitialLanguage]));
 
   const currentWorkspace = workspaces[language] || createWorkspace(language);
@@ -291,58 +275,6 @@ export default function CodePlayground({
     [files, folders],
   );
   const currentIsRunning = runningLanguage === language;
-  const activeRecentFileId = activeFile?.serverId || activeFile?.id || null;
-
-  const refreshRecentFiles = useCallback(async () => {
-    const workspaceSnapshot = workspacesRef.current;
-    const localRows = entriesFromWorkspaces(workspaceSnapshot);
-    const applyDismissed = (rows) =>
-      filterDismissedRecentEntries(rows, dismissedRecentKeys);
-
-    if (!token) {
-      setRecentFiles(applyDismissed(mergeRecentEntries([localRows])));
-      return;
-    }
-
-    setRecentLoading(true);
-    try {
-      const data = await fetchPlaygroundRecentFiles(token, { limit: 40 });
-      if (Array.isArray(data.files) && data.files.length) {
-        setRecentFiles(
-          applyDismissed(mergeRecentEntries([data.files, localRows])),
-        );
-        return;
-      }
-
-      const languages = [
-        language,
-        ...Array.from(visitedLanguagesRef.current),
-      ].filter((lang, index, list) => list.indexOf(lang) === index);
-
-      const cloudLists = await Promise.all(
-        languages.map(async (lang) => {
-          try {
-            const payload = await fetchPlaygroundFiles(token, lang);
-            return entriesFromCloudFiles(lang, payload.files);
-          } catch {
-            return [];
-          }
-        }),
-      );
-
-      const merged = mergeRecentEntries([...cloudLists, localRows]);
-      setRecentFiles(applyDismissed(merged));
-    } catch (err) {
-      logPlaygroundSyncError("Could not load recent code", err);
-      setRecentFiles(applyDismissed(mergeRecentEntries([localRows])));
-    } finally {
-      setRecentLoading(false);
-    }
-  }, [token, language, dismissedRecentKeys]);
-
-  useEffect(() => {
-    refreshRecentRef.current = refreshRecentFiles;
-  }, [refreshRecentFiles]);
 
   const refreshRunHistory = useCallback(async () => {
     const workspace = workspacesRef.current[language];
@@ -385,20 +317,8 @@ export default function CodePlayground({
   }, [token, language, historyScope]);
 
   useEffect(() => {
-    if (!token) return;
-    const localRows = entriesFromWorkspaces(workspaces);
-    if (localRows.length) {
-      setRecentFiles((prev) => mergeRecentEntries([prev, localRows]));
-    }
-  }, [token, workspaces]);
-
-  useEffect(() => {
-    refreshRecentFiles();
-  }, [refreshRecentFiles]);
-
-  useEffect(() => {
     refreshRunHistory();
-  }, [token, language, activeRecentFileId, historyScope, refreshRunHistory]);
+  }, [token, language, activeFile?.id, historyScope, refreshRunHistory]);
 
   useEffect(() => {
     workspacesRef.current = workspaces;
@@ -482,13 +402,6 @@ export default function CodePlayground({
             activeTab: prev[language]?.activeTab || "output",
           },
         }));
-        setRecentFiles((prev) =>
-          mergeRecentEntries([
-            prev,
-            entriesFromCloudFiles(language, data.files),
-          ]),
-        );
-        refreshRecentRef.current?.();
       } catch (err) {
         if (!cancelled) {
           logPlaygroundSyncError("Could not load files from cloud", err);
@@ -585,7 +498,6 @@ export default function CodePlayground({
       logPlaygroundSyncError("Could not save to cloud", err);
     } finally {
       setSyncing(false);
-      refreshRecentRef.current?.();
     }
   }, [token, language]);
 
@@ -705,118 +617,6 @@ export default function CodePlayground({
     [language, selectedFolder, updateWorkspace],
   );
 
-  const openRecentFile = useCallback(
-    (entry) => {
-      if (!entry?.id || !entry.language) return;
-      pendingRecentFileRef.current = {
-        id: entry.id,
-        language: entry.language,
-      };
-      if (entry.language !== language) {
-        setLanguage(entry.language);
-        return;
-      }
-      const workspace = workspacesRef.current[language];
-      const match = workspace?.files?.find(
-        (file) => file.serverId === entry.id || file.id === entry.id,
-      );
-      if (match) {
-        pendingRecentFileRef.current = null;
-        selectFile(match.id);
-      }
-    },
-    [language, selectFile],
-  );
-
-  const removeFromRecent = useCallback((entry) => {
-    const next = dismissRecentEntry(entry);
-    setDismissedRecentKeys(next);
-    setRecentFiles((prev) =>
-      prev.filter((item) => recentEntryKey(item) !== recentEntryKey(entry)),
-    );
-  }, []);
-
-  const deleteRecentFile = useCallback(
-    async (entry) => {
-      if (!entry?.language || !entry?.name) return;
-      const langInfo = resolveEngine(entry.language);
-      if (
-        !window.confirm(
-          `Delete "${entry.name}" from your ${langInfo.label} workspace? This cannot be undone.`,
-        )
-      ) {
-        return;
-      }
-
-      removeFromRecent(entry);
-
-      const targetLanguage = entry.language;
-      const workspace =
-        workspacesRef.current[targetLanguage] || createWorkspace(targetLanguage);
-      const match =
-        workspace.files.find(
-          (file) =>
-            file.serverId === entry.id ||
-            file.id === entry.id ||
-            file.name === entry.name,
-        ) || null;
-
-      if (token && (match?.serverId || entry.id)) {
-        try {
-          setSyncing(true);
-          await deletePlaygroundFile(token, match?.serverId || entry.id);
-        } catch (err) {
-          logPlaygroundSyncError("Could not delete file from cloud", err);
-          setSyncing(false);
-          return;
-        } finally {
-          setSyncing(false);
-        }
-      }
-
-      updateWorkspace(targetLanguage, (current) => {
-        if (!match) return {};
-        const nextFiles = current.files.filter((file) => file.id !== match.id);
-        if (nextFiles.length === 0) {
-          const replacement = createFile(targetLanguage);
-          return {
-            files: [replacement],
-            activeFileId: replacement.id,
-          };
-        }
-        return {
-          files: nextFiles,
-          activeFileId:
-            current.activeFileId === match.id
-              ? nextFiles[0]?.id
-              : current.activeFileId,
-        };
-      });
-
-      refreshRecentRef.current?.();
-    },
-    [token, removeFromRecent, updateWorkspace],
-  );
-
-  useEffect(() => {
-    const pending = pendingRecentFileRef.current;
-    if (!pending || pending.language !== language) return;
-
-    const workspace = workspaces[language];
-    if (!workspace?.cloudLoaded) return;
-
-    const match = workspace.files.find(
-      (file) => file.serverId === pending.id || file.id === pending.id,
-    );
-    if (match) {
-      pendingRecentFileRef.current = null;
-      updateWorkspace(language, {
-        activeFileId: match.id,
-        selectedFolder: normalizePath(dirname(match.name)),
-      });
-    }
-  }, [workspaces, language, updateWorkspace]);
-
   const applyRunHistory = useCallback(
     (run) => {
       if (!run) return;
@@ -902,7 +702,29 @@ export default function CodePlayground({
       const targetFolder = normalizePath(
         folderPath ?? workspace.selectedFolder ?? "",
       );
-      const name = nextFileNameInFolder(language, workspace.files, targetFolder);
+      const defaultPath = nextFileNameInFolder(
+        language,
+        workspace.files,
+        targetFolder,
+      );
+      const input = window.prompt(
+        "Enter file name",
+        basename(defaultPath) || defaultMainFileName(language),
+      );
+      if (input === null) return;
+
+      const trimmed = input.trim();
+      if (!trimmed) return;
+
+      const name = joinPath(targetFolder, trimmed);
+      const exists = workspace.files.some(
+        (file) => normalizePath(file.name) === normalizePath(name),
+      );
+      if (exists) {
+        window.alert("A file with that name already exists.");
+        return;
+      }
+
       const localFile = createFile(language, { name });
 
       if (token) {
@@ -923,6 +745,12 @@ export default function CodePlayground({
             files: [...current.files, cloudFile],
             activeFileId: cloudFile.id,
             selectedFolder: targetFolder,
+            expandedFolders: {
+              ...(current.expandedFolders || {}),
+              [targetFolder]: true,
+              ...(targetFolder ? { [dirname(targetFolder)]: true } : {}),
+              "": true,
+            },
           }));
         } catch (err) {
           logPlaygroundSyncError("Could not create file in cloud", err);
@@ -936,6 +764,11 @@ export default function CodePlayground({
         files: [...current.files, localFile],
         activeFileId: localFile.id,
         selectedFolder: targetFolder,
+        expandedFolders: {
+          ...(current.expandedFolders || {}),
+          [targetFolder]: true,
+          "": true,
+        },
       }));
     },
     [language, token, updateWorkspace],
@@ -1002,11 +835,19 @@ export default function CodePlayground({
     [language, updateWorkspace],
   );
 
-  const closeFile = useCallback(
+  const deleteFile = useCallback(
     async (fileId) => {
       const workspace = workspacesRef.current[language];
       const target = workspace?.files?.find((file) => file.id === fileId);
-      if (!target || workspace.files.length <= 1) return;
+      if (!target) return;
+
+      if (
+        !window.confirm(
+          `Delete "${target.name}"? This cannot be undone.`,
+        )
+      ) {
+        return;
+      }
 
       if (token && target.serverId) {
         try {
@@ -1023,13 +864,19 @@ export default function CodePlayground({
 
       updateWorkspace(language, (current) => {
         const nextFiles = current.files.filter((file) => file.id !== fileId);
-        const nextActive =
-          current.activeFileId === fileId
-            ? nextFiles[0]?.id
-            : current.activeFileId;
+        if (nextFiles.length === 0) {
+          const replacement = createFile(language);
+          return {
+            files: [replacement],
+            activeFileId: replacement.id,
+          };
+        }
         return {
           files: nextFiles,
-          activeFileId: nextActive,
+          activeFileId:
+            current.activeFileId === fileId
+              ? nextFiles[0]?.id
+              : current.activeFileId,
         };
       });
     },
@@ -1183,7 +1030,6 @@ export default function CodePlayground({
         })
           .then(() => {
             refreshRunHistory();
-            refreshRecentRef.current?.();
           })
           .catch(() => {
             /* non-blocking */
@@ -1255,11 +1101,11 @@ export default function CodePlayground({
         <div className="pg-toolbar-center">
           {token ? (
             <span className={`pg-sync-badge${syncing ? " pg-sync-badge--busy" : ""}`}>
-              {syncing ? "Saving…" : "Saved to your PolyCode account"}
+              {syncing ? "Saving…" : "Files saved to your account"}
             </span>
           ) : (
             <span className="pg-sync-badge pg-sync-badge--local">
-              Saved in this browser — sign in to sync across devices
+              Files saved in this browser — sign in to sync
             </span>
           )}
           {isServerBased ? (
@@ -1320,20 +1166,15 @@ export default function CodePlayground({
           activeFileId={activeFile?.id}
           selectedFolder={selectedFolder}
           explorerOpen={explorerOpen}
+          signedIn={Boolean(token)}
+          fileCount={files.length}
           onToggleExplorer={toggleExplorer}
           onToggleFolder={toggleFolder}
           onSelectFolder={selectFolder}
           onSelectFile={selectFile}
           onNewFile={addFile}
           onNewFolder={addFolder}
-          signedIn={Boolean(token)}
-          recentFiles={recentFiles}
-          recentLoading={recentLoading}
-          activeRecentFileId={activeRecentFileId}
-          activeLanguage={language}
-          onOpenRecentFile={openRecentFile}
-          onRemoveRecentFile={removeFromRecent}
-          onDeleteRecentFile={deleteRecentFile}
+          onDeleteFile={deleteFile}
         />
 
         <div
@@ -1365,8 +1206,9 @@ export default function CodePlayground({
                   <button
                     type="button"
                     className="pg-file-tab-close"
-                    onClick={() => closeFile(file.id)}
-                    aria-label={`Close ${file.name}`}
+                    onClick={() => deleteFile(file.id)}
+                    aria-label={`Delete ${file.name}`}
+                    title={`Delete ${file.name}`}
                   >
                     ×
                   </button>
