@@ -129,17 +129,83 @@
   --learn-cert-btn-text: #1a1200;
 }
 
-.app.theme-midnight {
+.app.theme-midnight .main-content.learn-content {
   --learn-hero-bg:
-    linear-gradient(135deg, rgba(129, 140, 248, 0.16), transparent 44%),
-    var(--bg-card, #12182b);
-  --learn-card-bg-solid: rgba(19, 26, 46, 0.94);
-  --learn-pill-bg: rgba(165, 180, 252, 0.1);
-  --learn-pill-border: rgba(165, 180, 252, 0.22);
-  --learn-pill-text: #a5b4fc;
-  --learn-action-bg: #6366f1;
-  --learn-cert-btn-bg: #6366f1;
+    linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(59, 130, 246, 0.06) 48%, transparent 72%),
+    var(--bg-card, #151b32);
+  --learn-card-bg:
+    linear-gradient(165deg, rgba(34, 42, 76, 0.98) 0%, rgba(22, 30, 54, 0.98) 100%);
+  --learn-card-bg-solid: rgba(26, 34, 64, 0.96);
+  --learn-card-border: rgba(139, 152, 255, 0.28);
+  --learn-card-title: #f0f4ff;
+  --learn-card-muted: #9aa8dc;
+  --learn-action-bg: linear-gradient(135deg, #7c6df0 0%, #6366f1 100%);
+  --learn-action-text: #ffffff;
+  --learn-pill-bg: rgba(139, 92, 246, 0.14);
+  --learn-pill-border: rgba(167, 139, 250, 0.32);
+  --learn-pill-text: #c4b5fd;
+  --learn-tile-bg: rgba(22, 30, 54, 0.92);
+  --learn-tile-border: rgba(139, 152, 255, 0.22);
+  --learn-cert-btn-bg: #7c6df0;
   --learn-cert-btn-text: #ffffff;
+}
+
+.app.theme-midnight .main-content.learn-content .oops-chapter-card,
+.app.theme-midnight .main-content.learn-content .oops-hero,
+.app.theme-midnight .main-content.learn-content .oops-resume-panel,
+.app.theme-midnight .main-content.learn-content .oops-tool-panel {
+  box-shadow:
+    0 14px 36px rgba(8, 12, 28, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.app.theme-midnight .main-content.learn-content .oops-chapter-card {
+  background: var(--learn-card-bg);
+  border-color: var(--learn-card-border);
+}
+
+.app.theme-midnight .main-content.learn-content .oops-chapter-card:hover {
+  border-color: rgba(167, 139, 250, 0.55);
+  box-shadow:
+    0 18px 42px rgba(99, 102, 241, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.app.theme-midnight .main-content.learn-content .oops-chapter-card.oops-chapter-done {
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+.app.theme-midnight .main-content.learn-content .oops-chapter-title {
+  color: var(--learn-card-title);
+}
+
+.app.theme-midnight .main-content.learn-content .oops-chapter-num,
+.app.theme-midnight .main-content.learn-content .oops-chapter-meta,
+.app.theme-midnight .main-content.learn-content .oops-lesson-xp {
+  color: var(--learn-card-muted);
+}
+
+.app.theme-midnight .main-content.learn-content .oops-chapter-progress-track {
+  background: rgba(139, 152, 255, 0.12);
+}
+
+.app.theme-midnight .main-content.learn-content .oops-lesson-item:hover {
+  background: rgba(139, 92, 246, 0.12);
+}
+
+.app.theme-midnight .main-content.learn-content .oops-lesson-item.done .oops-lesson-status {
+  color: #a78bfa;
+}
+
+.app.theme-midnight .main-content.learn-content .oops-chapter-cta {
+  background: var(--learn-action-bg, #7c6df0);
+  color: var(--learn-action-text, #fff);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.28);
+}
+
+.app.theme-midnight .main-content.learn-content .oops-chapter-cta:hover {
+  opacity: 1;
+  filter: brightness(1.06);
 }
 
 .app.theme-ocean {
