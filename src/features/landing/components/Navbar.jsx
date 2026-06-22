@@ -7,7 +7,7 @@ import ThemeSettingsMenu from "../../../shared/theme/ThemeSettingsMenu";
 
 const NAV_LINKS = [
   { href: "#modules", label: "Features" },
-  { href: "/hub", label: "Docs" },
+  { href: "/playground", label: "Playground" },
 ];
 
 export default function Navbar({ theme = "dark", onThemeChange }) {
