@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CHAPTERS } from "../data/oopsCurriculum";
 import { useLearnNav } from "../../shared/LearnNavContext";
+import LearnChapterIcon from "../../shared/LearnChapterIcon";
+import LessonStatusIcon from "../../shared/LessonStatusIcon";
 
 export default function OopsSidebar({
   currentLessonId,
@@ -82,7 +84,9 @@ export default function OopsSidebar({
                   style={{ "--ch-color": ch.color }}
                   onClick={() => toggleChapter(ch.id)}
                 >
-                  <span className="oops-sb-icon">{ch.icon}</span>
+                  <span className="oops-sb-icon">
+                    <LearnChapterIcon icon={ch.icon} size={16} />
+                  </span>
                   <span className="oops-sb-title">{ch.title}</span>
                   <span className="oops-sb-count">
                     {doneLessons}/{ch.lessons.length}
@@ -103,7 +107,7 @@ export default function OopsSidebar({
                             onClick={() => goToLesson(l.id)}
                           >
                             <span className="oops-sb-check">
-                              {isDone ? "✓" : "○"}
+                              <LessonStatusIcon done={isDone} />
                             </span>
                             <span>{l.title}</span>
                             {!isDone && (
