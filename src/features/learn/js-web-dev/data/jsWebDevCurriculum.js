@@ -13,8 +13,6 @@ import {
   objectives,
 } from "../../js-fundamentals/data/jsCurriculumHelpers";
 
-const ACCENT = "#22c55e";
-
 export const JS_WEB_DEV_CHAPTERS = [
   {
     id: "dom-foundations",
