@@ -1,86 +1,104 @@
+import { DefaultRubyVM } from "@ruby/wasm-wasi/dist/browser";
+
+let rubyVM = null;
+
 /**
- * Utility functions for running Ruby code and formatting the output.
- * Placed in `shared/runRuby.js`
+ * Initializes the Ruby WebAssembly Virtual Machine.
  */
+export async function initRubyVM() {
+  if (rubyVM) return;
+  
+  try {
+    const response = await fetch(
+      "https://unpkg.com/@ruby/3.2-wasm-wasi/dist/ruby.wasm",
+    );
+    
+    if (!response.ok) {
+      throw new Error(`Download failed with status: ${response.status}`);
+    }
 
-// Example using the public Piston execution API.
-// Replace this with your own backend endpoint if you have a custom execution service (e.g., "/api/execute/ruby").
-const EXECUTION_API_URL = "https://emkc.org/api/v2/piston/execute";
+    const buffer = await response.arrayBuffer();
+    const module = await WebAssembly.compile(buffer);
+    
+    const { vm } = await DefaultRubyVM(module);
+    rubyVM = vm;
+    
+    console.log("Ruby Engine loaded successfully!");
+    
+  } catch (error) {
+    console.error("Failed to start the Ruby Engine in initRubyVM:", error);
+    // CRITICAL FIX: Re-throw the error so any function calling this knows it failed
+    throw error; 
+  }
+}
 
 /**
- * Sends the Ruby code to the execution backend.
- * @param {string} code - The Ruby source code to run.
- * @returns {Promise<Object>} The execution payload.
+ * Runs Ruby code flawlessly in the browser using the WASM VM.
  */
 export async function runRubyCode(code) {
   try {
-    const response = await fetch(EXECUTION_API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        language: "ruby",
-        version: "3.2.2", // or "*" to use the latest available version
-        files: [
-          {
-            name: "script.rb",
-            content: code,
-          },
-        ],
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Server responded with status: ${response.status}`);
+    // Attempt to load the VM if it isn't ready
+    if (!rubyVM) {
+      await initRubyVM();
     }
 
-    const data = await response.json();
+    // EXTRA SECURITY CHECK: If it still failed to load, stop immediately
+    if (!rubyVM) {
+      throw new Error("Ruby WebAssembly environment was not initialized.");
+    }
 
-    // Normalize the output to ensure the React component receives a predictable structure
+    const wrapperCode = `
+      require 'stringio'
+      $stdout = StringIO.new
+      $stderr = StringIO.new
+      
+      begin
+        eval(<<~'POLYCODE_USER_SCRIPT')
+          ${code}
+        POLYCODE_USER_SCRIPT
+      rescue Exception => e   # <--- THE MAGIC FIX
+        $stderr.puts e.message
+      ensure
+        $polycode_stdout = $stdout.string
+        $polycode_stderr = $stderr.string
+        $stdout = STDOUT
+        $stderr = STDERR
+      end
+    `;
+
+    // Execute the code inside the WebAssembly VM
+    rubyVM.eval(wrapperCode);
+
+    // Extract the captured outputs back into JavaScript using the global variables
+    const stdoutBuffer = rubyVM.eval("$polycode_stdout").toString();
+    const stderrBuffer = rubyVM.eval("$polycode_stderr").toString();
+    const codeStatus = stderrBuffer.length > 0 ? 1 : 0;
+
     return {
       result: {
-        stdout: data.run.stdout || "",
-        stderr: data.run.stderr || "",
-        code: data.run.code,
-        signal: data.run.signal,
-      },
+        stdout: stdoutBuffer.trim(),
+        stderr: stderrBuffer.trim(),
+        code: codeStatus
+      }
     };
-  } catch (error) {
-    console.error("Execution request failed:", error);
-    throw new Error("Could not connect to the Ruby execution server.");
+
+  } catch (err) {
+    // This catches both compilation issues AND our initialization errors cleanly!
+    return {
+      result: {
+        stdout: "",
+        stderr: `Initialization/Syntax Error: ${err.message}`,
+        code: 1
+      }
+    };
   }
 }
 
-/**
- * Formats the raw execution result into a clean output string for the console UI.
- * @param {Object} result - The result object from runRubyCode.
- * @returns {string} The formatted console output.
- */
 export function formatRubyOutput(result) {
   if (!result) return "";
-  
-  // Combine stdout and stderr, filtering out empty strings
-  const out = result.stdout ? result.stdout.trim() : "";
-  const err = result.stderr ? result.stderr.trim() : "";
-  
-  return [out, err].filter(Boolean).join("\n\n");
+  return [result.stdout, result.stderr].filter(Boolean).join("\n\n");
 }
 
-/**
- * Checks the execution result for runtime errors or syntax exceptions.
- * @param {Object} result - The result object from runRubyCode.
- * @returns {string|null} The error message if one occurred, otherwise null.
- */
 export function getRubyRuntimeError(result) {
-  if (!result) return "Execution failed to return a result.";
-
-  // Exit code 0 generally means success. If it's non-zero, or if there's explicit stderr, flag it.
-  if (result.code !== 0 || result.stderr) {
-    // Ruby errors usually appear in stderr. If it's empty but code isn't 0, provide a fallback.
-    const errorMessage = result.stderr.trim();
-    return errorMessage || `Process exited with code ${result.code}.`;
-  }
-
-  return null;
+  return result?.stderr || null;
 }
