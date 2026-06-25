@@ -92,7 +92,6 @@ export async function runRubyCode(code) {
       }
     };
   }
-}
 
 export function formatRubyOutput(result) {
   if (!result) return "";

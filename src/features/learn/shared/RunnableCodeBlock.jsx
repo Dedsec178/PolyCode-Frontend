@@ -60,7 +60,10 @@ async function executeTheoryCode(source, lang) {
     return runJavaScriptCode(source);
   }
   if (lang === "csharp") {
-    return runCsharpCode(source); 
+    return runCsharpCode(source);
+  }
+  if (lang === "ruby") {
+    return runRubyCode(source, { learn: true });
   }
   // 2. ROUTE THE EXECUTOR TO USE THE WASM RUNNER
   if (lang === "ruby") {
@@ -146,9 +149,11 @@ export default function RunnableCodeBlock({
         formatTheoryOutput(result, lang) ||
         (result.plotImages?.length
           ? `Rendered ${result.plotImages.length} chart${result.plotImages.length > 1 ? "s" : ""}.`
-          : runtime === "server"
-            ? "Ran on server (no printed output)."
-            : "Ran in browser (no printed output).");
+          : lang === "ruby"
+            ? "Ruby ran successfully. Add puts to display values, e.g. puts total"
+            : runtime === "server"
+              ? "Ran on server (no printed output)."
+              : "Ran in browser (no printed output).");
 
       setOutput({
         status: "pass",
