@@ -1,86 +1,110 @@
-/**
- * Utility functions for running Ruby code and formatting the output.
- * Placed in `shared/runRuby.js`
- */
-
-// Example using the public Piston execution API.
-// Replace this with your own backend endpoint if you have a custom execution service (e.g., "/api/execute/ruby").
-const EXECUTION_API_URL = "https://emkc.org/api/v2/piston/execute";
+import { getApiBase } from "../../../config/apiBase";
 
 /**
- * Sends the Ruby code to the execution backend.
- * @param {string} code - The Ruby source code to run.
- * @returns {Promise<Object>} The execution payload.
+ * Lesson snippets often assign variables without puts/print. Append display lines
+ * so learners still see computed values in the output panel.
  */
-export async function runRubyCode(code) {
+export function prepareRubyLearnCode(code = "") {
+  if (/\b(puts|print|pp)\b/.test(code)) {
+    return code;
+  }
+
+  const names = [];
+  const re = /^\s*([A-Za-z_][\w]*)\s*=/gm;
+  let match;
+  while ((match = re.exec(code)) !== null) {
+    names.push(match[1]);
+  }
+
+  const unique = [...new Set(names)];
+  if (!unique.length) return code;
+
+  const trailer = unique.map((name) => `puts "${name} = #{${name}}"`).join("\n");
+  return `${code.replace(/\s*$/, "")}\n\n${trailer}\n`;
+}
+
+async function readJsonResponse(response) {
+  const text = await response.text();
+  const trimmed = text.trim();
+  if (!trimmed) return {};
+  if (trimmed.startsWith("<")) {
+    throw new Error(
+      "Server returned HTML instead of JSON. Start the PolyCode backend on port 5000.",
+    );
+  }
   try {
-    const response = await fetch(EXECUTION_API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        language: "ruby",
-        version: "3.2.2", // or "*" to use the latest available version
-        files: [
-          {
-            name: "script.rb",
-            content: code,
-          },
-        ],
-      }),
-    });
+    return JSON.parse(trimmed);
+  } catch {
+    throw new Error("Ruby API returned invalid JSON.");
+  }
+}
 
-    if (!response.ok) {
-      throw new Error(`Server responded with status: ${response.status}`);
+async function runRubyOnServer(source) {
+  const endpoints = ["/challenges/run-ruby", "/documents/run-ruby"];
+  let lastError = null;
+
+  for (const path of endpoints) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 45000);
+
+    try {
+      const response = await fetch(`${getApiBase()}${path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: source }),
+        signal: controller.signal,
+      });
+
+      const payload = await readJsonResponse(response);
+      if (!response.ok) {
+        lastError = new Error(
+          payload.message || payload.error || `Ruby API failed (${path})`,
+        );
+        continue;
+      }
+      return payload;
+    } catch (error) {
+      lastError = error;
+    } finally {
+      clearTimeout(timeout);
     }
+  }
 
-    const data = await response.json();
+  throw lastError || new Error("Ruby API unavailable");
+}
 
-    // Normalize the output to ensure the React component receives a predictable structure
-    return {
-      result: {
-        stdout: data.run.stdout || "",
-        stderr: data.run.stderr || "",
-        code: data.run.code,
-        signal: data.run.signal,
-      },
-    };
+/**
+ * Sends Ruby code to the PolyCode backend for execution.
+ * @param {string} code - Ruby source code
+ * @param {{ learn?: boolean }} options - When learn is true, auto-print assigned variables
+ * @returns {Promise<{ result: Object, runtime: string }>}
+ */
+export async function runRubyCode(code, { learn = false } = {}) {
+  const source = learn ? prepareRubyLearnCode(code) : code;
+
+  try {
+    const result = await runRubyOnServer(source);
+    return { result, runtime: "server" };
   } catch (error) {
-    console.error("Execution request failed:", error);
-    throw new Error("Could not connect to the Ruby execution server.");
+    if (error.name === "AbortError") {
+      throw new Error("Ruby run timed out. Try shorter code.");
+    }
+    throw new Error(
+      error.message ||
+        "Could not run Ruby. Start the PolyCode backend on port 5000.",
+    );
   }
 }
 
-/**
- * Formats the raw execution result into a clean output string for the console UI.
- * @param {Object} result - The result object from runRubyCode.
- * @returns {string} The formatted console output.
- */
-export function formatRubyOutput(result) {
-  if (!result) return "";
-  
-  // Combine stdout and stderr, filtering out empty strings
-  const out = result.stdout ? result.stdout.trim() : "";
-  const err = result.stderr ? result.stderr.trim() : "";
-  
-  return [out, err].filter(Boolean).join("\n\n");
+export function formatRubyOutput(result = {}) {
+  return [result.stdout, result.stderr].filter(Boolean).join("\n").trim();
 }
 
-/**
- * Checks the execution result for runtime errors or syntax exceptions.
- * @param {Object} result - The result object from runRubyCode.
- * @returns {string|null} The error message if one occurred, otherwise null.
- */
-export function getRubyRuntimeError(result) {
-  if (!result) return "Execution failed to return a result.";
-
-  // Exit code 0 generally means success. If it's non-zero, or if there's explicit stderr, flag it.
-  if (result.code !== 0 || result.stderr) {
-    // Ruby errors usually appear in stderr. If it's empty but code isn't 0, provide a fallback.
-    const errorMessage = result.stderr.trim();
-    return errorMessage || `Process exited with code ${result.code}.`;
-  }
-
-  return null;
+export function getRubyRuntimeError(runResult) {
+  return (
+    runResult?.error ||
+    (runResult?.exitCode != null && runResult.exitCode !== 0
+      ? runResult.stderr || "Ruby exited with an error"
+      : "")
+  );
 }
