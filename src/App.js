@@ -18,6 +18,7 @@ import LastRouteTracker from "./shared/navigation/LastRouteTracker";
 import { LearnNavProvider } from "./features/learn/shared/LearnNavContext";
 import GlobalAssistant from "./features/assistant/components/GlobalAssistant";
 import { AssistantProvider } from "./features/assistant/context/AssistantContext";
+import { AppSettingsProvider } from "./shared/settings/AppSettingsContext";
 import "./App.css";
 import "./styles/theme-light.css";
 import "./styles/theme-ocean.css";
@@ -1170,6 +1171,7 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
+      <AppSettingsProvider>
       <PlaygroundProvider>
         <Router>
           <AssistantProvider>
@@ -1181,6 +1183,7 @@ function App() {
           </AssistantProvider>
         </Router>
       </PlaygroundProvider>
+      </AppSettingsProvider>
     </AuthProvider>
   );
 }

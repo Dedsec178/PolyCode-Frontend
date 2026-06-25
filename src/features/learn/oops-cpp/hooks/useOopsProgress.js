@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../../auth/context/AuthContext";
+import { recordLessonXp } from "../../shared/recordLessonXp";
 import {
   addOopsTime,
   completeOopsLesson,
@@ -92,6 +93,7 @@ export default function useOopsProgress() {
         });
         setRemoteProgress(progress);
         setSyncState("synced");
+        recordLessonXp(token, "oops-cpp", lesson);
         return;
       }
 
@@ -100,6 +102,7 @@ export default function useOopsProgress() {
       localStorage.setItem(LOCAL_KEY, JSON.stringify(current));
       localStorage.setItem(LOCAL_LAST_KEY, lesson.id);
       refreshLocal();
+      recordLessonXp(token, "oops-cpp", lesson);
     },
     [refreshLocal, token],
   );

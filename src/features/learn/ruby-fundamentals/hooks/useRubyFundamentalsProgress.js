@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useAuth } from "../../../auth/context/AuthContext";
+import { recordLessonXp } from "../../shared/recordLessonXp";
 
 const LOCAL_KEY = "ruby_fundamentals_progress";
 const LOCAL_CODE_KEY = "ruby_fundamentals_saved_code";
@@ -15,7 +16,7 @@ function readJson(key, fallback) {
 }
 
 export default function useRubyFundamentalsProgress() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, token } = useAuth();
   const [localVersion, setLocalVersion] = useState(0);
   const refreshLocal = useCallback(() => setLocalVersion((v) => v + 1), []);
 
@@ -41,8 +42,9 @@ export default function useRubyFundamentalsProgress() {
       localStorage.setItem(LOCAL_KEY, JSON.stringify(current));
       localStorage.setItem(LOCAL_LAST_KEY, lesson.id);
       refreshLocal();
+      recordLessonXp(token, "ruby-fundamentals", lesson);
     },
-    [isAuthenticated, refreshLocal],
+    [isAuthenticated, refreshLocal, token],
   );
 
   const rememberLesson = useCallback(

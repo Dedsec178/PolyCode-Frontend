@@ -55,7 +55,11 @@ import {
 } from "../../../shared/utils/monacoTheme";
 import { isLightTheme } from "../../../shared/theme/themes";
 import { attachMonacoPasteNormalizer } from "../../../shared/utils/normalizeBrokenCodePaste";
-import { useDocumentThemeId } from "../hooks/useDocumentThemeId";
+import useIdeTheme from "../hooks/useIdeTheme";
+import PlaygroundSettingsMenu from "./PlaygroundSettingsMenu";
+import { useAppSettings } from "../../../shared/settings/AppSettingsContext";
+import { playSound } from "../../../shared/sound/soundEffects";
+import { recordPlaygroundRunXp } from "../../learn/shared/recordLessonXp";
 import "./CodePlayground.css";
 
 const LANG_GROUPS = [
@@ -236,8 +240,9 @@ export default function CodePlayground({
   initialLanguage = "javascript",
 }) {
   const { token } = useAuth();
-  const documentThemeId = useDocumentThemeId();
-  const editorTheme = isLightTheme(documentThemeId)
+  const { soundEnabled } = useAppSettings();
+  const { ideTheme, setIdeTheme } = useIdeTheme();
+  const editorTheme = isLightTheme(ideTheme)
     ? POLYCODE_PLAYGROUND_LIGHT_THEME
     : POLYCODE_PLAYGROUND_DARK_THEME;
   const normalizedInitialLanguage = normalizeLanguage(initialLanguage);
@@ -989,6 +994,7 @@ export default function CodePlayground({
     if (runningLanguage || !currentCode.trim()) return;
 
     setRunningLanguage(currentLanguage);
+    playSound("run", soundEnabled);
     updateWorkspace(currentLanguage, {
       output: [
         {
@@ -1031,6 +1037,25 @@ export default function CodePlayground({
         previewHTML: resultPreview,
         activeTab: activeTabAfter,
       });
+      playSound(result.error ? "error" : "success", soundEnabled);
+
+      if (!result.error && token) {
+        recordPlaygroundRunXp(token, currentLanguage, file).then((data) => {
+          if (data && !data.alreadyRecorded && data.xpAwarded) {
+            updateWorkspace(currentLanguage, {
+              output: [
+                ...resultOutput,
+                {
+                  type: "system",
+                  text: `+${data.xpAwarded} XP — IDE run recorded`,
+                },
+              ],
+              previewHTML: resultPreview,
+              activeTab: activeTabAfter,
+            });
+          }
+        });
+      }
 
       const durationMs = Math.round(performance.now() - t0);
 
@@ -1068,6 +1093,7 @@ export default function CodePlayground({
       }
     } catch (e) {
       resultOutput = [{ type: "stderr", text: e.message }];
+      playSound("error", soundEnabled);
       updateWorkspace(currentLanguage, {
         output: resultOutput,
         previewHTML: null,
@@ -1076,7 +1102,7 @@ export default function CodePlayground({
     } finally {
       setRunningLanguage(null);
     }
-  }, [language, runningLanguage, token, updateWorkspace, refreshRunHistory]);
+  }, [language, runningLanguage, token, updateWorkspace, refreshRunHistory, soundEnabled]);
 
   const handleEditorKeyDown = useCallback(
     (e) => {
@@ -1109,7 +1135,7 @@ export default function CodePlayground({
   const editorLanguage = monacoLanguageForFile(activeFile?.name, langInfo.mono);
 
   return (
-    <div className="playground-root">
+    <div className="playground-root" data-ide-theme={ideTheme}>
       <div className="pg-toolbar">
         <div className="pg-toolbar-left">
           <span className="pg-logo">⬡ IDE</span>
@@ -1176,6 +1202,10 @@ export default function CodePlayground({
           >
             ↵
           </button>
+          <PlaygroundSettingsMenu
+            ideTheme={ideTheme}
+            onIdeThemeChange={setIdeTheme}
+          />
           <button
             type="button"
             className={`pg-run-btn ${currentIsRunning ? "running" : ""}`}

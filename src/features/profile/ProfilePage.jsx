@@ -4,6 +4,8 @@ import { useAuth } from "../auth/context/AuthContext";
 import { rememberSignedInUser } from "../../lib/authSession";
 import ProfileEditSection from "./components/ProfileEditSection";
 import ProfileHero from "./components/ProfileHero";
+import DailyXpProgressSection from "./components/DailyXpProgressSection";
+import useDailyXpProgress from "./hooks/useDailyXpProgress";
 import { ALL_LESSONS, TOTAL_XP } from "../learn/oops-cpp/data/oopsCurriculum";
 import useOopsProgress from "../learn/oops-cpp/hooks/useOopsProgress";
 import {
@@ -274,6 +276,7 @@ export default function ProfilePage() {
       (signedInUsername && routeUsername === signedInUsername) ||
       !signedInUsername);
   const profileUser = isOwnProfile ? user : publicUser;
+  const dailyXp = useDailyXpProgress({ enabled: isOwnProfile && Boolean(token) });
   const oops = useOopsProgress();
   const pointers = usePointersProgress();
   const numpy = useNumpyProgress();
@@ -566,6 +569,17 @@ export default function ProfilePage() {
           <strong>{totalPct}%</strong>
         </div>
       </section>
+
+      {isOwnProfile ? (
+        <DailyXpProgressSection
+          data={dailyXp.data}
+          loading={dailyXp.loading}
+          error={dailyXp.error}
+          markingDate={dailyXp.markingDate}
+          onRefresh={dailyXp.refresh}
+          onMarkRead={dailyXp.markRead}
+        />
+      ) : null}
 
       <div ref={activityWrapRef}>
         <ActivityGraph days={activityDays} />

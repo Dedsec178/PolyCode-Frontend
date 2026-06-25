@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useAuth } from "../../../auth/context/AuthContext";
+import { recordLessonXp } from "../../shared/recordLessonXp";
 
 // Sandboxed LocalStorage keys for C# Progress tracking
 const LOCAL_KEY = "csharp_progress";
@@ -16,7 +17,7 @@ function readJson(key, fallback) {
 }
 
 export default function useCsharpProgress() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, token } = useAuth();
   const [localVersion, setLocalVersion] = useState(0);
   const refreshLocal = useCallback(() => setLocalVersion((v) => v + 1), []);
 
@@ -42,8 +43,9 @@ export default function useCsharpProgress() {
       localStorage.setItem(LOCAL_KEY, JSON.stringify(current));
       localStorage.setItem(LOCAL_LAST_KEY, lesson.id);
       refreshLocal();
+      recordLessonXp(token, "csharp-fundamentals", lesson);
     },
-    [isAuthenticated, refreshLocal],
+    [isAuthenticated, refreshLocal, token],
   );
 
   const rememberLesson = useCallback(

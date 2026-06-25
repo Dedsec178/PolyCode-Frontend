@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useAuth } from "../../../auth/context/AuthContext";
+import { recordLessonXp } from "../../shared/recordLessonXp";
 
 const LOCAL_KEY = "ai_ml_py_progress";
 const LOCAL_CODE_KEY = "ai_ml_py_saved_code";
@@ -15,7 +16,7 @@ function readJson(key, fallback) {
 }
 
 export default function useAiProgress() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, token } = useAuth();
   const [localVersion, setLocalVersion] = useState(0);
   const refreshLocal = useCallback(() => setLocalVersion((v) => v + 1), []);
 
@@ -41,8 +42,9 @@ export default function useAiProgress() {
       localStorage.setItem(LOCAL_KEY, JSON.stringify(current));
       localStorage.setItem(LOCAL_LAST_KEY, lesson.id);
       refreshLocal();
+      recordLessonXp(token, "ai-ml-py", lesson);
     },
-    [isAuthenticated, refreshLocal],
+    [isAuthenticated, refreshLocal, token],
   );
 
   const rememberLesson = useCallback(

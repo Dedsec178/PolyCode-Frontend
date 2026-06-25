@@ -640,3 +640,35 @@ textarea {
 .app.theme-light .navbar-dropdown {
   background: #ffffff;
 }
+
+.theme-settings-heading--spaced {
+  margin-top: 0.65rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+}
+
+.theme-settings-sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: calc(100% - 1rem);
+  margin: 0 0.5rem 0.35rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--txt-1, #c0c8e0);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.theme-settings-sound-toggle.is-on {
+  border-color: color-mix(in srgb, var(--accent, #ffe566) 35%, transparent);
+  color: var(--txt-0, #fff);
+}
+
+.theme-settings-option--compact .theme-settings-copy strong {
+  font-size: 0.8rem;
+}

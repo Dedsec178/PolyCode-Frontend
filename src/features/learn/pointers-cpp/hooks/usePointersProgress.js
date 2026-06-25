@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useAuth } from "../../../auth/context/AuthContext";
+import { recordLessonXp } from "../../shared/recordLessonXp";
 
 const LOCAL_KEY = "pointers_cpp_progress";
 const LOCAL_CODE_KEY = "pointers_cpp_saved_code";
@@ -15,7 +16,7 @@ function readJson(key, fallback) {
 }
 
 export default function usePointersProgress() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const [localVersion, setLocalVersion] = useState(0);
   const refreshLocal = useCallback(() => setLocalVersion((value) => value + 1), []);
 
@@ -40,8 +41,9 @@ export default function usePointersProgress() {
       localStorage.setItem(LOCAL_KEY, JSON.stringify(current));
       localStorage.setItem(LOCAL_LAST_KEY, lesson.id);
       refreshLocal();
+      recordLessonXp(token, "pointers-cpp", lesson);
     },
-    [refreshLocal],
+    [refreshLocal, token],
   );
 
   const rememberLesson = useCallback(

@@ -134,8 +134,9 @@
   border-color: var(--profile-surface-border);
 }
 
-.main-content.learn-content:has(.profile-page) .profile-hero-metric {
-  border-bottom-color: var(--profile-surface-border);
+.main-content.learn-content:has(.profile-page) .profile-daily-xp-card {
+  background: var(--profile-surface-bg);
+  border-color: var(--profile-surface-border);
 }
 
 .main-content.learn-content:has(.profile-page) .profile-activity-cell,
