@@ -33,6 +33,11 @@ import {
   getRubyRuntimeError,
   runRubyCode,
 } from "./runRuby";
+import {
+  formatPhpOutput,
+  getPhpRuntimeError,
+  runPhpCode,
+} from "./runPhp";
 
 function normalizeLang(lang = "python") {
   const value = lang.toLowerCase();
@@ -49,6 +54,7 @@ function monacoLanguage(lang) {
   if (lang === "javascript") return "javascript";
   if (lang === "csharp") return "csharp";
   if (lang === "ruby") return "ruby";
+  if (lang === "php") return "php";
   return "python";
 }
 
@@ -65,7 +71,7 @@ async function executeTheoryCode(source, lang) {
   if (lang === "ruby") {
     return runRubyCode(source, { learn: true });
   }
-  if (lang === "php"){
+  if (lang === "php") {
     return runPhpCode(source);
   }
   return runPythonCode(source);
