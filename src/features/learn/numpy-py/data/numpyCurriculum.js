@@ -4074,7 +4074,7 @@ chance = np.random.rand(50)          # 50 random decimals 0–1
 buys_pastry = chance < 0.30          # True where they buy
 sales = np.sum(buys_pastry)
 print("Pastry sales:", sales)
-# With seed 1: 18 sales out of 50 — one possible \"what if\" answer`,
+# With seed 1: 18 sales out of 50 — one possible "what if" answer`,
             },
           },
           {

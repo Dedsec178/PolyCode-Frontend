@@ -472,7 +472,7 @@ function NumpyTheoryBlock({ block, step, accentColor }) {
           📋
         </span>
         <div>
-          <strong>Real scenario</strong>
+          <strong>{block.title || "Real scenario"}</strong>
           <p>
             <InlineText text={block.content} />
           </p>
@@ -486,6 +486,7 @@ function NumpyTheoryBlock({ block, step, accentColor }) {
       info: "Good to know",
       tip: "Helpful tip",
       warning: "Watch out",
+      success: "Learning outcome check",
     };
     const icons = { info: "💡", tip: "✨", warning: "⚠️" };
     return (

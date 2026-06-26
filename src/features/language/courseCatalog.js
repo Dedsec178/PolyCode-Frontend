@@ -10,6 +10,7 @@ import {
   Terminal,
   Presentation,
   BrainCircuit,
+  Server,
 } from "lucide-react";
 
 export function languageKey(value = "") {
@@ -120,6 +121,15 @@ export const languageCourses = {
         "Series, DataFrames, filtering, cleaning, groupby, merges, and CSV workflows with Pandas.",
       href: "/learn/pandas-py",
       accent: "#059669",
+    },
+    {
+      title: "FastAPI · py",
+      tag: "API Course",
+      icon: Server,
+      description:
+        "Beginner → advanced REST APIs: routes, Pydantic, CRUD, dependencies, routers, testing, and capstone.",
+      href: "/learn/fastapi-py",
+      accent: "#009688",
     },
     {
       tag: "Data Visualization",
@@ -261,6 +271,7 @@ export const learnNavByLanguage = {
   python: [
     { label: "NumPy", to: "/learn/numpy-py" },
     { label: "Pandas", to: "/learn/pandas-py" },
+    { label: "FastAPI", to: "/learn/fastapi-py" },
     { label: "Matplotlib", to: "/learn/matplotlib-py" },
     { label: "AI/ML", to: "/learn/ai_ml-py" },
   ],
@@ -284,6 +295,7 @@ export function inferLanguageFromLearnPath(pathname = "") {
   if (
     pathname.startsWith("/learn/numpy-py") ||
     pathname.startsWith("/learn/pandas-py") ||
+    pathname.startsWith("/learn/fastapi-py") ||
     pathname.startsWith("/learn/matplotlib-py") ||
     pathname.startsWith("/learn/ai_ml-py")
   ) {

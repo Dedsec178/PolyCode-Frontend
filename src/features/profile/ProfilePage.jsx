@@ -23,6 +23,11 @@ import {
   PANDAS_TOTAL_XP,
 } from "../learn/pandas-py/data/pandasCurriculum";
 import usePandasProgress from "../learn/pandas-py/hooks/usePandasProgress";
+import {
+  FASTAPI_LESSONS,
+  FASTAPI_TOTAL_XP,
+} from "../learn/fastapi-py/data/fastapiCurriculum";
+import useFastapiProgress from "../learn/fastapi-py/hooks/useFastapiProgress";
 import CourseCertificate from "../learn/shared/CourseCertificate";
 import {
   getFollowStatus,
@@ -281,16 +286,19 @@ export default function ProfilePage() {
   const pointers = usePointersProgress();
   const numpy = useNumpyProgress();
   const pandas = usePandasProgress();
+  const fastapi = useFastapiProgress();
   const totalCompleted =
     Object.keys(oops.completedMap).length +
     Object.keys(pointers.completedMap).length +
     Object.keys(numpy.completedMap).length +
-    Object.keys(pandas.completedMap).length;
+    Object.keys(pandas.completedMap).length +
+    Object.keys(fastapi.completedMap).length;
   const totalLessons =
     ALL_LESSONS.length +
     POINTER_LESSONS.length +
     NUMPY_LESSONS.length +
-    PANDAS_LESSONS.length;
+    PANDAS_LESSONS.length +
+    FASTAPI_LESSONS.length;
   const totalPct = Math.round((totalCompleted / totalLessons) * 100) || 0;
   const totalStreak = oops.remoteProgress?.currentStreak || 0;
   const [activityWidth, setActivityWidth] = React.useState(0);
@@ -304,6 +312,7 @@ export default function ProfilePage() {
         pointers.completedMap,
         numpy.completedMap,
         pandas.completedMap,
+        fastapi.completedMap,
       ),
     [
       activityDayCount,
@@ -311,6 +320,7 @@ export default function ProfilePage() {
       pointers.completedMap,
       numpy.completedMap,
       pandas.completedMap,
+      fastapi.completedMap,
     ],
   );
   const completedCertificates = [
@@ -337,6 +347,12 @@ export default function ProfilePage() {
       lessons: PANDAS_LESSONS,
       totalXP: PANDAS_TOTAL_XP,
       progress: pandas.completedMap,
+    }),
+    getCompletedTrackCertificate({
+      courseName: "FastAPI for Python",
+      lessons: FASTAPI_LESSONS,
+      totalXP: FASTAPI_TOTAL_XP,
+      progress: fastapi.completedMap,
     }),
   ].filter(Boolean);
   const certificateOwnerPath = `/@${routeUsername || signedInUsername || profileUser?.username}`;
@@ -626,6 +642,16 @@ export default function ProfilePage() {
           bookmarks={pandas.bookmarks}
           href="/learn/pandas-py"
           accent="#059669"
+        />
+        <TrackProgressCard
+          title="FastAPI · py"
+          subtitle="Python API track"
+          lessons={FASTAPI_LESSONS}
+          totalXP={FASTAPI_TOTAL_XP}
+          progress={fastapi.completedMap}
+          bookmarks={fastapi.bookmarks}
+          href="/learn/fastapi-py"
+          accent="#009688"
         />
       </div>
 

@@ -137,6 +137,12 @@ const PandasHub = lazyWithChunkRetry(
 const PandasLessonPage = lazyWithChunkRetry(
   () => import("./features/learn/pandas-py/pages/PandasLessonPage"),
 );
+const FastapiHub = lazyWithChunkRetry(
+  () => import("./features/learn/fastapi-py/pages/FastapiHub"),
+);
+const FastapiLessonPage = lazyWithChunkRetry(
+  () => import("./features/learn/fastapi-py/pages/FastapiLessonPage"),
+);
 const AiHub = lazyWithChunkRetry(
   () => import("./features/learn/ai_ml-py/pages/aiHub"),
 );
@@ -524,6 +530,7 @@ function AppRoutes() {
     if (
       path.startsWith("/learn/numpy-py") ||
       path.startsWith("/learn/pandas-py") ||
+      path.startsWith("/learn/fastapi-py") ||
       path.startsWith("/learn/matplotlib-py") ||
       path.startsWith("/learn/ai_ml-py")
     ) {
@@ -810,6 +817,52 @@ function AppRoutes() {
                 selectedLanguage={selectedLanguage}
               >
                 <PandasLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        {/* FastAPI Python Course Routes */}
+        <Route
+          path="/learn/fastapi-py"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <FastapiHub />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/fastapi-py/lesson/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <FastapiLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/fastapi-py/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <FastapiLessonPage />
               </LearnShell>
             </ThemedShell>
           }
