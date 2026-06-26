@@ -27,19 +27,24 @@ import {
   getCsharpRuntimeError,
   runCsharpCode,
 } from "./runCsharp";
-// 1. IMPORT YOUR NEW RUBY WASM HANDLERS HERE
 import {
   formatRubyOutput,
   getRubyRuntimeError,
   runRubyCode,
 } from "./runRuby"; 
+import {
+  formatPhpOutput,
+  getPhpRuntimeError,
+  runPhpCode,
+} from "./runPhp";
 
 function normalizeLang(lang = "python") {
   const value = lang.toLowerCase();
   if (value === "c++" || value === "cpp") return "cpp";
   if (value === "javascript" || value === "js") return "javascript";
   if (value === "csharp" || value === "c#") return "csharp";
-  if (value === "ruby") return "ruby"; // Explicitly normalize ruby strings
+  if (value === "ruby") return "ruby"; 
+  if (value === "php") return "php";
   return value;
 }
 
@@ -47,7 +52,8 @@ function monacoLanguage(lang) {
   if (lang === "cpp") return "cpp";
   if (lang === "javascript") return "javascript";
   if (lang === "csharp") return "csharp";
-  if (lang === "ruby") return "ruby"; // Tell Monaco to use Ruby syntax coloring
+  if (lang === "ruby") return "ruby";
+  if (lang === "php") return "php";
   return "python";
 }
 
@@ -61,9 +67,11 @@ async function executeTheoryCode(source, lang) {
   if (lang === "csharp") {
     return runCsharpCode(source); 
   }
-  // 2. ROUTE THE EXECUTOR TO USE THE WASM RUNNER
   if (lang === "ruby") {
     return runRubyCode(source);
+  }
+  if (lang === "php"){
+    return runPhpCode(source);
   }
   return runPythonCode(source);
 }
@@ -72,8 +80,8 @@ function formatTheoryOutput(result, lang) {
   if (lang === "cpp") return formatCppOutput(result);
   if (lang === "javascript") return formatJavaScriptOutput(result);
   if (lang === "csharp") return formatCsharpOutput(result);
-  // 3. ROUTE THE OUTPUT FORMATTER
   if (lang === "ruby") return formatRubyOutput(result);
+  if (lang === "php") return formatPhpOutput(result);
   return formatPythonOutput(result);
 }
 
@@ -81,8 +89,8 @@ function getTheoryRuntimeError(result, lang) {
   if (lang === "cpp") return getCppRuntimeError(result);
   if (lang === "javascript") return getJavaScriptRuntimeError(result);
   if (lang === "csharp") return getCsharpRuntimeError(result);
-  // 4. ROUTE THE ERROR INTERCEPTOR
   if (lang === "ruby") return getRubyRuntimeError(result);
+  if (lang === "php") return getPhpRuntimeError(result);
   return getPythonRuntimeError(result);
 }
 
