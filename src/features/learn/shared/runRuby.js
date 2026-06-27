@@ -1,12 +1,9 @@
 import { getApiBase } from "../../../config/apiBase";
+import { DefaultRubyVM } from "../../../lib/rubyWasmBrowser";
 
-const RUBY_WASM_LOADER =
-  "https://cdn.jsdelivr.net/npm/@ruby/wasm-wasi@2.9.4/dist/browser/+esm";
-const RUBY_WASM_BINARY =
-  "https://cdn.jsdelivr.net/npm/@ruby/3.4-wasm-wasi@2.9.4/dist/ruby+stdlib.wasm";
+const RUBY_WASM_URL = `${process.env.PUBLIC_URL || ""}/ruby/ruby-stdlib.wasm`;
 
 let rubyVmPromise = null;
-
 /**
  * Lesson snippets often assign variables without puts/print. Append display lines
  * so learners still see computed values in the output panel.
@@ -52,26 +49,31 @@ end
 `;
 }
 
+async function loadRubyWasmModule() {
+  const response = await fetch(RUBY_WASM_URL);
+  if (!response.ok) {
+    throw new Error("Could not load the in-browser Ruby runtime.");
+  }
+
+  try {
+    return await WebAssembly.compileStreaming(response);
+  } catch (_) {
+    const bytes = await response.arrayBuffer();
+    return WebAssembly.compile(bytes);
+  }
+}
+
 async function initRubyVM() {
   if (!rubyVmPromise) {
     rubyVmPromise = (async () => {
-      const { DefaultRubyVM } = await import(
-        /* webpackIgnore: true */
-        RUBY_WASM_LOADER
-      );
-      const response = await fetch(RUBY_WASM_BINARY);
-      if (!response.ok) {
-        throw new Error("Could not load the in-browser Ruby runtime.");
-      }
-      const module = await WebAssembly.compileStreaming(response);
-      const { vm } = await DefaultRubyVM(module);
+      const rubyModule = await loadRubyWasmModule();
+      const { vm } = await DefaultRubyVM(rubyModule);
       return vm;
     })();
   }
 
   return rubyVmPromise;
 }
-
 async function runRubyInBrowser(source) {
   const vm = await initRubyVM();
   const result = vm.eval(buildRubyCaptureScript(source));
