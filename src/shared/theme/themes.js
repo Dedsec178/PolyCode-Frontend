@@ -14,11 +14,11 @@ export const THEMES = [
   {
     id: "light",
     label: "Light",
-    description: "Clean and bright",
+    description: "Clean white + blue",
     icon: "☀️",
-    swatch: "#f4f6fa",
-    bg: "#f8f9fb",
-    bgLanding: "#f4f6fa",
+    swatch: "#2563eb",
+    bg: "#f8fafc",
+    bgLanding: "#f8fafc",
     appClass: "theme-light",
   },
   {

@@ -90,11 +90,11 @@
   --txt-2: #6b7280;
   --txt-3: #9ca3af;
 
-  --acid: #4f46e5;
-  --acid-rgb: 79, 70, 229;
+  --acid: #2563eb;
+  --acid-rgb: 37, 99, 235;
   --cyan: #0284c7;
-  --violet: #7c3aed;
-  --accent: #4f46e5;
+  --violet: #3b82f6;
+  --accent: #2563eb;
   --acid-glow: rgba(79, 70, 229, 0.2);
   --acid-dim: rgba(79, 70, 229, 0.08);
   --cyan-dim: rgba(2, 132, 199, 0.08);
@@ -976,10 +976,10 @@ body {
 
 .hero h1 {
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 8vw, 6.5rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
+  font-size: clamp(2.5rem, 6vw, 4.75rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
   margin-bottom: 32px;
   color: #fff;
 }
@@ -987,9 +987,9 @@ body {
 .hero h1 .gradient-text {
   background: linear-gradient(
     135deg,
-    var(--acid) 0%,
-    var(--cyan) 60%,
-    var(--violet) 100%
+    var(--hero-gradient-start, var(--acid)) 0%,
+    var(--hero-gradient-mid, var(--cyan)) 52%,
+    var(--hero-gradient-end, var(--violet)) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -3542,11 +3542,11 @@ body {
   --txt-1: #374151;
   --txt-2: #6b7280;
   --txt-3: #9ca3af;
-  --acid: #4f46e5;
-  --acid-rgb: 79, 70, 229;
-  --accent: #4f46e5;
-  --acid-glow: rgba(79, 70, 229, 0.2);
-  --acid-dim: rgba(79, 70, 229, 0.08);
+  --acid: #2563eb;
+  --acid-rgb: 37, 99, 235;
+  --accent: #2563eb;
+  --acid-glow: rgba(37, 99, 235, 0.2);
+  --acid-dim: rgba(37, 99, 235, 0.1);
   --cyan: #0284c7;
   --cyan-dim: rgba(2, 132, 199, 0.08);
   --violet: #7c3aed;
@@ -3607,7 +3607,7 @@ body {
 }
 
 .app.theme-light .hero h1 .gradient-text {
-  background: linear-gradient(135deg, #4f46e5 0%, #2563eb 50%, #7c3aed 100%);
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 55%, #60a5fa 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -3630,13 +3630,14 @@ body {
 }
 
 .app.theme-light .navbar-signup-btn {
-  background: #111827;
+  background: var(--accent);
   color: #ffffff;
-  border: 1px solid #111827;
+  border: 1px solid var(--accent);
 }
 
 .app.theme-light .navbar-signup-btn:hover {
-  background: #1f2937;
+  background: #1d4ed8;
+  border-color: #1d4ed8;
   opacity: 1;
 }
 
@@ -3723,12 +3724,13 @@ body {
 }
 
 .app.theme-light .btn-primary {
-  background: #111827;
+  background: var(--accent);
   color: #ffffff;
 }
 
 .app.theme-light .btn-primary:hover {
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+  background: #1d4ed8;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
 }
 
 .app.theme-light .btn-secondary {
@@ -3984,10 +3986,13 @@ body {
 .app.theme-light .pph-current strong,
 .app.theme-light .pg-logo,
 .app.theme-light .pg-tab.active,
-.app.theme-light .pg-run-btn,
-.app.theme-light .ide-btn.run-btn,
 .app.theme-light .ide-runtime-pill {
   color: #0f172a;
+}
+
+.app.theme-light .pg-run-btn,
+.app.theme-light .ide-btn.run-btn {
+  color: #ffffff;
 }
 
 .app.theme-light .pph-current,
@@ -4099,9 +4104,9 @@ body {
 
 .oops-hero-title {
   font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
+  font-weight: 600;
   color: var(--txt-0, #f0f0ff);
-  line-height: 1.1;
+  line-height: 1.15;
   margin: 0 0 12px;
 }
 
@@ -6578,9 +6583,10 @@ body {
 .language-hero-copy h1 {
   margin: 12px 0;
   color: var(--txt-0, #ffffff);
-  font-size: clamp(3rem, 9vw, 7.5rem);
-  line-height: 0.9;
-  letter-spacing: 0;
+  font-size: clamp(2.25rem, 7vw, 5.5rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
 }
 
 .language-hero-copy p {

@@ -29,6 +29,36 @@ const RAW_MATPLOTLIB_CHAPTERS = [
           },
           {
             type: "diagram",
+            title: "Where Matplotlib sits in your Python stack",
+            nodes: [
+              {
+                id: "python",
+                label: "Your Python code",
+                color: "#1e40af",
+                items: ["Scripts & notebooks", "import matplotlib.pyplot as plt"],
+              },
+              {
+                id: "data",
+                label: "Data sources",
+                color: "#2563eb",
+                items: ["Lists & tuples", "NumPy arrays", "Pandas Series / DataFrames"],
+              },
+              {
+                id: "mpl",
+                label: "Matplotlib",
+                color: "#3b82f6",
+                items: ["Builds Figure + Axes", "Draws lines, bars, labels"],
+              },
+              {
+                id: "out",
+                label: "Output",
+                color: "#60a5fa",
+                items: ["plt.show() on screen", "plt.savefig() to PNG/PDF"],
+              },
+            ],
+          },
+          {
+            type: "diagram",
             title: "Visualization pipeline",
             nodes: [
               {
@@ -48,6 +78,36 @@ const RAW_MATPLOTLIB_CHAPTERS = [
                 label: "Communication",
                 color: "#60a5fa",
                 items: ["Insights", "Decisions", "Reports"],
+              },
+            ],
+          },
+          {
+            type: "diagram",
+            title: "Anatomy of a simple line chart",
+            nodes: [
+              {
+                id: "title",
+                label: "Title",
+                color: "#1d4ed8",
+                items: ["plt.title('...')", "States the chart's message"],
+              },
+              {
+                id: "axes",
+                label: "Plotting area",
+                color: "#2563eb",
+                items: ["Where the line is drawn", "Automatic x & y scales"],
+              },
+              {
+                id: "labels",
+                label: "Axis labels",
+                color: "#3b82f6",
+                items: ["plt.xlabel('Month')", "plt.ylabel('Sales')"],
+              },
+              {
+                id: "line",
+                label: "Line (Artist)",
+                color: "#60a5fa",
+                items: ["plt.plot(x, y)", "Connects your data points"],
               },
             ],
           },
@@ -127,6 +187,41 @@ plt.show()`,
           },
           {
             type: "diagram",
+            title: "Same numbers — table vs chart",
+            nodes: [
+              {
+                id: "table",
+                label: "Raw table",
+                color: "#1e3a8a",
+                items: [
+                  "Day 1: 120 visits",
+                  "Day 7: 168 visits",
+                  "Trend is hard to spot quickly",
+                ],
+              },
+              {
+                id: "chart",
+                label: "Line chart",
+                color: "#2563eb",
+                items: [
+                  "Slope shows growth",
+                  "Outliers pop out",
+                  "Stakeholders grasp it fast",
+                ],
+              },
+              {
+                id: "you",
+                label: "Your job",
+                color: "#3b82f6",
+                items: [
+                  "Pick the view that answers the question",
+                  "Matplotlib makes the chart side easy",
+                ],
+              },
+            ],
+          },
+          {
+            type: "diagram",
             title: "Where plots help",
             nodes: [
               {
@@ -146,6 +241,30 @@ plt.show()`,
                 label: "Operations",
                 color: "#3b82f6",
                 items: ["Track drift", "Watch KPIs"],
+              },
+            ],
+          },
+          {
+            type: "diagram",
+            title: "Match the chart to the question",
+            nodes: [
+              {
+                id: "trend",
+                label: "“How does it change over time?”",
+                color: "#1d4ed8",
+                items: ["Ordered x-axis", "Use a line plot", "plt.plot() + markers"],
+              },
+              {
+                id: "compare",
+                label: "“Which category is bigger?”",
+                color: "#2563eb",
+                items: ["Named categories", "Use a bar chart", "plt.bar()"],
+              },
+              {
+                id: "spread",
+                label: "“How are values distributed?”",
+                color: "#3b82f6",
+                items: ["One numeric column", "Use a histogram", "plt.hist() — later chapter"],
               },
             ],
           },
@@ -227,71 +346,320 @@ plt.show()`,
       {
         id: "plt-1",
         title: "Figures and Axes",
-        xp: 12,
+        xp: 14,
         theory: [
           {
             type: "text",
             content:
-              "A **Figure** is the full canvas. An **Axes** object is one plotting area inside that figure. Most chart methods are called on Axes.",
+              "Matplotlib organizes every chart as a **Figure → Axes → Artists** stack. The **Figure** is the full canvas (one window or saved image). An **Axes** is one plotting panel inside it. **Artists** are the drawable pieces — lines, bars, labels, and legends.",
           },
           {
             type: "text",
             content:
-              "The object-oriented style (`fig, ax = plt.subplots()`) scales better than pure stateful plotting as your chart complexity grows.",
+              "Quick scripts often use `plt.plot()` shortcuts. As soon as you need multiple panels, titles per chart, or production-quality layouts, the object-oriented style `fig, ax = plt.subplots()` gives you explicit handles to control each layer.",
           },
           {
             type: "diagram",
-            title: "Figure and Axes model",
+            title: "Visual hierarchy — Figure → Axes → Artists",
             nodes: [
               {
-                id: "fig",
+                id: "figure",
                 label: "Figure",
-                color: "#2563eb",
-                items: ["Canvas", "Contains Axes"],
+                color: "#1d4ed8",
+                items: [
+                  "Top-level container (the whole image)",
+                  "Created by plt.figure() or plt.subplots()",
+                  "Can hold one or many Axes panels",
+                ],
               },
               {
-                id: "ax",
+                id: "axes",
                 label: "Axes",
-                color: "#3b82f6",
-                items: ["Data space", "Labels, ticks, legend"],
+                color: "#2563eb",
+                items: [
+                  "One plotting area (a single chart panel)",
+                  "Methods: ax.plot(), ax.set_title(), ax.legend()",
+                  "Not the same as axis (the x or y dimension)",
+                ],
               },
               {
                 id: "artists",
                 label: "Artists",
                 color: "#60a5fa",
-                items: ["Lines", "Bars", "Text"],
+                items: [
+                  "Lines, bars, scatter points, text",
+                  "Live inside an Axes object",
+                  "You rarely create them manually at first",
+                ],
+              },
+            ],
+          },
+          {
+            type: "table",
+            title: "Figure vs Axes vs Axis — know the difference",
+            columns: ["Term", "What it is", "Memory hook", "Example"],
+            showTotals: false,
+            rows: [
+              {
+                label: "Figure",
+                values: [
+                  "The entire canvas / image file",
+                  "Frame around everything",
+                  "fig = plt.figure()",
+                ],
+              },
+              {
+                label: "Axes",
+                values: [
+                  "One chart panel with its own data region",
+                  "Area where you draw",
+                  "fig, ax = plt.subplots()",
+                ],
+              },
+              {
+                label: "Axis",
+                values: [
+                  "The x or y dimension (ticks & limits)",
+                  "Direction, not a panel",
+                  "ax.set_xlabel('Month')",
+                ],
+              },
+            ],
+            footnote:
+              "Students mix up **Axes** (panel) and **axis** (dimension) constantly — the table above is worth memorizing.",
+          },
+          {
+            type: "diagram",
+            title: "Axes (panel) vs axis (x / y dimension)",
+            nodes: [
+              {
+                id: "panel",
+                label: "Axes — one panel",
+                color: "#1d4ed8",
+                items: [
+                  "Variable name: ax or axs[i, j]",
+                  "Object you call .plot() on",
+                  "Rectangle that holds the chart",
+                ],
+              },
+              {
+                id: "xaxis",
+                label: "x-axis — horizontal",
+                color: "#2563eb",
+                items: [
+                  "Tick marks & numbers along the bottom",
+                  "ax.set_xlabel('Month')",
+                  "Not the same object as ax",
+                ],
+              },
+              {
+                id: "yaxis",
+                label: "y-axis — vertical",
+                color: "#3b82f6",
+                items: [
+                  "Tick marks along the left side",
+                  "ax.set_ylabel('Sales')",
+                  "Part of the Axes panel",
+                ],
+              },
+            ],
+          },
+          {
+            type: "diagram",
+            title: "Two coding styles — same result",
+            nodes: [
+              {
+                id: "pyplot",
+                label: "Pyplot (stateful)",
+                color: "#1e40af",
+                items: ["plt.plot()", "plt.title()", "Great for quick notebooks"],
+              },
+              {
+                id: "arrow",
+                label: "Both build",
+                color: "#2563eb",
+                items: ["One Figure", "One or more Axes", "Artists on each panel"],
+              },
+              {
+                id: "oo",
+                label: "Object-oriented",
+                color: "#3b82f6",
+                items: ["fig, ax = plt.subplots()", "ax.plot()", "Better for dashboards"],
+              },
+            ],
+          },
+          {
+            type: "callout",
+            variant: "tip",
+            content:
+              "**Memory trick:** **Figure = Frame** (the picture frame). **Axes = Area to draw** (one rectangle inside the frame). Say it out loud once and you will stop confusing `ax` with `axis`.",
+          },
+          {
+            type: "text",
+            content:
+              "**Side-by-side:** the same line plot written two ways. Pyplot is fine for notebooks; the OO API scales when you manage layout yourself.",
+          },
+          {
+            type: "code",
+            lang: "python",
+            label: "Pyplot style — plt.plot() (stateful shortcut)",
+            content: `import matplotlib.pyplot as plt
+
+x = [1, 2, 3]
+y = [2, 4, 6]
+
+plt.plot(x, y)
+plt.title("Revenue trend")
+plt.xlabel("Month")
+plt.ylabel("Sales")
+plt.show()`,
+          },
+          {
+            type: "code",
+            lang: "python",
+            label: "Object-oriented style — fig, ax = plt.subplots() (explicit handles)",
+            content: `import matplotlib.pyplot as plt
+
+x = [1, 2, 3]
+y = [2, 4, 6]
+
+fig, ax = plt.subplots()
+ax.plot(x, y)
+ax.set_title("Revenue trend")
+ax.set_xlabel("Month")
+ax.set_ylabel("Sales")
+plt.show()`,
+          },
+          {
+            type: "callout",
+            variant: "warning",
+            content:
+              "**Common mistake:** `ax` is an **Axes** object (one panel). It is **not** the x-axis or y-axis. Methods like `ax.set_xlabel()` configure an axis **on** that panel — the names sound similar but the objects are completely different.",
+          },
+          {
+            type: "table",
+            title: "Line-by-line — what fig, ax = plt.subplots() does",
+            columns: ["Code", "Meaning"],
+            showTotals: false,
+            rows: [
+              {
+                label: "import matplotlib.pyplot as plt",
+                values: ["Load the plotting interface everyone calls plt."],
+              },
+              {
+                label: "fig, ax = plt.subplots()",
+                values: [
+                  "Create one Figure and one Axes; unpack them into fig and ax.",
+                ],
+              },
+              {
+                label: "ax.plot(x, y)",
+                values: ["Draw the line on that Axes panel (not on plt globally)."],
+              },
+              {
+                label: "ax.set_title('...')",
+                values: ["Set the title on this panel only."],
+              },
+              {
+                label: "plt.show()",
+                values: ["Open a window (or inline cell output in Jupyter)."],
+              },
+            ],
+          },
+          {
+            type: "diagram",
+            title: "Exercise preview — spot Figure vs Axes in a 2×2 layout",
+            nodes: [
+              {
+                id: "fig",
+                label: "fig (Figure)",
+                color: "#1d4ed8",
+                items: [
+                  "Owns the entire 2×2 grid",
+                  "Use fig.suptitle() for a global title",
+                  "Use fig.tight_layout() before saving",
+                ],
+              },
+              {
+                id: "axs",
+                label: "axs (2D array of Axes)",
+                color: "#2563eb",
+                items: [
+                  "Four separate panels",
+                  "axs[0, 0] top-left · axs[0, 1] top-right",
+                  "axs[1, 0] bottom-left · axs[1, 1] bottom-right",
+                ],
+              },
+              {
+                id: "one",
+                label: "axs[1, 0] (one Axes)",
+                color: "#3b82f6",
+                items: [
+                  "Just the bottom-left panel",
+                  "Call axs[1, 0].plot(...) here",
+                  "Not the Figure — one drawing area only",
+                ],
               },
             ],
           },
           {
             type: "code",
             lang: "python",
-            label: "OO plotting style",
+            label: "Multi-panel layout — practice spotting objects",
             content: `import matplotlib.pyplot as plt
 
-fig, ax = plt.subplots()
-ax.plot([1, 2, 3], [1, 4, 9])
-ax.set_title("Squares")
+fig, axs = plt.subplots(2, 2)  # fig = Figure, axs = grid of Axes
+
+axs[0, 0].plot([1, 2], [1, 3])
+axs[0, 1].bar(["A", "B"], [4, 7])
+axs[1, 0].scatter([1, 2, 3], [3, 1, 2])
+axs[1, 1].hist([1, 1, 2, 3, 3, 3])
+
+fig.suptitle("Dashboard — one Figure, four Axes")
+fig.tight_layout()
 plt.show()`,
+          },
+          {
+            type: "quiz",
+            question:
+              "In `fig, axs = plt.subplots(2, 2)`, which variable is the **Figure** (the whole canvas)?",
+            options: ["axs", "plt", "fig", "axs[0, 0]"],
+            answer: 2,
+            explanation:
+              "`fig` is the Figure — the container for all four panels. `axs` is an array of Axes objects; each `axs[row, col]` is one panel.",
+          },
+          {
+            type: "quiz",
+            question:
+              "What is `axs[1, 0]` in a 2×2 `plt.subplots(2, 2)` layout?",
+            options: [
+              "The entire Figure",
+              "One Axes panel (bottom-left)",
+              "The y-axis dimension",
+              "A matplotlib Artist base class",
+            ],
+            answer: 1,
+            explanation:
+              "`axs[1, 0]` indexes one Axes — the bottom-left chart panel. It is not the Figure and not an axis dimension.",
+          },
+          {
+            type: "quiz",
+            question: "What does `plt.subplots()` return by default (one panel)?",
+            options: [
+              "A single Figure only",
+              "A single Axes only",
+              "A tuple `(fig, ax)`",
+              "A list of Artists",
+            ],
+            answer: 2,
+            explanation:
+              "With default arguments you get one Figure and one Axes, unpacked as `fig, ax = plt.subplots()`.",
           },
           {
             type: "callout",
             variant: "info",
             content:
-              "What students need to understand: Figure/Axes vocabulary is essential for reading docs and solving real plotting tasks.",
-          },
-          {
-            type: "quiz",
-            question: "What does `plt.subplots()` return by default?",
-            options: [
-              "A single Figure only",
-              "A single Axes only",
-              "A tuple `(fig, ax)`",
-              "A list of charts",
-            ],
-            answer: 2,
-            explanation:
-              "It returns both the Figure object and one Axes object, which you use to build the chart.",
+              "What students need to understand: Figure/Axes vocabulary is how Matplotlib docs, Stack Overflow answers, and team code reviews all speak. Learn it once and every future chart gets easier.",
           },
         ],
         challenge: {
@@ -339,6 +707,87 @@ plt.show()`,
             type: "text",
             content:
               "Good line charts encode meaning with line shape, slope, and relative level. Add markers if exact points matter to the audience.",
+          },
+          {
+            type: "diagram",
+            title: "When a line chart is the right choice",
+            nodes: [
+              {
+                id: "yes",
+                label: "Use a line plot ✓",
+                color: "#1d4ed8",
+                items: [
+                  "Time series (days, months)",
+                  "Sequential measurements",
+                  "Continuous x with meaningful order",
+                ],
+              },
+              {
+                id: "no",
+                label: "Avoid line plots ✗",
+                color: "#64748b",
+                items: [
+                  "Unordered categories (colors, regions)",
+                  "Single snapshot comparisons",
+                  "→ use bar charts instead",
+                ],
+              },
+            ],
+          },
+          {
+            type: "diagram",
+            title: "Anatomy of a multi-series line chart",
+            nodes: [
+              {
+                id: "title",
+                label: "Title & legend",
+                color: "#1d4ed8",
+                items: ["plt.title() — main message", "plt.legend() — series A vs B"],
+              },
+              {
+                id: "series",
+                label: "Two line series",
+                color: "#2563eb",
+                items: [
+                  "plt.plot(..., label='A', marker='o')",
+                  "plt.plot(..., label='B', marker='s')",
+                ],
+              },
+              {
+                id: "axes",
+                label: "Shared axes",
+                color: "#3b82f6",
+                items: [
+                  "Same x for fair comparison",
+                  "ylabel explains the unit",
+                  "Markers highlight exact points",
+                ],
+              },
+            ],
+          },
+          {
+            type: "diagram",
+            title: "Reading slope & level on a line",
+            nodes: [
+              {
+                id: "slope",
+                label: "Slope",
+                color: "#1d4ed8",
+                items: ["Steep up = fast growth", "Flat = stable", "Down = decline"],
+              },
+              {
+                id: "level",
+                label: "Level",
+                color: "#2563eb",
+                items: ["Higher line = larger values", "Compare series at a glance"],
+              },
+              {
+                id: "gap",
+                label: "Gap between lines",
+                color: "#3b82f6",
+                items: ["Widening gap = diverging trends", "Crossing lines = rank change"],
+              },
+            ],
           },
           {
             type: "code",

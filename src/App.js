@@ -36,6 +36,7 @@ import "./styles/stack-picker-dark.css";
 import "./styles/responsive.css";
 import "./styles/theme-dark.css";
 import "./styles/theme-profile.css";
+import "./styles/theme-light-complete.css";
 
 import LandingShell from "./features/landing/LandingShell";
 

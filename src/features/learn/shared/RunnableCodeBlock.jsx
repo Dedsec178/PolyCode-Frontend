@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 import { useAuth } from "../../auth/context/AuthContext";
-import {
-  definePolycodeMonacoTheme,
-  getVSCodeEditorOptions,
-  POLYCODE_VSCODE_THEME,
-} from "../../../shared/utils/monacoTheme";
+import { useSiteMonacoTheme } from "../../../shared/hooks/useSiteMonacoTheme";
+import { getVSCodeEditorOptions } from "../../../shared/utils/monacoTheme";
 import {
   formatCppOutput,
   getCppRuntimeError,
@@ -101,6 +98,7 @@ export default function RunnableCodeBlock({
   language = "python",
 }) {
   const { loading: authLoading, isAuthenticated } = useAuth();
+  const { monacoTheme, beforeMount } = useSiteMonacoTheme();
   const canRun = isAuthenticated && !authLoading;
 
   const lang = normalizeLang(block.lang || language);
@@ -220,8 +218,8 @@ export default function RunnableCodeBlock({
           height="220px"
           language={editorLang}
           value={code}
-          beforeMount={definePolycodeMonacoTheme}
-          theme={POLYCODE_VSCODE_THEME}
+          beforeMount={beforeMount}
+          theme={monacoTheme}
           onChange={(value) => setCode(value ?? "")}
           options={getVSCodeEditorOptions({
             fontSize: 13,

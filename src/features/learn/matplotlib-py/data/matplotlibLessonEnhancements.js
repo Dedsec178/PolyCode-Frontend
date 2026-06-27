@@ -30,19 +30,12 @@ export const LESSON_ENHANCEMENTS = {
   "plt-1": {
     objectives: [
       "Describe the Figure → Axes → Artist hierarchy",
+      "Contrast Figure, Axes, and axis (x/y dimension)",
       "Create plots with `fig, ax = plt.subplots()`",
-      "Know when the object-oriented API is preferred over `plt.plot()` shortcuts",
+      "Identify Figure vs Axes in multi-panel layouts",
     ],
     scenario:
-      "You need two charts in one report with separate titles — the OO API gives you `fig` and `ax` handles to control each panel cleanly.",
-    prepend: [
-      {
-        type: "callout",
-        variant: "warning",
-        content:
-          "A **Figure** is the whole canvas; an **Axes** is one plotting area. Do not confuse `ax` (one panel) with `axis` (the x/y dimension).",
-      },
-    ],
+      "You need a 2×2 dashboard with four different chart types — the OO API gives you `fig` for the whole layout and `axs[row, col]` for each panel.",
   },
   "plt-1b": {
     objectives: [

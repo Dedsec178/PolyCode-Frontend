@@ -1136,9 +1136,9 @@ NAVBAR
 .landing-hero h1 {
   max-width: 36rem;
   font-size: clamp(2rem, 4.2vw, 3.125rem);
-  font-weight: 800;
-  line-height: 1.12;
-  letter-spacing: -0.025em;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   color: #fff;
   margin: 0;
 }
@@ -1146,7 +1146,12 @@ NAVBAR
 .landing-hero-shimmer {
   display: block;
   margin-top: 0.12em;
-  background: linear-gradient(135deg, #818cf8 0%, #38bdf8 52%, #a78bfa 100%);
+  background: linear-gradient(
+    135deg,
+    var(--hero-gradient-start, #818cf8) 0%,
+    var(--hero-gradient-mid, #38bdf8) 52%,
+    var(--hero-gradient-end, #a78bfa) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1206,10 +1211,10 @@ NAVBAR
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
 }
 .landing-hero-title-v2 {
-  font-size: clamp(4rem, 8vw, 7rem);
-  line-height: 0.95;
-  letter-spacing: -0.06em;
-  font-weight: 900;
+  font-size: clamp(2.75rem, 6.5vw, 5.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  font-weight: 600;
 }
 .landing-trust-row {
   display: flex;
@@ -5378,7 +5383,7 @@ NAVBAR
 
 .app.theme-light .polycode-landing .landing-hero-shimmer,
 .polycode-landing.polycode-landing--light .landing-hero-shimmer {
-  background: linear-gradient(135deg, #4f46e5 0%, #2563eb 52%, #7c3aed 100%);
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 55%, #60a5fa 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -5489,20 +5494,20 @@ NAVBAR
 
 .app.theme-light .polycode-landing .continue-stack-btn,
 .polycode-landing.polycode-landing--light .continue-stack-btn {
-  background: #111827;
-  border: 1px solid #111827;
+  background: #2563eb;
+  border: 1px solid #2563eb;
   color: #ffffff;
-  box-shadow: 0 4px 16px rgba(17, 24, 39, 0.12);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.28);
 }
 
 .app.theme-light .polycode-landing .continue-stack-btn:hover,
 .polycode-landing.polycode-landing--light .continue-stack-btn:hover {
-  background: #1f2937;
-  border-color: #1f2937;
+  background: #1d4ed8;
+  border-color: #1d4ed8;
   color: #ffffff;
   box-shadow:
-    0 12px 32px rgba(17, 24, 39, 0.16),
-    0 0 0 1px rgba(37, 99, 235, 0.15);
+    0 12px 32px rgba(37, 99, 235, 0.32),
+    0 0 0 1px rgba(37, 99, 235, 0.2);
 }
 
 .app.theme-light .polycode-landing .cs-card,

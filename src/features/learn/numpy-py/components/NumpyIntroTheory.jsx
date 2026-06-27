@@ -503,13 +503,6 @@ function NumpyTheoryBlock({ block, step, accentColor }) {
   if (block.type === "code") {
     return (
       <div className="numpy-step-code">
-        <div className="numpy-step-head">
-          <span
-            className="numpy-step-num numpy-step-num-code"
-            style={{ color: accentColor }}
-          ></span>
-        </div>
-        {block.label && <p className="numpy-code-caption">{block.label}</p>}
         <RunnableCodeBlock
           block={block}
           accentColor={accentColor}

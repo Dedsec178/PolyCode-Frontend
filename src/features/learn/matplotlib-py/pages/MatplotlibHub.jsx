@@ -339,6 +339,7 @@ export default function MatplotlibHub() {
               <article
                 key={stage.level}
                 className="matplotlib-path-card"
+                style={{ "--stage-color": stage.color }}
               >
                 <header className="matplotlib-path-card-head">
                   <span className="matplotlib-path-level">{stage.level}</span>

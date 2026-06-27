@@ -170,10 +170,10 @@
   --learn-card-border: rgba(15, 23, 42, 0.1);
   --learn-card-title: #0f172a;
   --learn-card-muted: #64748b;
-  --learn-action-bg: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
+  --learn-action-bg: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   --learn-action-text: #ffffff;
   --learn-pill-bg: rgba(37, 99, 235, 0.08);
-  --learn-pill-border: rgba(37, 99, 235, 0.18);
+  --learn-pill-border: rgba(37, 99, 235, 0.2);
   --learn-pill-text: #2563eb;
   --learn-tile-bg: #f8fafc;
   --learn-tile-border: rgba(15, 23, 42, 0.1);
@@ -185,10 +185,10 @@
   --learn-chapter-progress-fill: #2563eb;
   --learn-cert-bg:
     linear-gradient(135deg, rgba(79, 70, 229, 0.07), transparent 42%), #ffffff;
-  --learn-cert-label: #4f46e5;
+  --learn-cert-label: #2563eb;
   --learn-cert-title: #0f172a;
   --learn-cert-muted: #64748b;
-  --learn-cert-btn-bg: #4f46e5;
+  --learn-cert-btn-bg: #2563eb;
   --learn-cert-btn-text: #ffffff;
 }
 
