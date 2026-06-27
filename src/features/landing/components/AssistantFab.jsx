@@ -190,13 +190,18 @@ const MentorReply = memo(function MentorReply({
   showFeedback,
   onRate,
   feedbackRequired,
+  isWelcome = false,
 }) {
   const canRate = showFeedback && msg.content && msg.id !== "welcome";
 
   return (
     <article className="assistant-mentor-reply">
       <span aria-hidden className="assistant-mentor-accent" />
-      <div className="assistant-mentor-card">
+      <div
+        className={`assistant-mentor-card${
+          isWelcome ? " assistant-mentor-card--welcome" : ""
+        }`}
+      >
         <div className="assistant-mentor-meta">
           <AssistantAvatar size="sm" />
           <span className="assistant-mentor-name">{ASSISTANT_CONFIG.name}</span>
@@ -235,6 +240,7 @@ const UserReply = memo(function UserReply({ content, user }) {
 function ThinkingIndicator() {
   return (
     <div className="assistant-thinking">
+      <AssistantAvatar size="sm" alt="" />
       <span className="assistant-thinking-text">PolyMentor is thinking…</span>
     </div>
   );
@@ -710,9 +716,13 @@ export default function AssistantFab() {
             className="assistant-panel polym_mentor-panel"
           >
             <div className="assistant-panel-header">
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "0.75rem" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", minWidth: 0 }}>
-                  <AssistantAvatar size="md" alt={ASSISTANT_CONFIG.name} />
+              <div className="assistant-panel-header-row">
+                <div className="assistant-panel-header-main">
+                  <AssistantAvatar
+                    size="header"
+                    highlight
+                    alt={ASSISTANT_CONFIG.name}
+                  />
                   <div>
                     <p id="polym_mentor-title" className="assistant-panel-title">
                       {ASSISTANT_CONFIG.name}
@@ -741,7 +751,7 @@ export default function AssistantFab() {
                     </label>
                   </div>
                 </div>
-                <div style={{ display: "flex", gap: "0.25rem" }}>
+                <div className="assistant-panel-header-actions">
                   <button
                     type="button"
                     onClick={clearSession}
@@ -779,6 +789,7 @@ export default function AssistantFab() {
                   ) : (
                     <MentorReply
                       msg={{ ...msg, content: messageContent(msg) }}
+                      isWelcome={msg.id === "welcome"}
                       showFeedback
                       feedbackRequired={msg.id === pendingFeedback?.id}
                       onRate={(rating) =>
@@ -792,7 +803,7 @@ export default function AssistantFab() {
               {showQuickPrompts ? (
                 <div>
                   <p className="assistant-quick-label">Quick prompts</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                  <div className="assistant-quick-list">
                     {quickPrompts.map((prompt) => (
                       <button
                         key={prompt}
@@ -873,7 +884,11 @@ export default function AssistantFab() {
           }
         >
           <div aria-hidden="true" className="assistant-dock-inner">
-            <AssistantAvatar size={compactDock ? "md" : "lg"} alt={ASSISTANT_CONFIG.name} />
+            <AssistantAvatar
+              size={compactDock ? "dock" : "lg"}
+              highlight={compactDock}
+              alt={ASSISTANT_CONFIG.name}
+            />
             {!compactDock ? (
               <>
                 <span className="assistant-dock-copy">

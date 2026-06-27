@@ -7,7 +7,7 @@ export const ASSISTANT_CONFIG = {
   welcomeMessage:
     "Welcome to **PolyMentor**. I can explain PolyCode, guide your learning path, and help you understand PolyGuard security — ask me anything.",
   storageKey: "polycode_assistant_session",
-  avatarSrc: `${publicUrl}/images/assistant.png`,
+  avatarSrc: `${publicUrl}/images/polymentorAIAssistant.png`,
   inputPlaceholder: "Type your question here…",
   poweredByLabel: "PolyCode Ecosystem · AI Assistant",
   quickPrompts: [
