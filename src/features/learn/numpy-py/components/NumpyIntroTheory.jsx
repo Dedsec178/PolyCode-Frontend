@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import RunnableCodeBlock from "../../shared/RunnableCodeBlock";
 import LessonReadGate from "../../shared/LessonReadGate";
+import LessonQuizSlider from "../../shared/LessonQuizSlider";
 import { LEARN_ACCENT } from "../../shared/learnAccent";
 import { mapTheoryWithQuizIndices } from "../../shared/lessonQuizUtils";
 import useLessonQuizAttempts from "../../shared/useLessonQuizAttempts";
@@ -414,19 +415,7 @@ function NumpyVisualTable({ block }) {
   );
 }
 
-function NumpyTheoryBlock({
-  block,
-  step,
-  accentColor,
-  quizIndex = null,
-  quizSelection = null,
-  onQuizAnswer = null,
-}) {
-  const [localQuizSelection, setLocalQuizSelection] = useState(null);
-  const selectedQuiz =
-    quizSelection !== null && quizSelection !== undefined
-      ? quizSelection
-      : localQuizSelection;
+function NumpyTheoryBlock({ block, step, accentColor }) {
 
   if (block.type === "text") {
     return (
@@ -606,59 +595,6 @@ function NumpyTheoryBlock({
     );
   }
 
-  if (block.type === "quiz") {
-    const answered = selectedQuiz !== null;
-    const correct = selectedQuiz === block.answer;
-
-    function handleQuizSelect(index) {
-      if (typeof onQuizAnswer === "function" && quizIndex !== null) {
-        onQuizAnswer(quizIndex, index);
-      } else {
-        setLocalQuizSelection(index);
-      }
-    }
-
-    return (
-      <article
-        className={`numpy-quiz-card ${answered ? (correct ? "correct" : "wrong") : ""}`}
-      >
-        <div className="numpy-step-head">
-          <span className="numpy-step-num" style={{ background: accentColor }}>
-            ?
-          </span>
-          <span className="numpy-step-label">Quick check — no pressure!</span>
-        </div>
-        <p className="numpy-quiz-question">
-          <InlineText text={block.question} />
-        </p>
-        <div className="numpy-quiz-options">
-          {block.options.map((option, index) => {
-            const isSelected = selectedQuiz === index;
-            const isAnswer = block.answer === index;
-            return (
-              <button
-                key={option}
-                type="button"
-                className={`numpy-quiz-option ${
-                  answered && isAnswer ? "answer" : ""
-                } ${isSelected ? "selected" : ""}`}
-                onClick={() => handleQuizSelect(index)}
-              >
-                {String.fromCharCode(65 + index)}. <InlineText text={option} />
-              </button>
-            );
-          })}
-        </div>
-        {answered && (
-          <p className="numpy-quiz-feedback">
-            <strong>{correct ? "Nice!" : "Not quite — that's okay."}</strong>{" "}
-            <InlineText text={block.explanation} />
-          </p>
-        )}
-      </article>
-    );
-  }
-
   return null;
 }
 
@@ -698,7 +634,12 @@ export default function NumpyIntroTheory({
     introTextIndex >= 0
       ? theoryWithoutObjectives.filter((_, index) => index !== introTextIndex)
       : theoryWithoutObjectives;
+  const theoryWithQuizMeta = mapTheoryWithQuizIndices(theoryBlocks);
+  const quizSlides = theoryWithQuizMeta
+    .filter(({ block }) => block.type === "quiz")
+    .map(({ block, quizIndex }) => ({ block, quizIndex }));
   let stepCounter = 0;
+  let quizSliderRendered = false;
 
   return (
     <div className="numpy-intro-theory">
@@ -745,15 +686,28 @@ export default function NumpyIntroTheory({
           <small>Read the idea, then run the code right below it</small>
         </div>
 
-        {mapTheoryWithQuizIndices(theoryBlocks).map(
-          ({ block, theoryIndex, quizIndex }) => {
+        {theoryWithQuizMeta.map(({ block, theoryIndex, quizIndex }) => {
+          if (block.type === "quiz") {
+            if (quizSliderRendered) return null;
+            quizSliderRendered = true;
+            const step = ++stepCounter;
+            return (
+              <LessonQuizSlider
+                key={`quiz-slider-${theoryIndex}`}
+                quizzes={quizSlides}
+                accentColor={accentColor}
+                getSelection={getSelection}
+                onQuizAnswer={recordAttempt}
+              />
+            );
+          }
+
           const needsStep =
             block.type === "text" ||
             block.type === "array" ||
             block.type === "table" ||
             block.type === "matrices" ||
-            block.type === "diagram" ||
-            block.type === "quiz";
+            block.type === "diagram";
           const step = needsStep ? ++stepCounter : stepCounter;
 
           return (
@@ -762,11 +716,6 @@ export default function NumpyIntroTheory({
               block={block}
               step={step || theoryIndex + 1}
               accentColor={accentColor}
-              quizIndex={quizIndex}
-              quizSelection={
-                quizIndex === null ? null : getSelection(quizIndex)
-              }
-              onQuizAnswer={recordAttempt}
             />
           );
         })}

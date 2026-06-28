@@ -474,6 +474,58 @@ html[data-theme="light"] .lesson-annotator-fab-close,
   color: #334155 !important;
 }
 
+.app.theme-light .main-content.learn-content .lesson-quiz-slider {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-viewport .lesson-quiz-slide,
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-viewport .lesson-quiz-slide--correct,
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-viewport .lesson-quiz-slide--wrong {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-count {
+  color: #2563eb !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-progress {
+  color: #64748b !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-controls {
+  border-top-color: rgba(37, 99, 235, 0.15) !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-nav {
+  background: #f8fafc !important;
+  border-color: rgba(37, 99, 235, 0.22) !important;
+  color: #334155 !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-nav:hover:not(:disabled) {
+  background: #eff6ff !important;
+  border-color: rgba(37, 99, 235, 0.45) !important;
+  color: #1d4ed8 !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-dot {
+  background: #cbd5e1 !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-dot--active {
+  background: #2563eb !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-dot--done:not(.lesson-quiz-slider-dot--active) {
+  background: #93c5fd !important;
+}
+
 /* Scrollbar */
 .app.theme-light ::-webkit-scrollbar-track {
   background: var(--poly-surface-soft);
