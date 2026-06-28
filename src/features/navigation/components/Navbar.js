@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/context/AuthContext";
-import { getLearnNavLinks } from "../../language/courseCatalog";
+import { getActiveLearnNavGroup } from "../../language/courseCatalog";
+import LearnNavDropdown from "./LearnNavDropdown";
 import ProfileAvatar from "../../profile/components/ProfileAvatar";
 import ThemeSettingsMenu from "../../../shared/theme/ThemeSettingsMenu";
 import { THEMES } from "../../../shared/theme/themes";
@@ -56,8 +57,8 @@ export default function Navbar({
       ? "active"
       : "";
 
-  const learnNavLinks = useMemo(
-    () => getLearnNavLinks(selectedLanguage, location.pathname),
+  const learnNavGroup = useMemo(
+    () => getActiveLearnNavGroup(selectedLanguage, location.pathname),
     [selectedLanguage, location.pathname],
   );
 
@@ -135,11 +136,7 @@ export default function Navbar({
         <Link to="/search" className={isActive("/search")}>
           Search
         </Link>
-        {learnNavLinks.map((item) => (
-          <Link key={item.to} to={item.to} className={isActive(item.to)}>
-            {item.label}
-          </Link>
-        ))}
+        <LearnNavDropdown group={learnNavGroup} pathname={location.pathname} />
       </div>
 
       <div className="navbar-actions">

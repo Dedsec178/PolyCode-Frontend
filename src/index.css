@@ -449,6 +449,102 @@ textarea {
   color: var(--red, #ff4d6d);
 }
 
+/* Learn courses dropdown (one menu per language stack) */
+.navbar-learn-menu {
+  position: relative;
+}
+
+.navbar-learn-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--txt-1, #c0c8e0);
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.navbar-learn-trigger:hover,
+.navbar-learn-menu--open .navbar-learn-trigger {
+  background: var(--glass-2, rgba(255, 255, 255, 0.06));
+  color: var(--txt-0, #f0f0ff);
+}
+
+.navbar-learn-trigger.active {
+  background: var(--acid-dim, rgba(204, 255, 0, 0.12));
+  color: var(--acid, #ccff00);
+  border-color: rgba(204, 255, 0, 0.2);
+}
+
+.navbar-learn-chevron {
+  font-size: 0.65rem;
+  opacity: 0.75;
+  transition: transform 0.15s ease;
+}
+
+.navbar-learn-menu--open .navbar-learn-chevron {
+  transform: rotate(180deg);
+}
+
+.navbar-learn-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 210px;
+  max-height: min(70vh, 420px);
+  overflow-y: auto;
+  background: var(--ink-2, #0d1117);
+  border: 1px solid var(--border, #1e2433);
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  z-index: 220;
+  padding: 6px;
+}
+
+.navbar-learn-panel-all,
+.navbar-learn-panel-item {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 7px;
+  text-decoration: none;
+  color: var(--txt-1, #c0c8e0);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: background 0.12s, color 0.12s;
+}
+
+.navbar-learn-panel-all {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--learn-accent, var(--acid, #ccff00));
+}
+
+.navbar-learn-panel-all:hover,
+.navbar-learn-panel-item:hover {
+  background: var(--glass, rgba(255, 255, 255, 0.04));
+  color: var(--txt-0, #f0f0ff);
+}
+
+.navbar-learn-panel-item.active {
+  background: var(--acid-dim, rgba(204, 255, 0, 0.12));
+  color: var(--acid, #ccff00);
+}
+
+.navbar-learn-panel-divider {
+  height: 1px;
+  margin: 4px 6px 6px;
+  background: var(--border, #1e2433);
+}
+
 /* Theme settings menu */
 .theme-settings {
   position: relative;

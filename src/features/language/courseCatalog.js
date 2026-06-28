@@ -280,8 +280,19 @@ export const learnNavByLanguage = {
     { label: "Web Dev", to: "/learn/js-web-dev" },
   ],
   php: [{ label: "PHP Basics", to: "/learn/php-fundamentals" }],
-  ruby: [{label: "Ruby Basics", to: "/learn/ruby-fundamentals"}]
+  csharp: [{ label: "C# Basics", to: "/learn/c-sharp-fundamentals" }],
+  "c#": [{ label: "C# Basics", to: "/learn/c-sharp-fundamentals" }],
+  ruby: [{ label: "Ruby Basics", to: "/learn/ruby-fundamentals" }],
 };
+
+const learnNavLanguageAliases = {
+  "c++": "cpp",
+  "c#": "csharp",
+};
+
+function normalizeLearnNavLanguageKey(key = "") {
+  return learnNavLanguageAliases[key] || key;
+}
 
 /** Infer stack from an active /learn/* route when language is not set. */
 export function inferLanguageFromLearnPath(pathname = "") {
@@ -310,18 +321,46 @@ export function inferLanguageFromLearnPath(pathname = "") {
   if (pathname.startsWith("/learn/php-fundamentals")) {
     return "php";
   }
-  if (pathname.startsWith("/learn/ruby-fundamentals")){
+  if (pathname.startsWith("/learn/ruby-fundamentals")) {
     return "ruby";
+  }
+  if (pathname.startsWith("/learn/c-sharp-fundamentals")) {
+    return "csharp";
   }
   return null;
 }
 
 export function getLearnNavLinks(selectedLanguage, pathname = "") {
-  const key =
+  const group = getActiveLearnNavGroup(selectedLanguage, pathname);
+  return group?.courses || [];
+}
+
+/**
+ * Active language stack for navbar: one dropdown per stack instead of many top-level links.
+ */
+export function getActiveLearnNavGroup(selectedLanguage, pathname = "") {
+  const rawKey =
     languageKey(selectedLanguage || "") ||
     inferLanguageFromLearnPath(pathname) ||
     "";
-  return learnNavByLanguage[key] || [];
+  if (!rawKey) return null;
+
+  const stackKey = normalizeLearnNavLanguageKey(rawKey);
+  const courses =
+    learnNavByLanguage[rawKey] || learnNavByLanguage[stackKey] || [];
+  if (!courses.length) return null;
+
+  const stack =
+    courseStackGroups.find((entry) => entry.id === stackKey) ||
+    courseStackGroups.find((entry) => entry.id === rawKey);
+
+  return {
+    id: stackKey,
+    label: stack?.label || selectedLanguage || stackKey,
+    accent: stack?.accent,
+    languagePath: stack?.languagePath || `/language/${selectedLanguage || stack?.label || ""}`,
+    courses,
+  };
 }
 
 export function getLanguageLandingCourses(languageKeyValue) {
