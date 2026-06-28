@@ -7,6 +7,7 @@ import OopsSidebar from "../../oops-cpp/components/OopsSidebar";
 import LearnProfileMenu from "../../shared/LearnProfileMenu";
 import LessonContentShell from "../../shared/LessonContentShell";
 import LessonReadGate from "../../shared/LessonReadGate";
+import LessonQuizSlider from "../../shared/LessonQuizSlider";
 import useLessonReadGate from "../../shared/useLessonReadGate";
 import useLessonQuizAttempts from "../../shared/useLessonQuizAttempts";
 import { mapTheoryWithQuizIndices } from "../../shared/lessonQuizUtils";
@@ -341,21 +342,43 @@ export default function PointersLessonPage() {
                 </div>
               </div>
 
-              {mapTheoryWithQuizIndices(theoryLesson?.theory || []).map(
-                ({ block, theoryIndex, quizIndex }) => (
-                <ConceptCard
-                  key={theoryIndex}
-                  block={block}
-                  accentColor={LEARN_ACCENT}
-                  runnableCodeLangs={["cpp", "c++"]}
-                  quizIndex={quizIndex}
-                  quizSelection={
-                    quizIndex === null ? null : getSelection(quizIndex)
-                  }
-                  onQuizAnswer={recordAttempt}
-                />
-              ),
-              )}
+              {(() => {
+                const theoryWithQuizMeta = mapTheoryWithQuizIndices(
+                  theoryLesson?.theory || [],
+                );
+                const quizSlides = theoryWithQuizMeta
+                  .filter(({ block }) => block.type === "quiz")
+                  .map(({ block, quizIndex }) => ({ block, quizIndex }));
+                let quizSliderRendered = false;
+
+                return theoryWithQuizMeta.map(
+                  ({ block, theoryIndex, quizIndex }) => {
+                    if (block.type === "quiz") {
+                      if (quizSliderRendered) return null;
+                      quizSliderRendered = true;
+                      return (
+                        <LessonQuizSlider
+                          key={`quiz-slider-${theoryIndex}`}
+                          quizzes={quizSlides}
+                          accentColor={LEARN_ACCENT}
+                          getSelection={getSelection}
+                          onQuizAnswer={recordAttempt}
+                          variant="oops"
+                        />
+                      );
+                    }
+
+                    return (
+                      <ConceptCard
+                        key={theoryIndex}
+                        block={block}
+                        accentColor={LEARN_ACCENT}
+                        runnableCodeLangs={["cpp", "c++"]}
+                      />
+                    );
+                  },
+                );
+              })()}
 
               <LessonReadGate
                 markedAsRead={markedAsRead}
