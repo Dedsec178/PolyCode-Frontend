@@ -4,70 +4,212 @@ import {
   Routes,
   Route,
   Navigate,
+  Link,
   useNavigate,
   useLocation,
 } from "react-router-dom";
+import VerifyCertificatePage from "./features/learn/shared/VerifyCertificatePage";
+
 import Navbar from "./features/navigation/components/Navbar";
 import Sidebar from "./features/navigation/components/Sidebar";
 import { PlaygroundProvider } from "./features/playground/context/PlaygroundContext";
-import { AuthProvider } from "./features/auth/context/AuthContext";
+import { AuthProvider, useAuth } from "./features/auth/context/AuthContext";
 import SelectionPins from "./shared/components/SelectionPins";
+import LastRouteTracker from "./shared/navigation/LastRouteTracker";
 import { LearnNavProvider } from "./features/learn/shared/LearnNavContext";
 import GlobalAssistant from "./features/assistant/components/GlobalAssistant";
 import { AssistantProvider } from "./features/assistant/context/AssistantContext";
+import { AppSettingsProvider } from "./shared/settings/AppSettingsContext";
 import "./App.css";
 import "./styles/theme-light.css";
+import "./styles/theme-ocean.css";
+import "./styles/theme-palettes.css";
+import "./styles/theme-assistant.css";
+import "./styles/theme-learn-surfaces.css";
+import {
+  applyDocumentTheme,
+  clearDocumentThemeInlineStyles,
+  getAppThemeClass,
+  isLightTheme,
+  normalizeThemeId,
+} from "./shared/theme/themes";
 import "./styles/stack-picker-dark.css";
 import "./styles/responsive.css";
+import "./styles/theme-dark.css";
+import "./styles/theme-profile.css";
+import "./styles/theme-light-complete.css";
 
 import LandingShell from "./features/landing/LandingShell";
 
-const LandingPage = lazy(() => import("./features/landing/pages/LandingPage"));
-const LanguageLandingPage = lazy(
+function lazyWithChunkRetry(importer) {
+  return lazy(() =>
+    importer()
+      .then((module) => {
+        sessionStorage.removeItem("polycode_chunk_reload");
+        return module;
+      })
+      .catch((error) => {
+        const message = error?.message || "";
+        const isChunkError =
+          error?.name === "ChunkLoadError" ||
+          /Loading chunk .* failed|Failed to fetch dynamically imported module/i.test(
+            message,
+          );
+
+        if (
+          isChunkError &&
+          typeof window !== "undefined" &&
+          sessionStorage.getItem("polycode_chunk_reload") !== "1"
+        ) {
+          sessionStorage.setItem("polycode_chunk_reload", "1");
+          window.location.reload();
+          return new Promise(() => {});
+        }
+
+        throw error;
+      }),
+  );
+}
+
+const LandingPage = lazyWithChunkRetry(
+  () => import("./features/landing/pages/LandingPage"),
+);
+const LanguageLandingPage = lazyWithChunkRetry(
   () => import("./features/language/pages/LanguageLandingPage"),
 );
-const HomePage = lazy(() => import("./features/docs/pages/Home/HomePage"));
-const DocumentPage = lazy(() => import("./features/docs/pages/DocumentPage"));
-const CategoryPage = lazy(() => import("./features/docs/pages/CategoryPage"));
-const SearchPage = lazy(() => import("./features/docs/pages/SearchPage"));
-const PlaygroundPage = lazy(
+const AllCoursesPage = lazyWithChunkRetry(
+  () => import("./features/courses/pages/AllCoursesPage"),
+);
+const HomePage = lazyWithChunkRetry(
+  () => import("./features/docs/pages/Home/HomePage"),
+);
+const DocumentPage = lazyWithChunkRetry(
+  () => import("./features/docs/pages/DocumentPage"),
+);
+const CategoryPage = lazyWithChunkRetry(
+  () => import("./features/docs/pages/CategoryPage"),
+);
+const SearchPage = lazyWithChunkRetry(
+  () => import("./features/docs/pages/SearchPage"),
+);
+const PlaygroundPage = lazyWithChunkRetry(
   () => import("./features/playground/pages/PlaygroundPage"),
 );
-const LoginPage = lazy(() => import("./features/auth/pages/LoginPage"));
-const SignupPage = lazy(() => import("./features/auth/pages/SignupPage"));
-const DailyChallenge = lazy(() => import("./pages/DailyChallenges"));
-const ProfilePage = lazy(() => import("./features/profile/ProfilePage"));
+const LoginPage = lazyWithChunkRetry(
+  () => import("./features/auth/pages/LoginPage"),
+);
+const SignupPage = lazyWithChunkRetry(
+  () => import("./features/auth/pages/SignupPage"),
+);
+const DailyChallenge = lazyWithChunkRetry(
+  () => import("./pages/DailyChallenges"),
+);
+const ProfilePage = lazyWithChunkRetry(
+  () => import("./features/profile/ProfilePage"),
+);
 
 // Learn — OOP C++ pages
-const OopsHub = lazy(() => import("./features/learn/oops-cpp/pages/OopsHub"));
-const LessonPage = lazy(
+const OopsHub = lazyWithChunkRetry(
+  () => import("./features/learn/oops-cpp/pages/OopsHub"),
+);
+const LessonPage = lazyWithChunkRetry(
   () => import("./features/learn/oops-cpp/pages/LessonPage"),
 );
-const PointersHub = lazy(
+const PointersHub = lazyWithChunkRetry(
   () => import("./features/learn/pointers-cpp/pages/PointersHub"),
 );
-const PointersLessonPage = lazy(
+const PointersLessonPage = lazyWithChunkRetry(
   () => import("./features/learn/pointers-cpp/pages/PointersLessonPage"),
 );
-const NumpyHub = lazy(() => import("./features/learn/numpy-py/pages/NumpyHub"));
-const NumpyLessonPage = lazy(
+const DsaHub = lazyWithChunkRetry(
+  () => import("./features/learn/dsa-cpp/pages/DsaHub"),
+);
+const DsaLessonPage = lazyWithChunkRetry(
+  () => import("./features/learn/dsa-cpp/pages/DsaLessonPage"),
+);
+const NumpyHub = lazyWithChunkRetry(
+  () => import("./features/learn/numpy-py/pages/NumpyHub"),
+);
+const NumpyLessonPage = lazyWithChunkRetry(
   () => import("./features/learn/numpy-py/pages/NumpyLessonPage"),
 );
-const PandasHub = lazy(
+const PythonFundamentalsHub = lazyWithChunkRetry(
+  () =>
+    import("./features/learn/python-fundamentals/pages/PythonFundamentalsHub"),
+);
+const PythonFundamentalsLessonPage = lazyWithChunkRetry(
+  () =>
+    import(
+      "./features/learn/python-fundamentals/pages/PythonFundamentalsLessonPage"
+    ),
+);
+const MatplotlibHub = lazyWithChunkRetry(
+  () => import("./features/learn/matplotlib-py/pages/MatplotlibHub"),
+);
+const MatplotlibLessonPage = lazyWithChunkRetry(
+  () => import("./features/learn/matplotlib-py/pages/MatplotlibLessonPage"),
+);
+const PandasHub = lazyWithChunkRetry(
   () => import("./features/learn/pandas-py/pages/PandasHub"),
 );
-const PandasLessonPage = lazy(
+const PandasLessonPage = lazyWithChunkRetry(
   () => import("./features/learn/pandas-py/pages/PandasLessonPage"),
 );
-const JsFundamentalsHub = lazy(
+const FastapiHub = lazyWithChunkRetry(
+  () => import("./features/learn/fastapi-py/pages/FastapiHub"),
+);
+const FastapiLessonPage = lazyWithChunkRetry(
+  () => import("./features/learn/fastapi-py/pages/FastapiLessonPage"),
+);
+const AiHub = lazyWithChunkRetry(
+  () => import("./features/learn/ai_ml-py/pages/aiHub"),
+);
+const AiLessonPage = lazyWithChunkRetry(
+  () => import("./features/learn/ai_ml-py/pages/aiLessonPage"),
+);
+const JsFundamentalsHub = lazyWithChunkRetry(
   () => import("./features/learn/js-fundamentals/pages/JsFundamentalsHub"),
 );
-const JsFundamentalsLessonPage = lazy(
-  () => import("./features/learn/js-fundamentals/pages/JsFundamentalsLessonPage"),
+const JsFundamentalsLessonPage = lazyWithChunkRetry(
+  () =>
+    import("./features/learn/js-fundamentals/pages/JsFundamentalsLessonPage"),
+);
+const JsWebDevHub = lazyWithChunkRetry(
+  () => import("./features/learn/js-web-dev/pages/JsWebDevHub"),
+);
+const JsWebDevLessonPage = lazyWithChunkRetry(
+  () => import("./features/learn/js-web-dev/pages/JsWebDevLessonPage"),
+);
+const CsharpHub = lazyWithChunkRetry(
+  () => import("./features/learn/csharp-fundamentals/pages/CsharpHub"),
+);
+const CsharpLessonPage = lazyWithChunkRetry(
+  () => import("./features/learn/csharp-fundamentals/pages/CsharpLessonPage"),
+);
+const CppFundamentalsHub = lazyWithChunkRetry(
+  () => import("./features/learn/cpp-fundamentals/pages/CppFundamentalsHub"),
+);
+const CppFundamentalsLessonPage = lazyWithChunkRetry(
+  () =>
+    import("./features/learn/cpp-fundamentals/pages/CppFundamentalsLessonPage"),
+);
+const PhpFundamentalsHub = lazyWithChunkRetry(
+  () => import("./features/learn/php-fundamentals/pages/phpFundamentalsHub"),
+);
+const PhpFundamentalsLessonPage = lazyWithChunkRetry(
+  () =>
+    import("./features/learn/php-fundamentals/pages/phpFundamentalsLessonPage"),
+);
+const RubyFundamentalsHub = lazyWithChunkRetry(
+  () => import("./features/learn/ruby-fundamentals/pages/rubyFundamentalsHub"),
+);
+const RubyFundamentalsLessonPage = lazyWithChunkRetry(
+  () =>
+    import("./features/learn/ruby-fundamentals/pages/rubyFundamentalsLessonPage"),
 );
 
 const PageFallback = () => (
-  <div className="loading">
+  <div className="loading-overlay">
     <div className="spinner-container">
       <div className="spinner" />
     </div>
@@ -75,9 +217,25 @@ const PageFallback = () => (
 );
 
 function AppFooter() {
+  const year = new Date().getFullYear();
+
   return (
     <footer className="app-footer">
       <div className="app-footer-inner">
+        <div className="app-footer-meta">
+          <Link to="/" className="app-footer-home" aria-label="PolyCode home">
+            <img
+              src="/images/polycode-logo.png"
+              alt=""
+              className="app-footer-polycode-logo"
+              width={28}
+              height={28}
+              decoding="async"
+            />
+          </Link>
+          <span className="app-footer-copy">© {year}</span>
+          <span className="app-footer-project">PolyCode</span>
+        </div>
         <a
           className="app-footer-brand"
           href="https://www.quantumlogicslimited.com"
@@ -86,14 +244,13 @@ function AppFooter() {
           aria-label="Quantum Logics"
         >
           <img
-            src="https://www.quantumlogicslimited.com/logo.png"
-            alt="Quantum Logics logo"
+            src="/images/logo.png"
+            alt=""
             className="app-footer-logo"
+            aria-hidden
           />
-          <span>Quantum Logics</span>
+          <span>Powered by Quantum Logics</span>
         </a>
-        <span className="app-footer-divider" />
-        <span className="app-footer-project">Polycode</span>
       </div>
     </footer>
   );
@@ -127,7 +284,7 @@ function MainApp({
   onLanguageSelect,
   onGoToStackPicker,
   theme,
-  onToggleTheme,
+  onThemeChange,
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const toggleSidebar = () => setIsSidebarOpen((o) => !o);
@@ -149,7 +306,7 @@ function MainApp({
       <Navbar
         toggleSidebar={toggleSidebar}
         theme={theme}
-        onToggleTheme={onToggleTheme}
+        onThemeChange={onThemeChange}
         onGoToStackPicker={onGoToStackPicker}
         selectedLanguage={selectedLanguage}
       />
@@ -186,16 +343,8 @@ function MainApp({
                 path="/search"
                 element={<SearchPage selectedLanguage={selectedLanguage} />}
               />
-              <Route
-                path="/playground"
-                element={
-                  <PlaygroundPage
-                    theme={theme}
-                    onToggleSidebar={toggleSidebar}
-                    sidebarOpen={isSidebarOpen}
-                  />
-                }
-              />
+              <Route path="/playground" element={<PlaygroundPage />} />
+
               <Route
                 path="/daily-challenge"
                 element={<DailyChallenge theme={theme} />}
@@ -211,7 +360,7 @@ function MainApp({
 
 function LearnShell({
   theme,
-  onToggleTheme,
+  onThemeChange,
   onGoToStackPicker,
   selectedLanguage,
   children,
@@ -257,7 +406,7 @@ function LearnShell({
         showMobileMenu={isLessonRoute}
         mobileMenuOpen={learnMenuOpen}
         theme={theme}
-        onToggleTheme={onToggleTheme}
+        onThemeChange={onThemeChange}
         onGoToStackPicker={onGoToStackPicker}
         selectedLanguage={selectedLanguage}
       />
@@ -268,44 +417,107 @@ function LearnShell({
           aria-hidden="true"
         />
       )}
-      <main className="main-content learn-content">{children}</main>
+      <main className="main-content learn-content">
+        {React.isValidElement(children)
+          ? React.cloneElement(children, { theme, onThemeChange })
+          : children}
+      </main>
     </LearnNavProvider>
   );
 }
 
-function ThemedShell({ theme, children }) {
+function ProfileOrMainFallback({
+  theme,
+  onThemeChange,
+  onGoToStackPicker,
+  selectedLanguage,
+  onLanguageSelect,
+}) {
+  const location = useLocation();
+
+  if (/^\/@[^/]+(?:\/certificates\/[^/]+)?$/.test(location.pathname)) {
+    return (
+      <ThemedShell theme={theme}>
+        <LearnShell
+          theme={theme}
+          onThemeChange={onThemeChange}
+          onGoToStackPicker={onGoToStackPicker}
+          selectedLanguage={selectedLanguage}
+        >
+          <ProfilePage />
+        </LearnShell>
+      </ThemedShell>
+    );
+  }
+
   return (
-    <div className={`app ${theme === "light" ? "theme-light" : ""}`}>
+    <ThemedShell theme={theme}>
+      {selectedLanguage ? (
+        <MainApp
+          selectedLanguage={selectedLanguage}
+          onLanguageSelect={onLanguageSelect}
+          onGoToStackPicker={onGoToStackPicker}
+          theme={theme}
+          onThemeChange={onThemeChange}
+        />
+      ) : (
+        <Navigate to="/select-language" replace />
+      )}
+    </ThemedShell>
+  );
+}
+
+function ThemedShell({ theme, children }) {
+  const themeClass = getAppThemeClass(theme);
+  return (
+    <div className={`app${themeClass ? ` ${themeClass}` : ""}`}>
       {children}
       <AppFooter />
     </div>
   );
 }
 
-/** Language picker is always dark — overrides global light theme on html/body */
-function StackPickerShell({ children, savedTheme }) {
+function ProfileRedirect() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <PageFallback />;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user?.username) {
+    return <Navigate to={`/@${user.username}`} replace />;
+  }
+
+  return <Navigate to="/hub" replace />;
+}
+
+/** Language picker respects global theme (dark styling only when theme is dark). */
+function StackPickerShell({ children, savedTheme, onThemeChange }) {
   React.useLayoutEffect(() => {
-    const html = document.documentElement;
-    const body = document.body;
-
-    html.setAttribute("data-theme", "dark");
-    body.classList.remove("light-theme");
-    html.style.backgroundColor = "#03050a";
-    body.style.backgroundColor = "#03050a";
-
-    return () => {
-      html.style.backgroundColor = "";
-      body.style.backgroundColor = "";
-      // Restore the real theme when leaving the stack picker
-      html.setAttribute("data-theme", savedTheme);
-      body.classList.toggle("light-theme", savedTheme === "light");
-    };
+    applyDocumentTheme(savedTheme);
+    return () => clearDocumentThemeInlineStyles();
   }, [savedTheme]);
 
+  const shellClass = [
+    "app",
+    isLightTheme(savedTheme) ? "theme-light" : "stack-picker-dark",
+    getAppThemeClass(savedTheme),
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className="app stack-picker-dark">
-      {children}
-      <AppFooter />
+    <div className={shellClass}>
+      {React.isValidElement(children)
+        ? React.cloneElement(children, {
+            theme: savedTheme,
+            onThemeChange,
+          })
+        : children}
     </div>
   );
 }
@@ -316,8 +528,8 @@ function AppRoutes() {
   const [selectedLanguage, setSelectedLanguage] = React.useState(
     () => localStorage.getItem("selectedLanguage") || null,
   );
-  const [theme, setTheme] = React.useState(
-    () => localStorage.getItem("theme") || "dark",
+  const [theme, setTheme] = React.useState(() =>
+    normalizeThemeId(localStorage.getItem("theme")),
   );
 
   const handleLanguageSelect = React.useCallback(
@@ -337,24 +549,37 @@ function AppRoutes() {
     navigate("/select-language");
   }, [navigate]);
 
-  const toggleTheme = React.useCallback(() => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  const handleThemeChange = React.useCallback((nextTheme) => {
+    setTheme(normalizeThemeId(nextTheme));
   }, []);
 
   React.useEffect(() => {
     const path = location.pathname;
     if (
+      path.startsWith("/learn/python-fundamentals") ||
       path.startsWith("/learn/numpy-py") ||
-      path.startsWith("/learn/pandas-py")
+      path.startsWith("/learn/pandas-py") ||
+      path.startsWith("/learn/fastapi-py") ||
+      path.startsWith("/learn/matplotlib-py") ||
+      path.startsWith("/learn/ai_ml-py")
     ) {
       handleLanguageSelect("Python", { stay: true });
     } else if (path.startsWith("/learn/js-fundamentals")) {
       handleLanguageSelect("JavaScript", { stay: true });
+    } else if (path.startsWith("/learn/js-web-dev")) {
+      handleLanguageSelect("JavaScript", { stay: true });
+    } else if (path.startsWith("/learn/c-sharp-fundamentals")) {
+      handleLanguageSelect("C#", { stay: true });
+    } else if (path.startsWith("/learn/php-fundamentals")) {
+      handleLanguageSelect("PHP", { stay: true });
     } else if (
+      path.startsWith("/learn/cpp-fundamentals") ||
       path.startsWith("/learn/oops-cpp") ||
       path.startsWith("/learn/pointers-cpp")
     ) {
       handleLanguageSelect("C++", { stay: true });
+    } else if (path.startsWith("/learn/ruby-fundamentals")) {
+      handleLanguageSelect("Ruby", { stay: true });
     }
   }, [location.pathname, handleLanguageSelect]);
 
@@ -364,8 +589,7 @@ function AppRoutes() {
     if (location.pathname === "/" || location.pathname === "/select-language") {
       return;
     }
-    document.documentElement.setAttribute("data-theme", theme);
-    document.body.classList.toggle("light-theme", theme === "light");
+    applyDocumentTheme(theme);
   }, [theme, location.pathname]);
 
   return (
@@ -384,7 +608,7 @@ function AppRoutes() {
           element={
             <LandingShell
               savedTheme={theme}
-              footer={<AppFooter />}
+              onThemeChange={setTheme}
               onLanguageSelect={handleLanguageSelect}
               continueLanguage={selectedLanguage}
             />
@@ -399,9 +623,20 @@ function AppRoutes() {
           }
         />
         <Route
+          path="/verify-certificate"
+          element={
+            <ThemedShell theme={theme}>
+              <VerifyCertificatePage />
+            </ThemedShell>
+          }
+        />
+        <Route
           path="/select-language"
           element={
-            <StackPickerShell savedTheme={theme}>
+            <StackPickerShell
+              savedTheme={theme}
+              onThemeChange={handleThemeChange}
+            >
               <LandingPage
                 onLanguageSelect={handleLanguageSelect}
                 continueLanguage={selectedLanguage}
@@ -410,12 +645,20 @@ function AppRoutes() {
           }
         />
         <Route
+          path="/courses"
+          element={
+            <ThemedShell theme={theme}>
+              <AllCoursesPage />
+            </ThemedShell>
+          }
+        />
+        <Route
           path="/language/:language"
           element={
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -433,7 +676,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -448,7 +691,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -463,7 +706,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -478,7 +721,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -493,7 +736,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -508,11 +751,86 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
                 <PointersLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/dsa-cpp"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <DsaHub />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/dsa-cpp/lesson/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <DsaLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/dsa-cpp/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <DsaLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/python-fundamentals"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <PythonFundamentalsHub />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/python-fundamentals/lesson/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <PythonFundamentalsLessonPage />
               </LearnShell>
             </ThemedShell>
           }
@@ -523,7 +841,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -538,7 +856,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -553,7 +871,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -568,7 +886,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -583,7 +901,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -598,7 +916,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -607,13 +925,183 @@ function AppRoutes() {
             </ThemedShell>
           }
         />
+        {/* FastAPI Python Course Routes */}
+        <Route
+          path="/learn/fastapi-py"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <FastapiHub />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/fastapi-py/lesson/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <FastapiLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/fastapi-py/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <FastapiLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        {/* AI/ML Python Course Routes */}
+        <Route
+          path="/learn/ai_ml-py"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <AiHub />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/ai_ml-py/lesson/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <AiLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/ai_ml-py/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <AiLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        {/* ✅ CORRECT: Route is the direct child, ThemedShell is inside the element prop */}
+        <Route
+          path="/learn/matplotlib-py"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <MatplotlibHub />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+
+        <Route
+          path="/learn/matplotlib-py/lesson/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <MatplotlibLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/cpp-fundamentals"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <CppFundamentalsHub />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/cpp-fundamentals/lesson/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <CppFundamentalsLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/cpp-fundamentals/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <CppFundamentalsLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+
         <Route
           path="/learn/js-fundamentals"
           element={
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -628,7 +1116,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -643,7 +1131,7 @@ function AppRoutes() {
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
@@ -652,36 +1140,183 @@ function AppRoutes() {
             </ThemedShell>
           }
         />
+
         <Route
-          path="/profile"
+          path="/learn/js-web-dev"
           element={
             <ThemedShell theme={theme}>
               <LearnShell
                 theme={theme}
-                onToggleTheme={toggleTheme}
+                onThemeChange={handleThemeChange}
                 onGoToStackPicker={goToStackPicker}
                 selectedLanguage={selectedLanguage}
               >
-                <ProfilePage />
+                <JsWebDevHub />
               </LearnShell>
             </ThemedShell>
           }
         />
         <Route
-          path="/*"
+          path="/learn/js-web-dev/lesson/:lessonId"
           element={
             <ThemedShell theme={theme}>
-              {selectedLanguage ? (
-                <MainApp
-                  selectedLanguage={selectedLanguage}
-                  onLanguageSelect={handleLanguageSelect}
-                  onGoToStackPicker={goToStackPicker}
-                  theme={theme}
-                  onToggleTheme={toggleTheme}
-                />
-              ) : (
-                <Navigate to="/select-language" replace />
-              )}
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <JsWebDevLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/js-web-dev/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <JsWebDevLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+
+        <Route
+          path="/learn/c-sharp-fundamentals"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <CsharpHub />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/c-sharp-fundamentals/lesson/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <CsharpLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route path="/profile" element={<ProfileRedirect />} />
+        <Route
+          path="/*"
+          element={
+            <ProfileOrMainFallback
+              theme={theme}
+              onThemeChange={handleThemeChange}
+              onGoToStackPicker={goToStackPicker}
+              selectedLanguage={selectedLanguage}
+              onLanguageSelect={handleLanguageSelect}
+            />
+          }
+        />
+        <Route
+          path="/learn/php-fundamentals"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <PhpFundamentalsHub />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/php-fundamentals/lesson/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <PhpFundamentalsLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/php-fundamentals/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <PhpFundamentalsLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+         <Route
+          path="/learn/ruby-fundamentals"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <RubyFundamentalsHub />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/ruby-fundamentals/lesson/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <RubyFundamentalsLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/ruby-fundamentals/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <RubyFundamentalsLessonPage />
+              </LearnShell>
             </ThemedShell>
           }
         />
@@ -693,16 +1328,19 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
+      <AppSettingsProvider>
       <PlaygroundProvider>
         <Router>
           <AssistantProvider>
             <SelectionPins />
             <ScrollToTop />
+            <LastRouteTracker />
             <AppRoutes />
             <GlobalAssistant />
           </AssistantProvider>
         </Router>
       </PlaygroundProvider>
+      </AppSettingsProvider>
     </AuthProvider>
   );
 }

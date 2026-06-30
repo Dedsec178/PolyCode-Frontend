@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from "react";
+import { LEARN_ACCENT } from "../../shared/learnAccent";
 import { useParams, useNavigate } from "react-router-dom";
 import { ALL_LESSONS, TOTAL_XP } from "../data/oopsCurriculum";
 import ConceptCard from "../components/ConceptCard";
@@ -6,8 +7,16 @@ import CodeChallenge from "../components/CodeChallenge";
 import OopsSidebar from "../components/OopsSidebar";
 import LearnProfileMenu from "../../shared/LearnProfileMenu";
 import LessonContentShell from "../../shared/LessonContentShell";
+import LessonReadGate from "../../shared/LessonReadGate";
+import LessonQuizSlider from "../../shared/LessonQuizSlider";
+import useLessonReadGate from "../../shared/useLessonReadGate";
+import useLessonQuizAttempts from "../../shared/useLessonQuizAttempts";
+import { mapTheoryWithQuizIndices } from "../../shared/lessonQuizUtils";
+import LessonChallengeTab from "../../shared/LessonChallengeTab";
 import useOopsProgress from "../hooks/useOopsProgress";
 import { useLessonAssistantContext } from "../../../assistant/hooks/useLessonAssistantContext";
+
+const READ_GATE_PREFIX = "oops";
 
 function plainLessonText(text = "") {
   return text.replace(/\*\*/g, "").replace(/`/g, "");
@@ -70,26 +79,39 @@ export default function LessonPage() {
   const navigate = useNavigate();
   const [tab, setTab] = useState("theory"); // "theory" | "challenge"
   const [focusMode, setFocusMode] = useState(false);
-  const [confidence, setConfidence] = useState("");
+  const {
+    markedAsRead,
+    markAsRead,
+    confidence,
+    handleConfidenceChange,
+    createGoToChallenge,
+    challengeTabLocked,
+  } = useLessonReadGate(READ_GATE_PREFIX, lessonId);
+  const goToChallenge = createGoToChallenge(setTab);
   const {
     user,
     syncState,
     remoteProgress,
     completedMap: progress,
     savedCodeMap,
-    getLessonNote,
     bookmarks,
     completeLesson,
     rememberLesson,
     saveCode,
-    saveNote,
     toggleBookmark,
     addTime,
   } = useOopsProgress();
-  const [noteDraft, setNoteDraft] = useState("");
   const codeSaveTimer = useRef(null);
 
   const lesson = ALL_LESSONS.find((l) => l.id === lessonId);
+  const {
+    preparedLesson,
+    quizCount,
+    attemptedCount,
+    recordAttempt,
+    getSelection,
+  } = useLessonQuizAttempts(READ_GATE_PREFIX, lessonId, lesson);
+  const theoryLesson = preparedLesson || lesson;
   const lessonIdx = ALL_LESSONS.findIndex((l) => l.id === lessonId);
   const prev = ALL_LESSONS[lessonIdx - 1];
   const next = ALL_LESSONS[lessonIdx + 1];
@@ -124,14 +146,6 @@ export default function LessonPage() {
   useEffect(() => {
     if (lessonId) rememberLesson(lessonId);
   }, [lessonId, rememberLesson]);
-
-  useEffect(() => {
-    setNoteDraft(getLessonNote(lessonId));
-  }, [lessonId, getLessonNote]);
-
-  useEffect(() => {
-    setConfidence(localStorage.getItem(`oops_confidence_${lessonId}`) || "");
-  }, [lessonId]);
 
   useEffect(() => {
     if (!lessonId) return undefined;
@@ -177,20 +191,11 @@ export default function LessonPage() {
     await completeLesson(lesson);
   }
 
-  function handleSaveNote() {
-    saveNote(lessonId, noteDraft);
-  }
-
   function handleCodeChange(code) {
     window.clearTimeout(codeSaveTimer.current);
     codeSaveTimer.current = window.setTimeout(() => {
       saveCode(lessonId, code).catch(() => {});
     }, 700);
-  }
-
-  function handleConfidenceChange(value) {
-    setConfidence(value);
-    localStorage.setItem(`oops_confidence_${lessonId}`, value);
   }
 
   return (
@@ -209,7 +214,7 @@ export default function LessonPage() {
             ← OOP C++
           </button>
           <div className="oops-lesson-breadcrumb">
-            <span style={{ color: `var(--ch-color, ${lesson.chapterColor})` }}>
+            <span className="learn-lesson-chapter-tag">
               {lesson.chapterTitle}
             </span>
             <span className="oops-bc-sep">›</span>
@@ -254,12 +259,12 @@ export default function LessonPage() {
           >
             📖 Theory
           </button>
-          <button
-            className={`oops-tab ${tab === "challenge" ? "active" : ""}`}
-            onClick={() => setTab("challenge")}
-          >
-            ⚡ Challenge <span className="oops-tab-xp">+{lesson.xp} XP</span>
-          </button>
+          <LessonChallengeTab
+            active={tab === "challenge"}
+            locked={challengeTabLocked}
+            xp={lesson.xp}
+            onClick={goToChallenge}
+          />
         </div>
 
         <LessonContentShell
@@ -357,63 +362,60 @@ export default function LessonPage() {
                   </ul>
                 </div>
               </div>
-              {lesson.theory.map((block, i) => (
-                <ConceptCard
-                  key={i}
-                  block={block}
-                  accentColor={lesson.chapterColor}
-                  runnableCodeLangs={["cpp", "c++"]}
-                />
-              ))}
-              <div className="oops-notes-panel">
-                <div>
-                  <span className="oops-interactive-label">Lesson Notes</span>
-                  <h3>Capture your mental model</h3>
-                </div>
-                <textarea
-                  value={noteDraft}
-                  onChange={(e) => setNoteDraft(e.target.value)}
-                  placeholder="Write a short note, gotcha, or example you want to remember..."
-                />
-                <button type="button" onClick={handleSaveNote}>
-                  Save Note
-                </button>
-              </div>
-              <div className="oops-confidence-panel">
-                <div>
-                  <span className="oops-interactive-label">Confidence Check</span>
-                  <h3>How well did this click?</h3>
-                </div>
-                <div className="oops-confidence-options">
-                  {[
-                    ["review", "Need review"],
-                    ["almost", "Almost there"],
-                    ["ready", "Ready to code"],
-                  ].map(([value, label]) => (
-                    <button
-                      key={value}
-                      type="button"
-                      className={confidence === value ? "active" : ""}
-                      onClick={() => handleConfidenceChange(value)}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="oops-theory-footer">
-                <button
-                  className="oops-cta-btn"
-                  onClick={() => setTab("challenge")}
-                >
-                  Ready? Take the Challenge →
-                </button>
-              </div>
+              {(() => {
+                const theoryWithQuizMeta = mapTheoryWithQuizIndices(
+                  theoryLesson?.theory || [],
+                );
+                const quizSlides = theoryWithQuizMeta
+                  .filter(({ block }) => block.type === "quiz")
+                  .map(({ block, quizIndex }) => ({ block, quizIndex }));
+                let quizSliderRendered = false;
+
+                return theoryWithQuizMeta.map(
+                  ({ block, theoryIndex, quizIndex }) => {
+                    if (block.type === "quiz") {
+                      if (quizSliderRendered) return null;
+                      quizSliderRendered = true;
+                      return (
+                        <LessonQuizSlider
+                          key={`quiz-slider-${theoryIndex}`}
+                          quizzes={quizSlides}
+                          accentColor={LEARN_ACCENT}
+                          getSelection={getSelection}
+                          onQuizAnswer={recordAttempt}
+                          variant="oops"
+                        />
+                      );
+                    }
+
+                    return (
+                      <ConceptCard
+                        key={theoryIndex}
+                        block={block}
+                        accentColor={LEARN_ACCENT}
+                        runnableCodeLangs={["cpp", "c++"]}
+                      />
+                    );
+                  },
+                );
+              })()}
+
+              <LessonReadGate
+                markedAsRead={markedAsRead}
+                onMarkAsRead={markAsRead}
+                confidence={confidence}
+                onConfidenceChange={handleConfidenceChange}
+                onGoChallenge={goToChallenge}
+                accentColor={LEARN_ACCENT}
+                quizzesRequired={quizCount}
+                quizzesAttempted={attemptedCount}
+                challengeLabel="Ready? Take the Challenge →"
+              />
             </div>
           ) : (
             <CodeChallenge
               challenge={lesson.challenge}
-              accentColor={lesson.chapterColor}
+              accentColor={LEARN_ACCENT}
               isCompleted={isCompleted}
               onComplete={handleChallengeComplete}
               initialCode={savedCodeMap[lessonId]}

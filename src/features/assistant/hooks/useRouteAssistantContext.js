@@ -5,7 +5,10 @@ import { useAssistant } from "../context/AssistantContext";
 const COURSE_BY_PREFIX = [
   { prefix: "/learn/numpy-py", course: "NumPy", language: "Python" },
   { prefix: "/learn/pandas-py", course: "Pandas", language: "Python" },
+  { prefix: "/learn/fastapi-py", course: "FastAPI", language: "Python" },
   { prefix: "/learn/js-fundamentals", course: "JavaScript Fundamentals", language: "JavaScript" },
+  { prefix: "/learn/js-web-dev", course: "JavaScript Web Development", language: "JavaScript" },
+  { prefix: "/learn/cpp-fundamentals", course: "C++ Fundamentals", language: "C++" },
   { prefix: "/learn/oops-cpp", course: "OOP C++", language: "C++" },
   { prefix: "/learn/pointers-cpp", course: "Pointers C++", language: "C++" },
 ];
@@ -43,7 +46,7 @@ function resolveRouteContext(pathname) {
   if (pathname.startsWith("/hub") || pathname.startsWith("/docs")) {
     return { page: "docs", route: pathname, language: null, course: null };
   }
-  if (pathname.startsWith("/profile")) {
+  if (pathname.startsWith("/profile") || /^\/@[^/]+$/.test(pathname)) {
     return { page: "profile", route: pathname, language: null, course: null };
   }
   if (pathname.startsWith("/language/")) {

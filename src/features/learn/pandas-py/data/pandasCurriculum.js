@@ -4,8 +4,9 @@
 
 import { applyLessonVideoLinks } from "../../shared/applyLessonVideoLinks";
 import { PANDAS_VIDEO_LINKS } from "./pandasVideoLinks";
+import { applyChapterEnhancements } from "./pandasLessonEnhancements";
 
-export const PANDAS_CHAPTERS = [
+const RAW_PANDAS_CHAPTERS = [
   {
     id: "intro",
     title: "What is Pandas?",
@@ -2136,6 +2137,8 @@ print(df.to_csv(index=False))`,
     ],
   },
 ];
+
+export const PANDAS_CHAPTERS = applyChapterEnhancements(RAW_PANDAS_CHAPTERS);
 
 export const PANDAS_LESSONS = applyLessonVideoLinks(
   PANDAS_CHAPTERS.flatMap((ch) =>

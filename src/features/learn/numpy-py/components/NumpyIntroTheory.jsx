@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import RunnableCodeBlock from "../../shared/RunnableCodeBlock";
-
-function plainText(text = "") {
-  return text.replace(/\*\*/g, "").replace(/`/g, "");
-}
+import LessonReadGate from "../../shared/LessonReadGate";
+import LessonQuizSlider from "../../shared/LessonQuizSlider";
+import { LEARN_ACCENT } from "../../shared/learnAccent";
+import { mapTheoryWithQuizIndices } from "../../shared/lessonQuizUtils";
+import useLessonQuizAttempts from "../../shared/useLessonQuizAttempts";
 
 function InlineText({ text }) {
   const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
@@ -174,94 +175,247 @@ function NumpyMatrixOpVisual({ block, accentColor }) {
   );
 }
 
+function NumpyArrayVisual({ block, accentColor }) {
+  const accent = block.accentColor || accentColor;
+  const missingAccent = block.missingAccent || "#f43f5e";
+  const okAccent = block.okAccent || "#22c55e";
+  const rows = block.rows?.length
+    ? block.rows
+    : [
+        {
+          label: block.label,
+          values: block.values || [],
+          colLabels: block.colLabels,
+          missingIndexes: block.missingIndexes,
+          okIndexes: block.okIndexes,
+        },
+      ];
+
+  return (
+    <div className="numpy-array-visual-wrap">
+      {rows.map((row, rowIndex) => {
+        const missing = new Set(row.missingIndexes || []);
+        const ok = new Set(row.okIndexes || []);
+        const colCount = row.values.length;
+        const isCompact = Boolean(row.label) && colCount === 1;
+        const valueColumns =
+          colCount > 8
+            ? `repeat(${colCount}, minmax(40px, 56px))`
+            : `repeat(${colCount}, minmax(56px, 88px))`;
+        const gridTemplateColumns = row.label
+          ? `72px ${valueColumns}`
+          : valueColumns;
+
+        if (isCompact) {
+          const value = row.values[0];
+          const isMissing = missing.has(0);
+          const isOk = ok.has(0);
+          const cellAccent = isMissing
+            ? missingAccent
+            : isOk
+              ? okAccent
+              : accent;
+
+          return (
+            <div
+              key={`${row.label}-${rowIndex}`}
+              className="numpy-array-row-block numpy-array-row-compact"
+            >
+              <div className="numpy-array-compact-row">
+                <span className="numpy-array-row-label">{row.label}</span>
+                <div className="numpy-array-value-col">
+                  {row.colLabels?.[0] ? (
+                    <span className="numpy-array-col-label">
+                      {row.colLabels[0]}
+                    </span>
+                  ) : null}
+                  <span
+                    className={`numpy-array-cell${isMissing ? " numpy-array-cell-missing" : ""}${isOk ? " numpy-array-cell-ok" : ""}`}
+                    style={{
+                      borderColor: `${cellAccent}66`,
+                      background: `${cellAccent}18`,
+                      color: isMissing ? missingAccent : undefined,
+                    }}
+                  >
+                    {value}
+                  </span>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <div
+            key={`${row.label}-${rowIndex}`}
+            className={`numpy-array-row-block${colCount > 8 ? " numpy-array-row-block-wide" : ""}`}
+          >
+            <div className="numpy-array-scroll">
+              {row.colLabels?.length > 0 ? (
+                <div
+                  className="numpy-array-col-labels"
+                  style={{ gridTemplateColumns }}
+                >
+                  {row.label ? <span className="numpy-array-corner" /> : null}
+                  {row.colLabels.map((colLabel) => (
+                    <span key={colLabel} className="numpy-array-col-label">
+                      {colLabel}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+              <div
+                className="numpy-array-data-row"
+                style={{ gridTemplateColumns }}
+              >
+                {row.label ? (
+                  <span className="numpy-array-row-label">{row.label}</span>
+                ) : null}
+                {row.values.map((value, index) => {
+                  const isMissing = missing.has(index);
+                  const isOk = ok.has(index);
+                  const cellAccent = isMissing
+                    ? missingAccent
+                    : isOk
+                      ? okAccent
+                      : accent;
+
+                  return (
+                    <span
+                      key={`${row.label}-${index}`}
+                      className={`numpy-array-cell${isMissing ? " numpy-array-cell-missing" : ""}${isOk ? " numpy-array-cell-ok" : ""}`}
+                      style={{
+                        borderColor: `${cellAccent}66`,
+                        background: `${cellAccent}18`,
+                        color: isMissing ? missingAccent : undefined,
+                      }}
+                    >
+                      {value}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+      {block.footnote ? (
+        <p className="numpy-array-footnote">
+          <InlineText text={block.footnote} />
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 function NumpyVisualTable({ block }) {
   const rowAccent = block.rowAccent || "#a855f7";
   const colAccent = block.colAccent || "#6366f1";
+  const hasTotals =
+    Array.isArray(block.rowTotals) && Array.isArray(block.colTotals);
+  const showTotals = block.showTotals !== false && hasTotals;
 
   return (
     <div className="numpy-visual-table-wrap">
       <table className="numpy-visual-table">
         <thead>
           <tr>
-            <th className="numpy-vt-corner" />
+            <th className="numpy-vt-corner">
+              {block.rowLabelHeader || ""}
+            </th>
             {block.columns.map((col) => (
               <th key={col} className="numpy-vt-col-head">
                 {col}
               </th>
             ))}
-            <th
-              className="numpy-vt-row-total-head"
-              style={{ color: rowAccent }}
-            >
-              Total
-            </th>
+            {showTotals ? (
+              <th
+                className="numpy-vt-row-total-head"
+                style={{ color: rowAccent }}
+              >
+                {block.rowTotalHeader || "Total"}
+              </th>
+            ) : null}
           </tr>
         </thead>
         <tbody>
           {block.rows.map((row, rowIndex) => (
-            <tr key={row.label}>
+            <tr
+              key={row.label || rowIndex}
+              className={block.highlightRows?.includes(rowIndex) ? "numpy-vt-row-highlight" : ""}
+            >
               <th className="numpy-vt-row-head">{row.label}</th>
-              {row.values.map((value, colIndex) => (
+              {(row.values || []).map((value, colIndex) => (
                 <td key={`${row.label}-${colIndex}`} className="numpy-vt-cell">
                   {value}
                 </td>
               ))}
-              <td
-                className="numpy-vt-row-total"
-                style={{
-                  background: `${rowAccent}22`,
-                  borderColor: `${rowAccent}55`,
-                }}
-              >
-                {block.rowTotals[rowIndex]}
-              </td>
+              {showTotals ? (
+                <td
+                  className="numpy-vt-row-total"
+                  style={{
+                    background: `${rowAccent}22`,
+                    borderColor: `${rowAccent}55`,
+                  }}
+                >
+                  {block.rowTotals[rowIndex]}
+                </td>
+              ) : null}
             </tr>
           ))}
-          <tr className="numpy-vt-col-total-row">
-            <th
-              className="numpy-vt-col-total-head"
-              style={{ color: colAccent }}
-            >
-              Total
-            </th>
-            {block.colTotals.map((total, colIndex) => (
-              <td
-                key={`col-total-${colIndex}`}
-                className="numpy-vt-col-total"
-                style={{
-                  background: `${colAccent}22`,
-                  borderColor: `${colAccent}55`,
-                }}
+          {showTotals ? (
+            <tr className="numpy-vt-col-total-row">
+              <th
+                className="numpy-vt-col-total-head"
+                style={{ color: colAccent }}
               >
-                {total}
-              </td>
-            ))}
-            <td className="numpy-vt-corner-total" />
-          </tr>
+                {block.colTotalHeader || "Total"}
+              </th>
+              {block.colTotals.map((total, colIndex) => (
+                <td
+                  key={`col-total-${colIndex}`}
+                  className="numpy-vt-col-total"
+                  style={{
+                    background: `${colAccent}22`,
+                    borderColor: `${colAccent}55`,
+                  }}
+                >
+                  {total}
+                </td>
+              ))}
+              <td className="numpy-vt-corner-total" />
+            </tr>
+          ) : null}
         </tbody>
       </table>
-      <div className="numpy-vt-legend">
-        <span className="numpy-vt-legend-item" style={{ color: rowAccent }}>
-          <span
-            className="numpy-vt-legend-swatch"
-            style={{ background: rowAccent }}
-          />
-          {block.rowTotalLabel || "axis=1 → add across each row"}
-        </span>
-        <span className="numpy-vt-legend-item" style={{ color: colAccent }}>
-          <span
-            className="numpy-vt-legend-swatch"
-            style={{ background: colAccent }}
-          />
-          {block.colTotalLabel || "axis=0 ↓ add down each column"}
-        </span>
-      </div>
+      {showTotals ? (
+        <div className="numpy-vt-legend">
+          <span className="numpy-vt-legend-item" style={{ color: rowAccent }}>
+            <span
+              className="numpy-vt-legend-swatch"
+              style={{ background: rowAccent }}
+            />
+            {block.rowTotalLabel || "axis=1 → add across each row"}
+          </span>
+          <span className="numpy-vt-legend-item" style={{ color: colAccent }}>
+            <span
+              className="numpy-vt-legend-swatch"
+              style={{ background: colAccent }}
+            />
+            {block.colTotalLabel || "axis=0 ↓ add down each column"}
+          </span>
+        </div>
+      ) : null}
+      {block.footnote ? (
+        <p className="numpy-vt-footnote">
+          <InlineText text={block.footnote} />
+        </p>
+      ) : null}
     </div>
   );
 }
 
 function NumpyTheoryBlock({ block, step, accentColor }) {
-  const [selectedQuiz, setSelectedQuiz] = useState(null);
 
   if (block.type === "text") {
     return (
@@ -295,11 +449,54 @@ function NumpyTheoryBlock({ block, step, accentColor }) {
     );
   }
 
+  if (block.type === "objectives") {
+    return (
+      <aside
+        className="lesson-objectives"
+        style={{ "--lesson-accent": accentColor }}
+      >
+        <span className="lesson-objectives-icon" aria-hidden>
+          🎯
+        </span>
+        <div>
+          <strong>After this lesson you can…</strong>
+          <ul>
+            {block.items.map((item) => (
+              <li key={item}>
+                <InlineText text={item} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    );
+  }
+
+  if (block.type === "scenario") {
+    return (
+      <aside
+        className="lesson-scenario"
+        style={{ "--lesson-accent": accentColor }}
+      >
+        <span className="lesson-scenario-icon" aria-hidden>
+          📋
+        </span>
+        <div>
+          <strong>{block.title || "Real scenario"}</strong>
+          <p>
+            <InlineText text={block.content} />
+          </p>
+        </div>
+      </aside>
+    );
+  }
+
   if (block.type === "callout") {
     const labels = {
       info: "Good to know",
       tip: "Helpful tip",
       warning: "Watch out",
+      success: "Learning outcome check",
     };
     const icons = { info: "💡", tip: "✨", warning: "⚠️" };
     return (
@@ -318,19 +515,26 @@ function NumpyTheoryBlock({ block, step, accentColor }) {
   if (block.type === "code") {
     return (
       <div className="numpy-step-code">
-        <div className="numpy-step-head">
-          <span
-            className="numpy-step-num numpy-step-num-code"
-            style={{ color: accentColor }}
-          ></span>
-        </div>
-        {block.label && <p className="numpy-code-caption">{block.label}</p>}
         <RunnableCodeBlock
           block={block}
           accentColor={accentColor}
           language={block.lang || "python"}
         />
       </div>
+    );
+  }
+
+  if (block.type === "array") {
+    return (
+      <article className="numpy-step-card numpy-array-card">
+        <div className="numpy-step-head">
+          <span className="numpy-step-num" style={{ background: accentColor }}>
+            {step}
+          </span>
+          <span className="numpy-step-label">{block.title}</span>
+        </div>
+        <NumpyArrayVisual block={block} accentColor={accentColor} />
+      </article>
     );
   }
 
@@ -391,154 +595,155 @@ function NumpyTheoryBlock({ block, step, accentColor }) {
     );
   }
 
-  if (block.type === "quiz") {
-    const answered = selectedQuiz !== null;
-    const correct = selectedQuiz === block.answer;
-
-    return (
-      <article
-        className={`numpy-quiz-card ${answered ? (correct ? "correct" : "wrong") : ""}`}
-      >
-        <div className="numpy-step-head">
-          <span className="numpy-step-num" style={{ background: accentColor }}>
-            ?
-          </span>
-          <span className="numpy-step-label">Quick check — no pressure!</span>
-        </div>
-        <p className="numpy-quiz-question">
-          <InlineText text={block.question} />
-        </p>
-        <div className="numpy-quiz-options">
-          {block.options.map((option, index) => {
-            const isSelected = selectedQuiz === index;
-            const isAnswer = block.answer === index;
-            return (
-              <button
-                key={option}
-                type="button"
-                className={`numpy-quiz-option ${
-                  answered && isAnswer ? "answer" : ""
-                } ${isSelected ? "selected" : ""}`}
-                onClick={() => setSelectedQuiz(index)}
-              >
-                {String.fromCharCode(65 + index)}. <InlineText text={option} />
-              </button>
-            );
-          })}
-        </div>
-        {answered && (
-          <p className="numpy-quiz-feedback">
-            <strong>{correct ? "Nice!" : "Not quite — that's okay."}</strong>{" "}
-            <InlineText text={block.explanation} />
-          </p>
-        )}
-      </article>
-    );
-  }
-
   return null;
 }
 
 export default function NumpyIntroTheory({
   lesson,
-  noteDraft,
-  onNoteChange,
-  onSaveNote,
+  quizStoragePrefix,
   confidence,
   onConfidenceChange,
+  markedAsRead = false,
+  onMarkAsRead = () => {},
   onGoChallenge,
+  introVariant = "default",
 }) {
-  const accentColor = lesson.chapterColor || "#4f46e5";
-  const firstText = lesson.theory.find((block) => block.type === "text");
+  const {
+    preparedLesson,
+    quizCount,
+    attemptedCount,
+    recordAttempt,
+    getSelection,
+  } = useLessonQuizAttempts(quizStoragePrefix, lesson?.id, lesson);
+  const activeLesson = preparedLesson || lesson;
+  const isCourseStart = introVariant === "course-start";
+  const accentColor =
+    isCourseStart && activeLesson?.chapterColor
+      ? activeLesson.chapterColor
+      : LEARN_ACCENT;
+  const theoryBase = isCourseStart
+    ? activeLesson.theory
+    : activeLesson.theory.filter((block) => block.type !== "objectives");
+  const objectivesBlock = activeLesson.theory.find(
+    (block) => block.type === "objectives",
+  );
+  const outcomeItems =
+    activeLesson.outcomes?.length > 0
+      ? activeLesson.outcomes
+      : objectivesBlock?.items || [];
+  const introText = theoryBase.find(
+    (block) => block.type === "text" && !block.code,
+  );
+  const introTextIndex = theoryBase.findIndex(
+    (block) => block.type === "text" && !block.code,
+  );
+  const theoryBlocks =
+    introTextIndex >= 0
+      ? theoryBase.filter((_, index) => index !== introTextIndex)
+      : theoryBase;
+  const theoryWithQuizMeta = mapTheoryWithQuizIndices(theoryBlocks);
+  const quizSlides = theoryWithQuizMeta
+    .filter(({ block }) => block.type === "quiz")
+    .map(({ block, quizIndex }) => ({ block, quizIndex }));
   let stepCounter = 0;
+  let quizSliderRendered = false;
 
   return (
-    <div className="numpy-intro-theory">
+    <div
+      className={`numpy-intro-theory${isCourseStart ? " numpy-intro-theory--course-start" : ""}`}
+    >
+      {!isCourseStart && outcomeItems.length > 0 && (
+        <section
+          className="numpy-lesson-outcomes numpy-lesson-outcomes-top"
+          style={{ "--numpy-accent": accentColor }}
+          aria-labelledby="numpy-outcomes-heading"
+        >
+          <h2 id="numpy-outcomes-heading" className="numpy-outcomes-heading">
+            Learning outcomes
+          </h2>
+          <ul className="numpy-outcomes-list">
+            {outcomeItems.map((item) => (
+              <li key={item}>
+                <InlineText text={item} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <header
         className="numpy-lesson-hero"
         style={{ "--numpy-accent": accentColor }}
       >
-        <span className="numpy-chapter-badge">{lesson.chapterTitle}</span>
+        <span className="numpy-chapter-badge">{activeLesson.chapterTitle}</span>
         <h2 className="numpy-lesson-title" id="numpy-lesson-heading">
-          {lesson.title}
+          {activeLesson.title}
         </h2>
+        {!isCourseStart && (
+          <p className="numpy-lesson-intro-label">Introduction</p>
+        )}
         <p className="numpy-lesson-hook">
-          {plainText(firstText?.content) ||
-            "We'll explain this idea in plain English — no jargon overload."}
+          {introText?.content ? (
+            <InlineText text={introText.content} />
+          ) : (
+            "We'll explain this idea in plain English — no jargon overload."
+          )}
         </p>
       </header>
 
       <div className="numpy-learn-path">
         <div className="numpy-path-label">
           <span>Your learning path</span>
-          <small>Read the idea, then run the code right below it</small>
+          {!isCourseStart && (
+            <small>Read the idea, then run the code right below it</small>
+          )}
         </div>
 
-        {lesson.theory.map((block, index) => {
+        {theoryWithQuizMeta.map(({ block, theoryIndex, quizIndex }) => {
+          if (block.type === "quiz") {
+            if (quizSliderRendered) return null;
+            quizSliderRendered = true;
+            stepCounter += 1;
+            return (
+              <LessonQuizSlider
+                key={`quiz-slider-${theoryIndex}`}
+                quizzes={quizSlides}
+                accentColor={accentColor}
+                getSelection={getSelection}
+                onQuizAnswer={recordAttempt}
+              />
+            );
+          }
+
           const needsStep =
             block.type === "text" ||
+            block.type === "array" ||
             block.type === "table" ||
             block.type === "matrices" ||
-            block.type === "diagram" ||
-            block.type === "quiz";
+            block.type === "diagram";
           const step = needsStep ? ++stepCounter : stepCounter;
 
           return (
             <NumpyTheoryBlock
-              key={`${block.type}-${index}`}
+              key={`${block.type}-${theoryIndex}`}
               block={block}
-              step={step || index + 1}
+              step={step || theoryIndex + 1}
               accentColor={accentColor}
             />
           );
         })}
       </div>
 
-      <div className="numpy-notes-panel">
-        <h3>📝 Your notes</h3>
-        <p className="numpy-notes-hint">
-          Write anything you want to remember — in your own words.
-        </p>
-        <textarea
-          value={noteDraft}
-          onChange={(event) => onNoteChange(event.target.value)}
-          placeholder="Example: ndarray = a neat row of numbers I can math on all at once..."
-        />
-        <button type="button" className="numpy-notes-save" onClick={onSaveNote}>
-          Save note
-        </button>
-      </div>
-
-      <div className="numpy-confidence-panel">
-        <h3>How do you feel about this lesson?</h3>
-        <div className="numpy-confidence-options">
-          {[
-            ["review", "😅 Need another read"],
-            ["almost", "🙂 Getting it"],
-            ["ready", "🚀 Ready for the challenge"],
-          ].map(([value, label]) => (
-            <button
-              key={value}
-              type="button"
-              className={confidence === value ? "active" : ""}
-              onClick={() => onConfidenceChange(value)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="numpy-theory-footer">
-        <button
-          type="button"
-          className="numpy-challenge-cta"
-          style={{ "--numpy-accent": accentColor }}
-          onClick={onGoChallenge}
-        >
-          Ready? Try the coding challenge →
-        </button>
-      </div>
+      <LessonReadGate
+        markedAsRead={markedAsRead}
+        onMarkAsRead={onMarkAsRead}
+        confidence={confidence}
+        onConfidenceChange={onConfidenceChange}
+        onGoChallenge={onGoChallenge}
+        accentColor={accentColor}
+        quizzesRequired={quizStoragePrefix ? quizCount : 0}
+        quizzesAttempted={attemptedCount}
+      />
     </div>
   );
 }

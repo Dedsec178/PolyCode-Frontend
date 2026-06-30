@@ -19,6 +19,7 @@ export async function postAssistantChat({
   history,
   session_id,
   context,
+  level,
   assistant_message_id,
 }) {
   const url = `${getApiBase()}/chat/assistant`;
@@ -31,6 +32,7 @@ export async function postAssistantChat({
       history,
       session_id,
       context: context || {},
+      level,
       assistant_message_id,
     }),
   });
@@ -66,6 +68,10 @@ export async function fetchAssistantSession(sessionId) {
     const res = await fetch(url, {
       headers: getAuthHeaders(),
     });
+
+    if (res.status === 403) {
+      return { forbidden: true };
+    }
 
     if (!res.ok) {
       return null;

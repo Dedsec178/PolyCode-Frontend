@@ -1,21 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../../auth/context/AuthContext";
+import { recordLessonXp } from "../../shared/recordLessonXp";
 import {
   addOopsTime,
   completeOopsLesson,
   getOopsProgress,
-  notesToMap,
   progressToMap,
   savedCodeToMap,
   saveOopsCode,
-  saveOopsNote,
   setLastOopsLesson,
   toggleOopsBookmark,
 } from "../services/oopsProgressApi";
 
 const LOCAL_KEY = "oops_progress";
 const LOCAL_CODE_KEY = "oops_saved_code";
-const LOCAL_NOTES_KEY = "oops_notes";
 const LOCAL_BOOKMARKS_KEY = "oops_bookmarks";
 const LOCAL_LAST_KEY = "oops_last_lesson";
 
@@ -73,12 +71,6 @@ export default function useOopsProgress() {
     return readJson(LOCAL_CODE_KEY, {});
   }, [remoteProgress, localVersion]);
 
-  const notesMap = useMemo(() => {
-    void localVersion;
-    if (remoteProgress) return notesToMap(remoteProgress);
-    return readJson(LOCAL_NOTES_KEY, {});
-  }, [remoteProgress, localVersion]);
-
   const bookmarks = useMemo(() => {
     void localVersion;
     if (remoteProgress) return remoteProgress.bookmarks || [];
@@ -101,6 +93,7 @@ export default function useOopsProgress() {
         });
         setRemoteProgress(progress);
         setSyncState("synced");
+        recordLessonXp(token, "oops-cpp", lesson);
         return;
       }
 
@@ -109,6 +102,7 @@ export default function useOopsProgress() {
       localStorage.setItem(LOCAL_KEY, JSON.stringify(current));
       localStorage.setItem(LOCAL_LAST_KEY, lesson.id);
       refreshLocal();
+      recordLessonXp(token, "oops-cpp", lesson);
     },
     [refreshLocal, token],
   );
@@ -149,23 +143,6 @@ export default function useOopsProgress() {
     [refreshLocal, token],
   );
 
-  const saveNote = useCallback(
-    async (lessonId, note) => {
-      if (token) {
-        const progress = await saveOopsNote(token, lessonId, note);
-        setRemoteProgress(progress);
-        setSyncState("synced");
-        return;
-      }
-
-      const current = readJson(LOCAL_NOTES_KEY, {});
-      current[lessonId] = note;
-      localStorage.setItem(LOCAL_NOTES_KEY, JSON.stringify(current));
-      refreshLocal();
-    },
-    [refreshLocal, token],
-  );
-
   const toggleBookmark = useCallback(
     async (lessonId) => {
       if (token) {
@@ -199,26 +176,18 @@ export default function useOopsProgress() {
     [token],
   );
 
-  const getLessonNote = useCallback(
-    (id) => notesMap[id] || "",
-    [notesMap],
-  );
-
   return {
     user,
     syncState,
     remoteProgress,
     completedMap,
     savedCodeMap,
-    notesMap,
     bookmarks,
     lastLessonId,
     completeLesson,
     rememberLesson,
     saveCode,
-    saveNote,
     toggleBookmark,
     addTime,
-    getLessonNote,
   };
 }

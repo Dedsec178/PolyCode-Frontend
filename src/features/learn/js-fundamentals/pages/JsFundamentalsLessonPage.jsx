@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { LEARN_ACCENT } from "../../shared/learnAccent";
 import { useNavigate, useParams } from "react-router-dom";
 import NumpyIntroTheory from "../../numpy-py/components/NumpyIntroTheory";
 import OopsSidebar from "../../oops-cpp/components/OopsSidebar";
@@ -11,30 +12,38 @@ import {
   JS_FUNDAMENTALS_TOTAL_XP,
 } from "../data/jsFundamentalsCurriculum";
 import useJsFundamentalsProgress from "../hooks/useJsFundamentalsProgress";
+import useLessonReadGate from "../../shared/useLessonReadGate";
+import LessonChallengeTab from "../../shared/LessonChallengeTab";
 import { useLessonAssistantContext } from "../../../assistant/hooks/useLessonAssistantContext";
 
 const BASE_PATH = "/learn/js-fundamentals";
+const READ_GATE_PREFIX = "js_fundamentals";
 
 export default function JsFundamentalsLessonPage() {
   const { lessonId } = useParams();
   const navigate = useNavigate();
   const [tab, setTab] = useState("theory");
   const [focusMode, setFocusMode] = useState(false);
-  const [confidence, setConfidence] = useState("");
+  const {
+    markedAsRead,
+    markAsRead,
+    confidence,
+    handleConfidenceChange,
+    createGoToChallenge,
+    challengeTabLocked,
+  } = useLessonReadGate(READ_GATE_PREFIX, lessonId);
+  const goToChallenge = createGoToChallenge(setTab);
   const {
     user,
     isAuthenticated,
     completedMap: progress,
     savedCodeMap,
-    getLessonNote,
     bookmarks,
     completeLesson,
     rememberLesson,
     saveCode,
-    saveNote,
     toggleBookmark,
   } = useJsFundamentalsProgress();
-  const [noteDraft, setNoteDraft] = useState("");
   const codeSaveTimer = useRef(null);
 
   const lesson = JS_FUNDAMENTALS_LESSONS.find((item) => item.id === lessonId);
@@ -45,7 +54,7 @@ export default function JsFundamentalsLessonPage() {
   const next = JS_FUNDAMENTALS_LESSONS[lessonIdx + 1];
 
   useLessonAssistantContext({
-    course: "JavaScript Fundamentals",
+    course: "JavaScript",
     language: "JavaScript",
     lesson,
     chapter: lesson?.chapterTitle,
@@ -61,16 +70,6 @@ export default function JsFundamentalsLessonPage() {
     if (lessonId) rememberLesson(lessonId);
   }, [lessonId, rememberLesson]);
 
-  useEffect(() => {
-    setNoteDraft(getLessonNote(lessonId));
-  }, [lessonId, getLessonNote]);
-
-  useEffect(() => {
-    setConfidence(
-      localStorage.getItem(`js_fundamentals_confidence_${lessonId}`) || "",
-    );
-  }, [lessonId]);
-
   useEffect(
     () => () => {
       window.clearTimeout(codeSaveTimer.current);
@@ -83,7 +82,7 @@ export default function JsFundamentalsLessonPage() {
       <div className="oops-not-found">
         <p>JavaScript lesson not found.</p>
         <button type="button" onClick={() => navigate(BASE_PATH)}>
-          ← Back to JavaScript Fundamentals
+          ← Back to JavaScript Course
         </button>
       </div>
     );
@@ -101,20 +100,11 @@ export default function JsFundamentalsLessonPage() {
     await completeLesson(lesson);
   }
 
-  function handleSaveNote() {
-    saveNote(lessonId, noteDraft);
-  }
-
   function handleCodeChange(code) {
     window.clearTimeout(codeSaveTimer.current);
     codeSaveTimer.current = window.setTimeout(() => {
       saveCode(lessonId, code).catch(() => {});
     }, 700);
-  }
-
-  function handleConfidenceChange(value) {
-    setConfidence(value);
-    localStorage.setItem(`js_fundamentals_confidence_${lessonId}`, value);
   }
 
   return (
@@ -124,7 +114,7 @@ export default function JsFundamentalsLessonPage() {
         progress={progress}
         chapters={JS_FUNDAMENTALS_CHAPTERS}
         basePath={BASE_PATH}
-        title="JavaScript Fundamentals"
+        title="JavaScript"
       />
 
       <div className="oops-lesson-main">
@@ -134,10 +124,10 @@ export default function JsFundamentalsLessonPage() {
             className="oops-back-btn"
             onClick={() => navigate(BASE_PATH)}
           >
-            ← JavaScript Fundamentals
+            ← JavaScript Course
           </button>
           <div className="oops-lesson-breadcrumb">
-            <span style={{ color: lesson.chapterColor }}>
+            <span className="learn-lesson-chapter-tag">
               {lesson.chapterTitle}
             </span>
             <span className="oops-bc-sep">›</span>
@@ -162,7 +152,7 @@ export default function JsFundamentalsLessonPage() {
           </button>
           <LearnProfileMenu
             user={user}
-            trackTitle="JavaScript Fundamentals"
+            trackTitle="JavaScript"
             syncLabel={
               isAuthenticated
                 ? "JavaScript progress saved to your account"
@@ -185,13 +175,12 @@ export default function JsFundamentalsLessonPage() {
           >
             Theory
           </button>
-          <button
-            type="button"
-            className={`oops-tab ${tab === "challenge" ? "active" : ""}`}
-            onClick={() => setTab("challenge")}
-          >
-            Challenge <span className="oops-tab-xp">+{lesson.xp} XP</span>
-          </button>
+          <LessonChallengeTab
+            active={tab === "challenge"}
+            locked={challengeTabLocked}
+            xp={lesson.xp}
+            onClick={goToChallenge}
+          />
         </div>
 
         <LessonContentShell
@@ -202,17 +191,17 @@ export default function JsFundamentalsLessonPage() {
           {tab === "theory" ? (
             <NumpyIntroTheory
               lesson={lesson}
-              noteDraft={noteDraft}
-              onNoteChange={setNoteDraft}
-              onSaveNote={handleSaveNote}
+              quizStoragePrefix={READ_GATE_PREFIX}
               confidence={confidence}
               onConfidenceChange={handleConfidenceChange}
-              onGoChallenge={() => setTab("challenge")}
+              markedAsRead={markedAsRead}
+              onMarkAsRead={markAsRead}
+              onGoChallenge={goToChallenge}
             />
           ) : (
             <JavaScriptCodeChallenge
               challenge={lesson.challenge}
-              accentColor={lesson.chapterColor}
+              accentColor={LEARN_ACCENT}
               isCompleted={isCompleted}
               onComplete={handleChallengeComplete}
               initialCode={savedCodeMap[lessonId]}

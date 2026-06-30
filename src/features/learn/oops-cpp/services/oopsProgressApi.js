@@ -1,32 +1,4 @@
-import { getApiBase } from "../../../../config/apiBase";
-
-async function request(path, token, options = {}) {
-  const res = await fetch(`${getApiBase()}/auth/learn/oops-cpp/progress${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      ...(options.headers || {}),
-    },
-  });
-
-  const text = await res.text();
-  let data = {};
-
-  if (text) {
-    try {
-      data = JSON.parse(text);
-    } catch {
-      data = { error: text };
-    }
-  }
-
-  if (!res.ok) {
-    throw new Error(data.error || "Unable to sync OOP C++ progress");
-  }
-
-  return data.progress;
-}
+import { apiFetch } from "../../../../lib/apiClient";
 
 export function getOopsProgress(token) {
   return request("", token);
@@ -53,13 +25,6 @@ export function saveOopsCode(token, lessonId, code) {
   });
 }
 
-export function saveOopsNote(token, lessonId, note) {
-  return request("/note", token, {
-    method: "POST",
-    body: JSON.stringify({ lessonId, note }),
-  });
-}
-
 export function toggleOopsBookmark(token, lessonId) {
   return request("/bookmark", token, {
     method: "POST",
@@ -74,6 +39,15 @@ export function addOopsTime(token, minutes) {
   });
 }
 
+async function request(path, token, options = {}) {
+  const data = await apiFetch(`/auth/learn/oops-cpp/progress${path}`, {
+    token,
+    fallbackMessage: "Unable to sync OOP C++ progress",
+    ...options,
+  });
+  return data.progress;
+}
+
 export function progressToMap(progress) {
   return (progress?.completedLessons || []).reduce((acc, item) => {
     acc[item.lessonId] = { xp: item.xp, at: item.completedAt };
@@ -84,13 +58,6 @@ export function progressToMap(progress) {
 export function savedCodeToMap(progress) {
   return (progress?.savedCode || []).reduce((acc, item) => {
     acc[item.lessonId] = item.code;
-    return acc;
-  }, {});
-}
-
-export function notesToMap(progress) {
-  return (progress?.notes || []).reduce((acc, item) => {
-    acc[item.lessonId] = item.note;
     return acc;
   }, {});
 }

@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState } from "react";
 import { useAuth } from "../../../auth/context/AuthContext";
+import { recordLessonXp } from "../../shared/recordLessonXp";
 
 const LOCAL_KEY = "pointers_cpp_progress";
 const LOCAL_CODE_KEY = "pointers_cpp_saved_code";
-const LOCAL_NOTES_KEY = "pointers_cpp_notes";
 const LOCAL_BOOKMARKS_KEY = "pointers_cpp_bookmarks";
 const LOCAL_LAST_KEY = "pointers_cpp_last_lesson";
 
@@ -16,7 +16,7 @@ function readJson(key, fallback) {
 }
 
 export default function usePointersProgress() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const [localVersion, setLocalVersion] = useState(0);
   const refreshLocal = useCallback(() => setLocalVersion((value) => value + 1), []);
 
@@ -25,21 +25,14 @@ export default function usePointersProgress() {
     return {
       completed: readJson(LOCAL_KEY, {}),
       savedCode: readJson(LOCAL_CODE_KEY, {}),
-      notes: readJson(LOCAL_NOTES_KEY, {}),
       bookmarks: readJson(LOCAL_BOOKMARKS_KEY, []),
     };
   }, [localVersion]);
 
   const completedMap = localSnapshot.completed;
   const savedCodeMap = localSnapshot.savedCode;
-  const notesMap = localSnapshot.notes;
   const bookmarks = localSnapshot.bookmarks;
   const lastLessonId = localStorage.getItem(LOCAL_LAST_KEY);
-
-  const getLessonNote = useCallback(
-    (id) => localSnapshot.notes[id] || "",
-    [localSnapshot],
-  );
 
   const completeLesson = useCallback(
     async (lesson) => {
@@ -48,8 +41,9 @@ export default function usePointersProgress() {
       localStorage.setItem(LOCAL_KEY, JSON.stringify(current));
       localStorage.setItem(LOCAL_LAST_KEY, lesson.id);
       refreshLocal();
+      recordLessonXp(token, "pointers-cpp", lesson);
     },
-    [refreshLocal],
+    [refreshLocal, token],
   );
 
   const rememberLesson = useCallback(
@@ -65,16 +59,6 @@ export default function usePointersProgress() {
       const current = readJson(LOCAL_CODE_KEY, {});
       current[lessonId] = code;
       localStorage.setItem(LOCAL_CODE_KEY, JSON.stringify(current));
-      refreshLocal();
-    },
-    [refreshLocal],
-  );
-
-  const saveNote = useCallback(
-    async (lessonId, note) => {
-      const current = readJson(LOCAL_NOTES_KEY, {});
-      current[lessonId] = note;
-      localStorage.setItem(LOCAL_NOTES_KEY, JSON.stringify(current));
       refreshLocal();
     },
     [refreshLocal],
@@ -100,15 +84,12 @@ export default function usePointersProgress() {
     remoteProgress: null,
     completedMap,
     savedCodeMap,
-    notesMap,
     bookmarks,
     lastLessonId,
     completeLesson,
     rememberLesson,
     saveCode,
-    saveNote,
     toggleBookmark,
     addTime,
-    getLessonNote,
   };
 }

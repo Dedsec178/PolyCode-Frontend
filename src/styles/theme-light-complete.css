@@ -1,0 +1,986 @@
+/**
+ * PolyCode Light Theme — unified white + blue system.
+ * Loaded last so it wins over scattered per-page overrides.
+ */
+
+.app.theme-light {
+  --poly-blue: #2563eb;
+  --poly-blue-hover: #1d4ed8;
+  --poly-blue-deep: #1e40af;
+  --poly-blue-light: #eff6ff;
+  --poly-blue-dim: rgba(37, 99, 235, 0.1);
+  --poly-blue-border: rgba(37, 99, 235, 0.24);
+  --poly-surface: #ffffff;
+  --poly-surface-muted: #f8fafc;
+  --poly-surface-soft: #f1f5f9;
+  --btn-primary-bg: var(--poly-blue);
+  --btn-primary-bg-hover: var(--poly-blue-hover);
+  --btn-primary-text: #ffffff;
+
+  --bg: var(--poly-surface-muted);
+  --ink: var(--poly-surface-muted);
+  --ink-2: var(--poly-surface);
+  --ink-3: var(--poly-surface);
+  --ink-4: var(--poly-surface-soft);
+  --bg-card: var(--poly-surface);
+  --border: #e2e8f0;
+  --border-2: #cbd5e1;
+  --txt-0: #0f172a;
+  --txt-1: #334155;
+  --txt-2: #64748b;
+  --txt-3: #94a3b8;
+  --acid: var(--poly-blue);
+  --acid-rgb: 37, 99, 235;
+  --accent: var(--poly-blue);
+  --acid-dim: var(--poly-blue-dim);
+  --acid-glow: rgba(37, 99, 235, 0.22);
+  --cyan: #0284c7;
+  --cyan-dim: rgba(2, 132, 199, 0.1);
+  --vscode-blue: var(--poly-blue);
+  --vscode-blue-2: #3b82f6;
+  --vscode-panel: var(--poly-surface-soft);
+  --vscode-panel-2: #e2e8f0;
+  --vscode-border: #e2e8f0;
+  --numpy-accent: var(--poly-blue);
+  --course-accent: var(--poly-blue);
+  background: linear-gradient(180deg, #ffffff 0%, var(--poly-surface-muted) 48%, #f1f5f9 100%);
+}
+
+.app.theme-light .main-content.learn-content {
+  --ink: var(--poly-surface-muted);
+  --ink-2: var(--poly-surface);
+  --ink-3: var(--poly-surface);
+  --ink-4: var(--poly-surface-soft);
+  --border: #e2e8f0;
+  --border-2: #cbd5e1;
+  --txt-0: #0f172a;
+  --txt-1: #334155;
+  --txt-2: #64748b;
+  --txt-3: #94a3b8;
+  --acid: var(--poly-blue);
+  --acid-rgb: 37, 99, 235;
+  --accent: var(--poly-blue);
+  --acid-dim: var(--poly-blue-dim);
+  --acid-glow: rgba(37, 99, 235, 0.2);
+  --bg-card: var(--poly-surface);
+  --vscode-panel: var(--poly-surface-soft);
+  --vscode-panel-2: #e2e8f0;
+  --vscode-border: #e2e8f0;
+  --vscode-blue: var(--poly-blue);
+  --vscode-blue-2: #3b82f6;
+  --numpy-accent: var(--poly-blue);
+  --course-accent: var(--poly-blue);
+}
+
+/* ── Surfaces: white cards everywhere ── */
+.app.theme-light .main-content,
+.app.theme-light .layout,
+.app.theme-light .hero,
+.app.theme-light .oops-sidebar,
+.app.theme-light .oops-lesson-main,
+.app.theme-light .oops-lesson-topbar,
+.app.theme-light .numpy-step-card,
+.app.theme-light .numpy-lesson-hero,
+.app.theme-light .numpy-quiz-card,
+.app.theme-light .lesson-read-gate,
+.app.theme-light .lesson-confidence-panel,
+.app.theme-light .numpy-confidence-panel,
+.app.theme-light .profile-daily-xp-card,
+.app.theme-light .daily-challenge-page,
+.app.theme-light .challenge-card {
+  color: var(--txt-1);
+}
+
+.app.theme-light .oops-sidebar {
+  background: var(--poly-surface);
+  border-color: var(--border);
+}
+
+.app.theme-light .oops-lesson-topbar {
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom-color: var(--border);
+}
+
+.app.theme-light .oops-tab.active {
+  color: var(--poly-blue);
+  border-bottom-color: var(--poly-blue);
+  background: transparent;
+}
+
+.app.theme-light .oops-tab:hover {
+  color: var(--poly-blue-deep);
+}
+
+/* ── Primary action buttons — all blue ── */
+.app.theme-light :is(
+    .btn-primary,
+    .navbar-signup-btn,
+    .auth-submit.btn-primary,
+    .search-btn,
+    .submit-btn,
+    .oops-run-btn,
+    .oops-run-code-btn,
+    .oops-auth-gate-btn-primary,
+    .profile-edit-btn-primary,
+    .language-primary-btn,
+    .oops-chapter-cta,
+    .lesson-mark-read-btn,
+    .lesson-challenge-cta,
+    .numpy-mark-read-btn,
+    .profile-daily-xp-mark:not(:disabled),
+    .pg-run-btn,
+    .btn-run,
+    .btn-analyze,
+    .landing-btn-hero-primary,
+    .polycode-landing .landing-btn-primary,
+    .polycode-landing .landing-mobile-cta,
+    .learn-profile-view-btn,
+    .continue-stack-btn
+  ) {
+  background: var(--btn-primary-bg) !important;
+  color: var(--btn-primary-text) !important;
+  border-color: var(--btn-primary-bg) !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22);
+}
+
+.app.theme-light :is(
+    .btn-primary,
+    .navbar-signup-btn,
+    .auth-submit.btn-primary,
+    .search-btn,
+    .submit-btn,
+    .oops-run-btn,
+    .oops-run-code-btn,
+    .oops-auth-gate-btn-primary,
+    .profile-edit-btn-primary,
+    .language-primary-btn,
+    .oops-chapter-cta,
+    .lesson-mark-read-btn,
+    .lesson-challenge-cta,
+    .numpy-mark-read-btn,
+    .profile-daily-xp-mark:not(:disabled),
+    .pg-run-btn,
+    .btn-run,
+    .btn-analyze,
+    .landing-btn-hero-primary,
+    .polycode-landing .landing-btn-primary,
+    .polycode-landing .landing-mobile-cta,
+    .learn-profile-view-btn,
+    .continue-stack-btn
+  ):hover:not(:disabled) {
+  background: var(--btn-primary-bg-hover) !important;
+  border-color: var(--btn-primary-bg-hover) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  transform: translateY(-1px);
+}
+
+.app.theme-light .oops-run-btn:disabled,
+.app.theme-light .pg-run-btn:disabled,
+.app.theme-light .btn-primary:disabled {
+  background: #94a3b8 !important;
+  border-color: #94a3b8 !important;
+  color: #ffffff !important;
+  opacity: 0.65 !important;
+  transform: none !important;
+}
+
+/* Secondary / outline buttons */
+.app.theme-light :is(
+    .btn-secondary,
+    .navbar-login-btn,
+    .language-secondary-btn,
+    .profile-edit-btn:not(.profile-edit-btn-primary),
+    .oops-nav-btn,
+    .profile-daily-xp-btn,
+    .theme-settings-btn,
+    .landing-btn-secondary,
+    .landing-btn-hero-secondary
+  ) {
+  background: var(--poly-surface) !important;
+  color: var(--poly-blue) !important;
+  border: 1px solid var(--poly-blue-border) !important;
+}
+
+.app.theme-light :is(
+    .btn-secondary,
+    .navbar-login-btn,
+    .language-secondary-btn,
+    .profile-edit-btn:not(.profile-edit-btn-primary),
+    .oops-nav-btn,
+    .profile-daily-xp-btn,
+    .theme-settings-btn,
+    .landing-btn-secondary,
+    .landing-btn-hero-secondary
+  ):hover:not(:disabled) {
+  background: var(--poly-blue-light) !important;
+  color: var(--poly-blue-deep) !important;
+  border-color: rgba(37, 99, 235, 0.4) !important;
+}
+
+.app.theme-light .oops-nav-next {
+  background: var(--btn-primary-bg) !important;
+  color: #ffffff !important;
+  border-color: var(--btn-primary-bg) !important;
+}
+
+/* Lesson read gate + confidence */
+.app.theme-light .lesson-read-gate,
+.app.theme-light .lesson-confidence-panel,
+.app.theme-light .numpy-mark-read-panel,
+.app.theme-light .numpy-confidence-panel {
+  background: var(--poly-surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.app.theme-light .lesson-read-gate-hint,
+.app.theme-light .lesson-confidence-panel h3,
+.app.theme-light .numpy-confidence-panel h3 {
+  color: var(--txt-1) !important;
+}
+
+.app.theme-light .lesson-read-gate-error {
+  color: #dc2626 !important;
+}
+
+.app.theme-light .lesson-confidence-options button,
+.app.theme-light .numpy-confidence-options button {
+  background: var(--poly-surface-muted) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--txt-1) !important;
+}
+
+.app.theme-light .lesson-confidence-options button:hover,
+.app.theme-light .lesson-confidence-options button.active,
+.app.theme-light .numpy-confidence-options button:hover,
+.app.theme-light .numpy-confidence-options button.active {
+  background: var(--poly-blue-light) !important;
+  border-color: var(--poly-blue-border) !important;
+  color: var(--poly-blue-deep) !important;
+}
+
+/* Learn cards & hero */
+.app.theme-light .numpy-lesson-hero,
+.app.theme-light .numpy-step-card,
+.app.theme-light .numpy-diagram-item {
+  background: var(--poly-surface) !important;
+  border-color: var(--border) !important;
+}
+
+.app.theme-light .numpy-step-num:not(.numpy-step-num-code) {
+  color: #ffffff !important;
+  background: var(--poly-blue) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-lesson-intro-label,
+.app.theme-light .main-content.learn-content .numpy-chapter-badge {
+  color: var(--poly-blue) !important;
+}
+
+.app.theme-light .numpy-intro-theory--course-start .numpy-chapter-badge {
+  color: #b45309 !important;
+}
+
+.app.theme-light .numpy-intro-theory--course-start .numpy-lesson-hero {
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.06),
+    var(--poly-surface) 55%
+  ) !important;
+  border-color: rgba(37, 99, 235, 0.28) !important;
+  box-shadow: 0 0 0 1px rgba(180, 83, 9, 0.12) !important;
+}
+
+.app.theme-light .numpy-intro-theory--course-start .lesson-objectives {
+  background: rgba(37, 99, 235, 0.06) !important;
+  border-color: rgba(37, 99, 235, 0.22) !important;
+}
+
+.app.theme-light .numpy-intro-theory--course-start .numpy-path-label span {
+  color: #b45309 !important;
+}
+
+.app.theme-light .numpy-step-num-code {
+  display: none !important;
+}
+
+.app.theme-light .numpy-lesson-title,
+.app.theme-light .numpy-step-label {
+  color: var(--txt-0) !important;
+}
+
+/* IDE run button text fix (was forced dark) */
+.app.theme-light .pg-run-btn,
+.app.theme-light .ide-btn.run-btn {
+  color: #ffffff !important;
+}
+
+.app.theme-light .ide-btn.run-btn {
+  background: var(--poly-blue-dim) !important;
+  border-color: var(--poly-blue-border) !important;
+  color: var(--poly-blue-deep) !important;
+}
+
+.app.theme-light .ide-btn.run-btn:hover:not(:disabled) {
+  background: var(--poly-blue) !important;
+  color: #ffffff !important;
+}
+
+/* Assistant + lesson markup FAB (portaled to body — need html[data-theme]) */
+html[data-theme="light"] :is(
+    .assistant-avatar-wrap--mascot.assistant-avatar-wrap--highlight,
+    .assistant-avatar-wrap--highlight
+  ),
+.app.theme-light :is(
+    .assistant-avatar-wrap--mascot.assistant-avatar-wrap--highlight,
+    .assistant-avatar-wrap--highlight
+  ) {
+  background: #f8fafc !important;
+  border-color: rgba(37, 99, 235, 0.28) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 0 0 1px rgba(37, 99, 235, 0.14),
+    0 6px 20px rgba(15, 23, 42, 0.08) !important;
+}
+
+html[data-theme="light"] .polym_mentor-dock.assistant-dock-btn--compact,
+.app.theme-light .polym_mentor-dock.assistant-dock-btn--compact {
+  background: #ffffff !important;
+  border-color: rgba(37, 99, 235, 0.28) !important;
+  box-shadow:
+    0 0 0 1px rgba(37, 99, 235, 0.12),
+    0 10px 28px rgba(15, 23, 42, 0.1) !important;
+}
+
+html[data-theme="light"] .polym_mentor-dock.assistant-dock-btn--compact:hover,
+.app.theme-light .polym_mentor-dock.assistant-dock-btn--compact:hover {
+  background: var(--poly-blue-light) !important;
+  border-color: var(--poly-blue-border) !important;
+  transform: translateY(-2px) scale(1.02);
+}
+
+html[data-theme="light"] .assistant-dock-btn:hover,
+.app.theme-light .assistant-dock-btn:hover {
+  border-color: var(--poly-blue) !important;
+  background: var(--poly-blue-light) !important;
+}
+
+/* Lesson markup floating button + menu */
+html[data-theme="light"] .lesson-annotator-fab,
+.app.theme-light .lesson-annotator-fab {
+  background: #ffffff !important;
+  border: 1px solid rgba(37, 99, 235, 0.28) !important;
+  color: var(--poly-blue) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1) !important;
+}
+
+html[data-theme="light"] .lesson-annotator-fab:hover,
+html[data-theme="light"] .lesson-annotator-fab--open,
+.app.theme-light .lesson-annotator-fab:hover,
+.app.theme-light .lesson-annotator-fab--open {
+  background: var(--poly-blue-light) !important;
+  border-color: rgba(37, 99, 235, 0.42) !important;
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.14) !important;
+}
+
+html[data-theme="light"] .lesson-annotator-fab-menu,
+.app.theme-light .lesson-annotator-fab-menu {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1) !important;
+}
+
+html[data-theme="light"] .lesson-annotator-fab-menu-head,
+.app.theme-light .lesson-annotator-fab-menu-head {
+  border-bottom-color: #e2e8f0 !important;
+  color: #64748b !important;
+}
+
+html[data-theme="light"] .lesson-annotator-fab-tools button,
+html[data-theme="light"] .lesson-annotator-fab-clear,
+.app.theme-light .lesson-annotator-fab-tools button,
+.app.theme-light .lesson-annotator-fab-clear {
+  background: #f8fafc !important;
+  color: #475569 !important;
+  border-color: #e2e8f0 !important;
+}
+
+html[data-theme="light"] .lesson-annotator-fab-tools button:hover,
+html[data-theme="light"] .lesson-annotator-fab-clear:hover,
+.app.theme-light .lesson-annotator-fab-tools button:hover,
+.app.theme-light .lesson-annotator-fab-clear:hover {
+  background: var(--poly-blue-light) !important;
+  color: var(--poly-blue-deep) !important;
+}
+
+html[data-theme="light"] .lesson-annotator-fab-tools button.active,
+.app.theme-light .lesson-annotator-fab-tools button.active {
+  background: var(--poly-blue-light) !important;
+  border-color: rgba(37, 99, 235, 0.35) !important;
+  color: var(--poly-blue-deep) !important;
+}
+
+html[data-theme="light"] .lesson-annotator-fab-colors,
+.app.theme-light .lesson-annotator-fab-colors {
+  border-top-color: #e2e8f0 !important;
+}
+
+html[data-theme="light"] .lesson-annotator-fab-colors > span,
+html[data-theme="light"] .lesson-annotator-fab-hint,
+.app.theme-light .lesson-annotator-fab-colors > span,
+.app.theme-light .lesson-annotator-fab-hint {
+  color: #94a3b8 !important;
+}
+
+html[data-theme="light"] .lesson-annotator-fab-close,
+.app.theme-light .lesson-annotator-fab-close {
+  color: #64748b !important;
+}
+
+/* Profile */
+.app.theme-light .profile-edit-btn-primary {
+  color: #ffffff !important;
+}
+
+.app.theme-light .profile-hero-stat:hover strong,
+.app.theme-light .profile-hero-stat[aria-expanded="true"] strong {
+  color: var(--poly-blue) !important;
+}
+
+/* Quizzes — readable options (not dark gray slabs) */
+.app.theme-light .main-content.learn-content .numpy-quiz-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(37, 99, 235, 0.22) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-quiz-card.correct {
+  border-color: rgba(22, 163, 74, 0.45) !important;
+  background: #f0fdf4 !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-quiz-card.wrong {
+  border-color: rgba(220, 38, 38, 0.4) !important;
+  background: #fef2f2 !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-quiz-question {
+  color: #0f172a !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-quiz-option {
+  background: #f8fafc !important;
+  border: 1px solid rgba(37, 99, 235, 0.22) !important;
+  color: #334155 !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-quiz-option:hover {
+  border-color: rgba(37, 99, 235, 0.45) !important;
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-quiz-option.selected {
+  border-color: var(--poly-blue) !important;
+  background: var(--poly-blue-light) !important;
+  color: var(--poly-blue-deep) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-quiz-option.answer {
+  border-color: #16a34a !important;
+  background: #f0fdf4 !important;
+  color: #166534 !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-quiz-feedback {
+  border-top-color: rgba(37, 99, 235, 0.15) !important;
+  color: #334155 !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-viewport .lesson-quiz-slide,
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-viewport .lesson-quiz-slide--correct,
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-viewport .lesson-quiz-slide--wrong {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-count {
+  color: #2563eb !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-progress {
+  color: #64748b !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-controls {
+  border-top-color: rgba(37, 99, 235, 0.15) !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-nav {
+  background: #f8fafc !important;
+  border-color: rgba(37, 99, 235, 0.22) !important;
+  color: #334155 !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-nav:hover:not(:disabled) {
+  background: #eff6ff !important;
+  border-color: rgba(37, 99, 235, 0.45) !important;
+  color: #1d4ed8 !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-dot {
+  background: #cbd5e1 !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-dot--active {
+  background: #2563eb !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-quiz-slider-dot--done:not(.lesson-quiz-slider-dot--active) {
+  background: #93c5fd !important;
+}
+
+/* Scrollbar */
+.app.theme-light ::-webkit-scrollbar-track {
+  background: var(--poly-surface-soft);
+}
+
+.app.theme-light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+
+.app.theme-light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.app.theme-light * {
+  scrollbar-color: #cbd5e1 var(--poly-surface-soft);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Course hubs — path cards, stats, chapter grid (all courses)
+   ══════════════════════════════════════════════════════════════ */
+
+.app.theme-light .main-content.learn-content .oops-stat-tile {
+  background: var(--poly-surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+}
+
+.app.theme-light .main-content.learn-content .oops-stat-tile span {
+  color: var(--txt-3) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-stat-tile strong {
+  color: var(--txt-0) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-path-step {
+  background: var(--poly-surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  color: var(--txt-1) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-path-step:hover {
+  border-color: var(--poly-blue-border) !important;
+  background: var(--poly-blue-light) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-path-step.active,
+.app.theme-light .main-content.learn-content .oops-path-step.done {
+  border-color: var(--poly-blue) !important;
+  background: var(--poly-blue-light) !important;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12);
+}
+
+.app.theme-light .main-content.learn-content .oops-path-step-body strong {
+  color: var(--txt-0) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-path-step-num {
+  color: var(--poly-blue) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-chapter-card.oops-chapter-done {
+  border-color: rgba(37, 99, 235, 0.35) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-done-badge {
+  color: var(--poly-blue) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-chapter-header {
+  border-bottom-color: var(--border) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-chapter-num,
+.app.theme-light .main-content.learn-content .oops-chapter-meta {
+  color: var(--txt-3) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-chapter-title {
+  color: var(--txt-0) !important;
+}
+
+/* Matplotlib hub — learning path cards */
+.app.theme-light .matplotlib-hub .matplotlib-hero,
+.app.theme-light .matplotlib-hub .oops-hero {
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.07), transparent 48%),
+    var(--poly-surface) !important;
+  border-color: var(--border) !important;
+}
+
+.app.theme-light .matplotlib-hub .matplotlib-hero::before,
+.app.theme-light .matplotlib-hub .oops-hero::before {
+  background: radial-gradient(
+    circle,
+    rgba(37, 99, 235, 0.1) 0%,
+    transparent 70%
+  ) !important;
+}
+
+.app.theme-light .matplotlib-hub .oops-hero-accent {
+  color: var(--poly-blue) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-path-label {
+  border-bottom-color: var(--border) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-path-label span {
+  color: var(--poly-blue) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-path-label small {
+  color: var(--txt-3) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-path-card {
+  background: var(--poly-surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-path-level {
+  color: var(--stage-color, var(--poly-blue)) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-path-pct {
+  color: var(--txt-3) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-path-summary {
+  color: var(--txt-1) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-path-chapters li {
+  color: var(--txt-1) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-path-cta {
+  background: var(--poly-blue) !important;
+  border: 1px solid var(--poly-blue) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22);
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-path-cta:hover {
+  background: var(--poly-blue-hover) !important;
+  border-color: var(--poly-blue-hover) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-prerequisites {
+  background: var(--poly-surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-prerequisites-head span {
+  color: var(--poly-blue) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-prereq-card {
+  background: var(--poly-surface-muted) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-prereq-card:hover {
+  border-color: var(--poly-blue-border) !important;
+  background: var(--poly-blue-light) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-prereq-card strong {
+  color: var(--txt-0) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-prereq-card p,
+.app.theme-light .main-content.learn-content .matplotlib-runtime-note {
+  color: var(--txt-2) !important;
+}
+
+.app.theme-light .main-content.learn-content .matplotlib-prereq-cheat {
+  border-color: rgba(37, 99, 235, 0.25) !important;
+  background: var(--poly-blue-light) !important;
+}
+
+/* NumPy / shared lesson theory surfaces */
+.app.theme-light .main-content.learn-content .numpy-concept-code {
+  border-top-color: var(--border) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-inline-code {
+  background: var(--poly-blue-light) !important;
+  color: var(--poly-blue-deep) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-tip-box {
+  border-color: rgba(37, 99, 235, 0.2) !important;
+  background: var(--poly-blue-light) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-diagram-item h4 {
+  color: var(--txt-0) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-diagram-item ul {
+  color: var(--txt-1) !important;
+}
+
+/* Runnable code blocks + lesson IDE runner */
+.app.theme-light .main-content.learn-content .oops-code-block {
+  background: var(--poly-surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-code-label {
+  background: var(--poly-surface-muted) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-code-lang {
+  color: #ffffff !important;
+  background: var(--poly-blue) !important;
+  border-color: var(--poly-blue-hover) !important;
+  box-shadow: none !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-code-file {
+  color: var(--txt-3) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-copy-btn {
+  background: var(--poly-surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--txt-1) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-copy-btn:hover {
+  background: var(--poly-blue-light) !important;
+  border-color: var(--poly-blue-border) !important;
+  color: var(--poly-blue-deep) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-run-code-btn {
+  background: var(--poly-blue) !important;
+  border: 1px solid var(--poly-blue) !important;
+  color: #ffffff !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-run-code-btn:hover:not(:disabled) {
+  background: var(--poly-blue-hover) !important;
+  border-color: var(--poly-blue-hover) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-theory-editor {
+  border-top-color: var(--border) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-theory-editor .monaco-editor,
+.app.theme-light .main-content.learn-content .oops-theory-editor .monaco-editor-background,
+.app.theme-light .main-content.learn-content .oops-theory-editor .margin-view-overlays {
+  background: #f8fafc !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-theory-editor .monaco-editor .view-overlays .current-line,
+.app.theme-light .main-content.learn-content .oops-theory-editor .monaco-editor .margin-view-overlays .current-line {
+  background: #dbeafe !important;
+  border: none !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-auth-gate-theory {
+  border-top-color: var(--border) !important;
+  background: var(--poly-surface-muted) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-theory-output {
+  border-top-color: var(--border) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-clear-output-btn {
+  border-color: var(--border) !important;
+  color: var(--txt-2) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-clear-output-btn:hover {
+  border-color: var(--poly-blue-border) !important;
+  color: var(--poly-blue) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-editor .monaco-editor,
+.app.theme-light .main-content.learn-content .oops-editor .monaco-editor-background,
+.app.theme-light .main-content.learn-content .oops-editor .monaco-editor .margin,
+.app.theme-light .main-content.learn-content .oops-editor .monaco-editor .margin-view-overlays {
+  background: #ffffff !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-editor .monaco-editor .view-overlays .current-line,
+.app.theme-light .main-content.learn-content .oops-editor .monaco-editor .margin-view-overlays .current-line {
+  background: #dbeafe !important;
+  border: none !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-editor-action {
+  color: var(--txt-1) !important;
+  border-color: var(--border) !important;
+  background: var(--poly-surface) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-editor-action:hover:not(:disabled) {
+  background: var(--poly-blue-light) !important;
+  color: var(--poly-blue-deep) !important;
+  border-color: var(--poly-blue-border) !important;
+}
+
+.app.theme-light .main-content.learn-content .oops-auth-gate-btn-primary {
+  background: var(--poly-blue) !important;
+  color: #ffffff !important;
+  border-color: var(--poly-blue) !important;
+}
+
+/* Other course hub heroes */
+.app.theme-light .numpy-hub .numpy-hero,
+.app.theme-light .numpy-hub .oops-hero {
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.07), transparent 48%),
+    var(--poly-surface) !important;
+}
+
+.app.theme-light .numpy-hub .oops-hero-accent {
+  color: var(--poly-blue) !important;
+}
+
+.app.theme-light .pandas-hub .oops-hero-accent,
+.app.theme-light .fastapi-hub .oops-hero-accent,
+.app.theme-light .ai-ml-hub .oops-hero-accent {
+  color: var(--poly-blue) !important;
+}
+
+/* NumPy lesson theory — readable text + blue tables in light mode */
+.app.theme-light .main-content.learn-content .numpy-outcomes-heading,
+.app.theme-light .main-content.learn-content .numpy-path-label span {
+  color: var(--poly-blue) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-lesson-outcomes {
+  background: #eff6ff !important;
+  border-color: rgba(37, 99, 235, 0.28) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-path-label {
+  border-bottom-color: rgba(37, 99, 235, 0.15) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-path-label small {
+  color: #64748b !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-lesson-title {
+  color: #0f172a !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-lesson-hook {
+  color: #0f172a !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-lesson-hook strong {
+  color: #0f172a !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-step-text,
+.app.theme-light .main-content.learn-content .numpy-vt-footnote,
+.app.theme-light .main-content.learn-content .numpy-array-footnote,
+.app.theme-light .main-content.learn-content .numpy-matrix-footnote,
+.app.theme-light .main-content.learn-content .lesson-scenario p,
+.app.theme-light .main-content.learn-content .numpy-diagram-item ul,
+.app.theme-light .main-content.learn-content .numpy-diagram-item h4,
+.app.theme-light .main-content.learn-content .numpy-outcomes-list,
+.app.theme-light .main-content.learn-content .numpy-tip-box p {
+  color: #334155 !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-step-text strong,
+.app.theme-light .main-content.learn-content .numpy-vt-footnote strong,
+.app.theme-light .main-content.learn-content .numpy-array-footnote strong,
+.app.theme-light .main-content.learn-content .lesson-scenario strong {
+  color: #1e293b !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-inline-code {
+  background: rgba(37, 99, 235, 0.1) !important;
+  color: #1d4ed8 !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-visual-table th,
+.app.theme-light .main-content.learn-content .numpy-visual-table td {
+  border: 1px solid rgba(37, 99, 235, 0.28) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-vt-col-head,
+.app.theme-light .main-content.learn-content .numpy-vt-row-head,
+.app.theme-light .main-content.learn-content .numpy-vt-corner:not(:empty) {
+  color: #1d4ed8 !important;
+  background: #eff6ff !important;
+  font-weight: 600;
+}
+
+.app.theme-light .main-content.learn-content .numpy-vt-cell {
+  color: #334155 !important;
+  background: #ffffff !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-vt-row-highlight .numpy-vt-row-head,
+.app.theme-light .main-content.learn-content .numpy-vt-row-highlight .numpy-vt-cell {
+  background: rgba(37, 99, 235, 0.08) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-diagram-item {
+  background: #f8fafc !important;
+  border-color: rgba(37, 99, 235, 0.2) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-array-row-block {
+  background: #f8fafc !important;
+  border-color: rgba(37, 99, 235, 0.2) !important;
+}
+
+.app.theme-light .main-content.learn-content .numpy-array-col-label,
+.app.theme-light .main-content.learn-content .numpy-array-row-label {
+  color: #2563eb !important;
+}
+
+.app.theme-light .main-content.learn-content .lesson-scenario {
+  background: #eff6ff !important;
+  border-color: rgba(37, 99, 235, 0.28) !important;
+}

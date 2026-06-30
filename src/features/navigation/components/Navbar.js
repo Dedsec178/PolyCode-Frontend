@@ -1,15 +1,18 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../auth/context/AuthContext";
-import { getLearnNavLinks } from "../../language/courseCatalog";
+import { getActiveLearnNavGroup } from "../../language/courseCatalog";
+import LearnNavDropdown from "./LearnNavDropdown";
 import ProfileAvatar from "../../profile/components/ProfileAvatar";
+import ThemeSettingsMenu from "../../../shared/theme/ThemeSettingsMenu";
+import { THEMES } from "../../../shared/theme/themes";
 
 export default function Navbar({
   toggleSidebar,
   showMobileMenu = true,
   mobileMenuOpen = false,
   theme = "dark",
-  onToggleTheme,
+  onThemeChange,
   onGoToStackPicker,
   selectedLanguage,
 }) {
@@ -54,8 +57,8 @@ export default function Navbar({
       ? "active"
       : "";
 
-  const learnNavLinks = useMemo(
-    () => getLearnNavLinks(selectedLanguage, location.pathname),
+  const learnNavGroup = useMemo(
+    () => getActiveLearnNavGroup(selectedLanguage, location.pathname),
     [selectedLanguage, location.pathname],
   );
 
@@ -95,7 +98,6 @@ export default function Navbar({
         <img src="/images/polycode-logo.png" alt="PolyCode Logo" className="navbar-logo" />
         <div className="navbar-brand-text">
           <span className="logo-text">PolyCode</span>
-          <span className="logo-sub">v2.0 docs</span>
         </div>
       </button>
 
@@ -125,25 +127,16 @@ export default function Navbar({
         >
           Home
         </button>
-        <Link to="/hub" className={isActive("/hub")}>
-          Docs hub
+        <Link
+          to="/playground"
+          className={`navbar-playground-link ${isActive("/playground")}`}
+        >
+          Playground
         </Link>
         <Link to="/search" className={isActive("/search")}>
           Search
         </Link>
-        {learnNavLinks.map((item) => (
-          <Link key={item.to} to={item.to} className={isActive(item.to)}>
-            {item.label}
-          </Link>
-        ))}
-        <NavLink
-          to="/playground"
-          className={({ isActive: a }) =>
-            `navbar-playground-link ${a ? "active" : ""}`
-          }
-        >
-          ▶ Playground
-        </NavLink>
+        <LearnNavDropdown group={learnNavGroup} pathname={location.pathname} />
       </div>
 
       <div className="navbar-actions">
@@ -156,20 +149,12 @@ export default function Navbar({
           ⌕
         </Link>
 
-        <button
-          type="button"
-          className="theme-toggle-btn"
-          onClick={onToggleTheme}
-          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-          title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-        >
-          <span className="theme-toggle-icon" aria-hidden="true">
-            {theme === "dark" ? "☀" : "🌙"}
-          </span>
-          <span className="theme-toggle-label">
-            {theme === "dark" ? "Light" : "Dark"}
-          </span>
-        </button>
+        <ThemeSettingsMenu
+          theme={theme}
+          onThemeChange={onThemeChange}
+          buttonClassName="theme-settings-btn"
+          panelClassName="theme-settings-panel"
+        />
 
         {user ? (
           <div className="navbar-user" ref={dropdownRef}>
@@ -190,12 +175,46 @@ export default function Navbar({
                   <span>{user.email}</span>
                 </div>
                 <Link
-                  to="/profile"
+                  to={user?.username ? `/@${user.username}` : "/profile"}
                   className="navbar-dropdown-item"
                   onClick={() => setDropdownOpen(false)}
                 >
                   View profile
                 </Link>
+                <div className="navbar-dropdown-theme">
+                  <p className="theme-settings-dropdown-label">Theme</p>
+                  <div className="theme-settings-list">
+                    {THEMES.map((item) => {
+                      const active = item.id === theme;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          className={`theme-settings-option${active ? " theme-settings-option--active" : ""}`}
+                          onClick={() => {
+                            onThemeChange?.(item.id);
+                            setDropdownOpen(false);
+                          }}
+                        >
+                          <span
+                            className="theme-settings-swatch"
+                            style={{ background: item.swatch }}
+                            aria-hidden
+                          />
+                          <span className="theme-settings-copy">
+                            <strong>{item.label}</strong>
+                            <small>{item.description}</small>
+                          </span>
+                          {active ? (
+                            <span className="theme-settings-check" aria-hidden>
+                              ✓
+                            </span>
+                          ) : null}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
                 <button
                   type="button"
                   className="navbar-dropdown-item navbar-dropdown-logout"

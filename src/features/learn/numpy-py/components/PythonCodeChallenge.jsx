@@ -2,11 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 import { useAuth } from "../../../auth/context/AuthContext";
-import {
-  definePolycodeMonacoTheme,
-  getVSCodeEditorOptions,
-  POLYCODE_VSCODE_THEME,
-} from "../../../../shared/utils/monacoTheme";
+import { useSiteMonacoTheme } from "../../../../shared/hooks/useSiteMonacoTheme";
+import { getVSCodeEditorOptions } from "../../../../shared/utils/monacoTheme";
 import {
   formatPythonOutput,
   getPythonRuntimeError,
@@ -14,6 +11,7 @@ import {
 } from "../../shared/runPython";
 import ChallengeCompleteCelebration from "../../shared/ChallengeCompleteCelebration";
 import { useChallengeCelebration } from "../../shared/useChallengeCelebration";
+import PythonRunOutput from "../../shared/PythonRunOutput";
 
 function normalizeWhitespace(value = "") {
   return value.replace(/\s+/g, "");
@@ -74,6 +72,7 @@ export default function PythonCodeChallenge({
   onCodeChange,
 }) {
   const { loading: authLoading, isAuthenticated } = useAuth();
+  const { monacoTheme, beforeMount } = useSiteMonacoTheme();
   const canRun = isAuthenticated && !authLoading;
 
   const [code, setCode] = useState(initialCode || challenge.starterCode);
@@ -190,9 +189,12 @@ export default function PythonCodeChallenge({
         status: allPassed ? "pass" : "fail",
         stdout:
           stdout ||
-          (runtime === "server"
-            ? "Program ran on server (no printed output)."
-            : "Program ran in browser (no printed output)."),
+          (runResult.plotImages?.length
+            ? `Rendered ${runResult.plotImages.length} chart${runResult.plotImages.length > 1 ? "s" : ""}.`
+            : runtime === "server"
+              ? "Program ran on server (no printed output)."
+              : "Program ran in browser (no printed output)."),
+        plotImages: runResult.plotImages || [],
         expected: expectedOutput,
       });
 
@@ -369,9 +371,11 @@ export default function PythonCodeChallenge({
             <span>Output</span>
             <small>{output ? "after last run" : "waiting for run"}</small>
           </div>
-          <pre className="oops-output-body">
-            {output?.stdout || "Run your code to see output here."}
-          </pre>
+          <PythonRunOutput
+            stdout={output?.stdout}
+            plotImages={output?.plotImages}
+            emptyHint="Run your code to see output here."
+          />
           {output?.expected && (
             <div className="oops-expected-output">
               <span>Expected</span>
@@ -408,9 +412,9 @@ export default function PythonCodeChallenge({
             height="100%"
             language="python"
             value={showSolution ? challenge.solutionCode : code}
-            beforeMount={definePolycodeMonacoTheme}
+            beforeMount={beforeMount}
             onMount={handleEditorMount}
-            theme={POLYCODE_VSCODE_THEME}
+            theme={monacoTheme}
             onChange={(value) => {
               if (!showSolution) {
                 const next = value || "";

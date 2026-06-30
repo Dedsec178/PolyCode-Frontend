@@ -53,6 +53,10 @@ const languageMeta = {
     color: "#012456",
   },
   "q#": { icon: "⚛️", color: "#0078d4" },
+  quantum: {
+    icon: "/images/logo.png",
+    color: "#6366f1",
+  },
   r: {
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/r/r-original.svg",
     color: "#276dc3",
@@ -138,11 +142,8 @@ export default function LanguagePickerSection({
     return (
       <section id="get-started" className="landing-get-started">
         <div className="landing-container">
-          <div className="loading">
-            <div className="spinner-container">
-              <div className="spinner" />
-              <div className="spinner-inner" />
-            </div>
+          <div className="loading-section">
+            <div className="spinner" aria-hidden="true" />
             <p>Discovering available languages…</p>
           </div>
         </div>
@@ -202,7 +203,7 @@ export default function LanguagePickerSection({
                 }}
               >
                 <div className="lang-icon-wrapper">
-                  {meta.icon.startsWith("http") ? (
+                  {meta.icon.startsWith("http") || meta.icon.startsWith("/") ? (
                     <img src={meta.icon} alt={language} />
                   ) : (
                     <span>{meta.icon}</span>

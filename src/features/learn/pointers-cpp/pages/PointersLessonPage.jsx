@@ -1,10 +1,17 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { LEARN_ACCENT } from "../../shared/learnAccent";
 import { useNavigate, useParams } from "react-router-dom";
 import CodeChallenge from "../../oops-cpp/components/CodeChallenge";
 import ConceptCard from "../../oops-cpp/components/ConceptCard";
 import OopsSidebar from "../../oops-cpp/components/OopsSidebar";
 import LearnProfileMenu from "../../shared/LearnProfileMenu";
 import LessonContentShell from "../../shared/LessonContentShell";
+import LessonReadGate from "../../shared/LessonReadGate";
+import LessonQuizSlider from "../../shared/LessonQuizSlider";
+import useLessonReadGate from "../../shared/useLessonReadGate";
+import useLessonQuizAttempts from "../../shared/useLessonQuizAttempts";
+import { mapTheoryWithQuizIndices } from "../../shared/lessonQuizUtils";
+import LessonChallengeTab from "../../shared/LessonChallengeTab";
 import {
   POINTER_CHAPTERS,
   POINTER_LESSONS,
@@ -14,6 +21,7 @@ import usePointersProgress from "../hooks/usePointersProgress";
 import { useLessonAssistantContext } from "../../../assistant/hooks/useLessonAssistantContext";
 
 const BASE_PATH = "/learn/pointers-cpp";
+const READ_GATE_PREFIX = "pointers_cpp";
 
 function plainLessonText(text = "") {
   return text.replace(/\*\*/g, "").replace(/`/g, "");
@@ -70,24 +78,37 @@ export default function PointersLessonPage() {
   const navigate = useNavigate();
   const [tab, setTab] = useState("theory");
   const [focusMode, setFocusMode] = useState(false);
-  const [confidence, setConfidence] = useState("");
+  const {
+    markedAsRead,
+    markAsRead,
+    confidence,
+    handleConfidenceChange,
+    createGoToChallenge,
+    challengeTabLocked,
+  } = useLessonReadGate(READ_GATE_PREFIX, lessonId);
+  const goToChallenge = createGoToChallenge(setTab);
   const {
     user,
     completedMap: progress,
     savedCodeMap,
-    getLessonNote,
     bookmarks,
     completeLesson,
     rememberLesson,
     saveCode,
-    saveNote,
     toggleBookmark,
     addTime,
   } = usePointersProgress();
-  const [noteDraft, setNoteDraft] = useState("");
   const codeSaveTimer = useRef(null);
 
   const lesson = POINTER_LESSONS.find((item) => item.id === lessonId);
+  const {
+    preparedLesson,
+    quizCount,
+    attemptedCount,
+    recordAttempt,
+    getSelection,
+  } = useLessonQuizAttempts(READ_GATE_PREFIX, lessonId, lesson);
+  const theoryLesson = preparedLesson || lesson;
   const lessonIdx = POINTER_LESSONS.findIndex((item) => item.id === lessonId);
   const prev = POINTER_LESSONS[lessonIdx - 1];
   const next = POINTER_LESSONS[lessonIdx + 1];
@@ -124,14 +145,6 @@ export default function PointersLessonPage() {
   }, [lessonId, rememberLesson]);
 
   useEffect(() => {
-    setNoteDraft(getLessonNote(lessonId));
-  }, [lessonId, getLessonNote]);
-
-  useEffect(() => {
-    setConfidence(localStorage.getItem(`pointers_cpp_confidence_${lessonId}`) || "");
-  }, [lessonId]);
-
-  useEffect(() => {
     if (!lessonId) return undefined;
     const id = setInterval(() => addTime(1), 60000);
     return () => clearInterval(id);
@@ -165,20 +178,11 @@ export default function PointersLessonPage() {
     await completeLesson(lesson);
   }
 
-  function handleSaveNote() {
-    saveNote(lessonId, noteDraft);
-  }
-
   function handleCodeChange(code) {
     window.clearTimeout(codeSaveTimer.current);
     codeSaveTimer.current = window.setTimeout(() => {
       saveCode(lessonId, code).catch(() => {});
     }, 700);
-  }
-
-  function handleConfidenceChange(value) {
-    setConfidence(value);
-    localStorage.setItem(`pointers_cpp_confidence_${lessonId}`, value);
   }
 
   return (
@@ -197,7 +201,7 @@ export default function PointersLessonPage() {
             ← Pointers C++
           </button>
           <div className="oops-lesson-breadcrumb">
-            <span style={{ color: `var(--ch-color, ${lesson.chapterColor})` }}>
+            <span className="learn-lesson-chapter-tag">
               {lesson.chapterTitle}
             </span>
             <span className="oops-bc-sep">›</span>
@@ -241,12 +245,12 @@ export default function PointersLessonPage() {
           >
             Theory
           </button>
-          <button
-            className={`oops-tab ${tab === "challenge" ? "active" : ""}`}
-            onClick={() => setTab("challenge")}
-          >
-            Challenge <span className="oops-tab-xp">+{lesson.xp} XP</span>
-          </button>
+          <LessonChallengeTab
+            active={tab === "challenge"}
+            locked={challengeTabLocked}
+            xp={lesson.xp}
+            onClick={goToChallenge}
+          />
         </div>
 
         <LessonContentShell
@@ -338,63 +342,60 @@ export default function PointersLessonPage() {
                 </div>
               </div>
 
-              {lesson.theory.map((block, index) => (
-                <ConceptCard
-                  key={index}
-                  block={block}
-                  accentColor={lesson.chapterColor}
-                  runnableCodeLangs={["cpp", "c++"]}
-                />
-              ))}
+              {(() => {
+                const theoryWithQuizMeta = mapTheoryWithQuizIndices(
+                  theoryLesson?.theory || [],
+                );
+                const quizSlides = theoryWithQuizMeta
+                  .filter(({ block }) => block.type === "quiz")
+                  .map(({ block, quizIndex }) => ({ block, quizIndex }));
+                let quizSliderRendered = false;
 
-              <div className="oops-notes-panel">
-                <div>
-                  <span className="oops-interactive-label">Lesson Notes</span>
-                  <h3>Capture your pointer rule</h3>
-                </div>
-                <textarea
-                  value={noteDraft}
-                  onChange={(event) => setNoteDraft(event.target.value)}
-                  placeholder="Write a pointer rule, gotcha, address trace, or safety note..."
-                />
-                <button type="button" onClick={handleSaveNote}>
-                  Save Note
-                </button>
-              </div>
+                return theoryWithQuizMeta.map(
+                  ({ block, theoryIndex, quizIndex }) => {
+                    if (block.type === "quiz") {
+                      if (quizSliderRendered) return null;
+                      quizSliderRendered = true;
+                      return (
+                        <LessonQuizSlider
+                          key={`quiz-slider-${theoryIndex}`}
+                          quizzes={quizSlides}
+                          accentColor={LEARN_ACCENT}
+                          getSelection={getSelection}
+                          onQuizAnswer={recordAttempt}
+                          variant="oops"
+                        />
+                      );
+                    }
 
-              <div className="oops-confidence-panel">
-                <div>
-                  <span className="oops-interactive-label">Confidence Check</span>
-                  <h3>Can you trace the memory?</h3>
-                </div>
-                <div className="oops-confidence-options">
-                  {[
-                    ["review", "Need review"],
-                    ["almost", "Almost there"],
-                    ["ready", "Ready to code"],
-                  ].map(([value, label]) => (
-                    <button
-                      key={value}
-                      type="button"
-                      className={confidence === value ? "active" : ""}
-                      onClick={() => handleConfidenceChange(value)}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                    return (
+                      <ConceptCard
+                        key={theoryIndex}
+                        block={block}
+                        accentColor={LEARN_ACCENT}
+                        runnableCodeLangs={["cpp", "c++"]}
+                      />
+                    );
+                  },
+                );
+              })()}
 
-              <div className="oops-theory-footer">
-                <button className="oops-cta-btn" onClick={() => setTab("challenge")}>
-                  Ready? Take the Challenge →
-                </button>
-              </div>
+              <LessonReadGate
+                markedAsRead={markedAsRead}
+                onMarkAsRead={markAsRead}
+                confidence={confidence}
+                onConfidenceChange={handleConfidenceChange}
+                onGoChallenge={goToChallenge}
+                accentColor={LEARN_ACCENT}
+                quizzesRequired={quizCount}
+                quizzesAttempted={attemptedCount}
+                challengeLabel="Ready? Take the Challenge →"
+              />
             </div>
           ) : (
             <CodeChallenge
               challenge={lesson.challenge}
-              accentColor={lesson.chapterColor}
+              accentColor={LEARN_ACCENT}
               isCompleted={isCompleted}
               onComplete={handleChallengeComplete}
               initialCode={savedCodeMap[lessonId]}

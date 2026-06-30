@@ -1,94 +1,12 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Boxes,
-  Layers3,
-  Grid3x3,
-  Table2,
-  Play,
-  Brain,
-  FileText,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 /* ─── Course data ───────────────────────────────────────────────
    Add new courses here — they appear in the slider automatically.
    Pull from courseCatalog.js values so it's one source of truth.
 ──────────────────────────────────────────────────────────────── */
-const COURSES = [
-  {
-    title: "OOPs C++",
-    tag: "C++ · Interactive",
-    icon: Boxes,
-    description:
-      "Classes, constructors, inheritance, polymorphism, design principles, and real coding challenges.",
-    href: "/learn/oops-cpp",
-    accent: "#ffe566",
-    level: "Intermediate",
-  },
-  {
-    title: "Pointers C++",
-    tag: "C++ · Memory",
-    icon: Layers3,
-    description:
-      "Addresses, dereferencing, nullptr, arrays, smart pointers, callbacks, and safety.",
-    href: "/learn/pointers-cpp",
-    accent: "#00d4ff",
-    level: "Intermediate",
-  },
-  {
-    title: "NumPy · Python",
-    tag: "Python · Data",
-    icon: Grid3x3,
-    description:
-      "ndarray basics, shape, dtype, vector math, and hands-on Python challenges with NumPy.",
-    href: "/learn/numpy-py",
-    accent: "#4dabdc",
-    level: "Beginner",
-  },
-  {
-    title: "Pandas · Python",
-    tag: "Python · Data",
-    icon: Table2,
-    description:
-      "Series, DataFrames, filtering, cleaning, groupby, merges, and CSV workflows.",
-    href: "/learn/pandas-py",
-    accent: "#059669",
-    level: "Beginner",
-  },
-  {
-    title: "Daily Challenge",
-    tag: "All Levels · Routine",
-    icon: Brain,
-    description:
-      "A fresh coding problem every day. Build consistency, sharpen problem-solving skills.",
-    href: "/daily-challenge",
-    accent: "#a78bfa",
-    level: "All Levels",
-  },
-  {
-    title: "Playground",
-    tag: "All Languages · Hands-on",
-    icon: Play,
-    description:
-      "Experiment freely — write, run, and test code in the browser with zero setup.",
-    href: "/playground",
-    accent: "#fb923c",
-    level: "All Levels",
-  },
-  {
-    title: "Documentation",
-    tag: "Reference · Guides",
-    icon: FileText,
-    description:
-      "Curated guides, syntax notes, examples, and reference material for every language.",
-    href: "/hub",
-    accent: "#38bdf8",
-    level: "All Levels",
-  },
-];
-
+import { ALL_COURSES as COURSES } from "../../learn/shared/allCourses";
 const CARD_WIDTH = 300; // px — keep in sync with CSS
 const GAP = 20;
 const AUTO_SCROLL_INTERVAL = 3500; // ms
@@ -103,23 +21,44 @@ export default function CoursesSlider() {
 
   /* ── scroll helpers ── */
   const scrollTo = useCallback(
-    (index) => {
+    (index, instant = false) => {
       if (!trackRef.current) return;
       const clamped = Math.max(0, Math.min(index, total - 1));
-      trackRef.current.scrollTo({
-        left: clamped * (CARD_WIDTH + GAP),
-        behavior: "smooth",
-      });
+      const track = trackRef.current;
+      const firstCard = track.querySelector(".cs-card");
+      const step = firstCard ? firstCard.offsetWidth + GAP : CARD_WIDTH + GAP;
+
+      if (instant) {
+        track.style.scrollSnapType = "none";
+        track.scrollTo({ left: clamped * step, behavior: "auto" });
+        setActiveIndex(clamped);
+        requestAnimationFrame(() => {
+          track.style.scrollSnapType = "";
+        });
+        return;
+      }
+
+      track.scrollTo({ left: clamped * step, behavior: "smooth" });
       setActiveIndex(clamped);
     },
     [total],
   );
 
-  const prev = () => scrollTo(activeIndex === 0 ? total - 1 : activeIndex - 1);
-  const next = useCallback(
-    () => scrollTo(activeIndex === total - 1 ? 0 : activeIndex + 1),
-    [activeIndex, scrollTo, total],
-  );
+  const prev = () => {
+    if (activeIndex === 0) {
+      scrollTo(total - 1, true);
+    } else {
+      scrollTo(activeIndex - 1);
+    }
+  };
+
+  const next = useCallback(() => {
+    if (activeIndex === total - 1) {
+      scrollTo(0, true);
+    } else {
+      scrollTo(activeIndex + 1);
+    }
+  }, [activeIndex, scrollTo, total]);
 
   /* ── auto-scroll ── */
   useEffect(() => {
@@ -133,12 +72,14 @@ export default function CoursesSlider() {
     const track = trackRef.current;
     if (!track) return;
     const onScroll = () => {
-      const index = Math.round(track.scrollLeft / (CARD_WIDTH + GAP));
-      setActiveIndex(index);
+      const firstCard = track.querySelector(".cs-card");
+      const step = firstCard ? firstCard.offsetWidth + GAP : CARD_WIDTH + GAP;
+      const index = Math.round(track.scrollLeft / step);
+      setActiveIndex(Math.max(0, Math.min(index, total - 1)));
     };
     track.addEventListener("scroll", onScroll, { passive: true });
     return () => track.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [total]);
 
   return (
     <section

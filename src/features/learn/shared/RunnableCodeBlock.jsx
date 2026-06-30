@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 import { useAuth } from "../../auth/context/AuthContext";
-import {
-  definePolycodeMonacoTheme,
-  getVSCodeEditorOptions,
-  POLYCODE_VSCODE_THEME,
-} from "../../../shared/utils/monacoTheme";
+import { useSiteMonacoTheme } from "../../../shared/hooks/useSiteMonacoTheme";
+import { getVSCodeEditorOptions } from "../../../shared/utils/monacoTheme";
 import {
   formatCppOutput,
   getCppRuntimeError,
@@ -22,17 +19,39 @@ import {
   getPythonRuntimeError,
   runPythonCode,
 } from "./runPython";
+import PythonRunOutput from "./PythonRunOutput";
+import {
+  formatCsharpOutput,
+  getCsharpRuntimeError,
+  runCsharpCode,
+} from "./runCsharp";
+import {
+  formatRubyOutput,
+  getRubyRuntimeError,
+  runRubyCode,
+} from "./runRuby";
+import {
+  formatPhpOutput,
+  getPhpRuntimeError,
+  runPhpCode,
+} from "./runPhp";
 
 function normalizeLang(lang = "python") {
   const value = lang.toLowerCase();
   if (value === "c++" || value === "cpp") return "cpp";
   if (value === "javascript" || value === "js") return "javascript";
+  if (value === "csharp" || value === "c#") return "csharp";
+  if (value === "ruby") return "ruby"; 
+  if (value === "php") return "php";
   return value;
 }
 
 function monacoLanguage(lang) {
   if (lang === "cpp") return "cpp";
   if (lang === "javascript") return "javascript";
+  if (lang === "csharp") return "csharp";
+  if (lang === "ruby") return "ruby";
+  if (lang === "php") return "php";
   return "python";
 }
 
@@ -43,18 +62,33 @@ async function executeTheoryCode(source, lang) {
   if (lang === "javascript") {
     return runJavaScriptCode(source);
   }
+  if (lang === "csharp") {
+    return runCsharpCode(source);
+  }
+  if (lang === "ruby") {
+    return runRubyCode(source, { learn: true });
+  }
+  if (lang === "php") {
+    return runPhpCode(source);
+  }
   return runPythonCode(source);
 }
 
 function formatTheoryOutput(result, lang) {
   if (lang === "cpp") return formatCppOutput(result);
   if (lang === "javascript") return formatJavaScriptOutput(result);
+  if (lang === "csharp") return formatCsharpOutput(result);
+  if (lang === "ruby") return formatRubyOutput(result);
+  if (lang === "php") return formatPhpOutput(result);
   return formatPythonOutput(result);
 }
 
 function getTheoryRuntimeError(result, lang) {
   if (lang === "cpp") return getCppRuntimeError(result);
   if (lang === "javascript") return getJavaScriptRuntimeError(result);
+  if (lang === "csharp") return getCsharpRuntimeError(result);
+  if (lang === "ruby") return getRubyRuntimeError(result);
+  if (lang === "php") return getPhpRuntimeError(result);
   return getPythonRuntimeError(result);
 }
 
@@ -64,6 +98,7 @@ export default function RunnableCodeBlock({
   language = "python",
 }) {
   const { loading: authLoading, isAuthenticated } = useAuth();
+  const { monacoTheme, beforeMount } = useSiteMonacoTheme();
   const canRun = isAuthenticated && !authLoading;
 
   const lang = normalizeLang(block.lang || language);
@@ -115,11 +150,19 @@ export default function RunnableCodeBlock({
 
       const stdout =
         formatTheoryOutput(result, lang) ||
-        (runtime === "server"
-          ? "Ran on server (no printed output)."
-          : "Ran in browser (no printed output).");
+        (result.plotImages?.length
+          ? `Rendered ${result.plotImages.length} chart${result.plotImages.length > 1 ? "s" : ""}.`
+          : lang === "ruby"
+            ? "Ruby ran successfully. Add puts to display values, e.g. puts total"
+            : runtime === "server"
+              ? "Ran on server (no printed output)."
+              : "Ran in browser (no printed output).");
 
-      setOutput({ status: "pass", stdout });
+      setOutput({
+        status: "pass",
+        stdout,
+        plotImages: result.plotImages || [],
+      });
     } catch (error) {
       setOutput({
         status: "fail",
@@ -175,8 +218,8 @@ export default function RunnableCodeBlock({
           height="220px"
           language={editorLang}
           value={code}
-          beforeMount={definePolycodeMonacoTheme}
-          theme={POLYCODE_VSCODE_THEME}
+          beforeMount={beforeMount}
+          theme={monacoTheme}
           onChange={(value) => setCode(value ?? "")}
           options={getVSCodeEditorOptions({
             fontSize: 13,
@@ -231,9 +274,11 @@ export default function RunnableCodeBlock({
             )}
           </div>
         </div>
-        <pre className="oops-output-body">
-          {output?.stdout || "Output will appear here after you run the code."}
-        </pre>
+        <PythonRunOutput
+          stdout={output?.stdout}
+          plotImages={output?.plotImages}
+          emptyHint="Output will appear here after you run the code."
+        />
       </div>
     </div>
   );

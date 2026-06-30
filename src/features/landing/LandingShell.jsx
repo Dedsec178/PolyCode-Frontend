@@ -1,58 +1,35 @@
 import React from "react";
 import LandingPage from "./pages/LandingPage";
+import {
+  applyDocumentTheme,
+  clearDocumentThemeInlineStyles,
+  getAppThemeClass,
+} from "../../shared/theme/themes";
 
 /**
- * Landing page always starts in dark mode. Theme toggle only affects the
- * landing route and does not persist to the global app theme.
+ * Landing page theme follows the global app theme and stays in sync when changed.
  */
 export default function LandingShell({
   savedTheme,
-  footer,
+  onThemeChange,
   onLanguageSelect,
   continueLanguage,
 }) {
-  const [landingTheme, setLandingTheme] = React.useState("dark");
-
   React.useLayoutEffect(() => {
-    setLandingTheme("dark");
-  }, []);
+    applyDocumentTheme(savedTheme, { landing: true });
+    return () => clearDocumentThemeInlineStyles();
+  }, [savedTheme]);
 
-  React.useLayoutEffect(() => {
-    const html = document.documentElement;
-    const body = document.body;
-
-    html.setAttribute("data-theme", landingTheme);
-    body.classList.toggle("light-theme", landingTheme === "light");
-
-    if (landingTheme === "light") {
-      html.style.backgroundColor = "#f4f6fa";
-      body.style.backgroundColor = "#f4f6fa";
-    } else {
-      html.style.backgroundColor = "#03050a";
-      body.style.backgroundColor = "#03050a";
-    }
-
-    return () => {
-      html.style.backgroundColor = "";
-      body.style.backgroundColor = "";
-      html.setAttribute("data-theme", savedTheme);
-      body.classList.toggle("light-theme", savedTheme === "light");
-    };
-  }, [landingTheme, savedTheme]);
-
-  const toggleLandingTheme = React.useCallback(() => {
-    setLandingTheme((current) => (current === "dark" ? "light" : "dark"));
-  }, []);
+  const themeClass = getAppThemeClass(savedTheme);
 
   return (
-    <div className={`app ${landingTheme === "light" ? "theme-light" : ""}`}>
+    <div className={`app${themeClass ? ` ${themeClass}` : ""}`}>
       <LandingPage
         onLanguageSelect={onLanguageSelect}
         continueLanguage={continueLanguage}
-        theme={landingTheme}
-        onToggleTheme={toggleLandingTheme}
+        theme={savedTheme}
+        onThemeChange={onThemeChange}
       />
-      {footer}
     </div>
   );
 }

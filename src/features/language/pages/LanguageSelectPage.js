@@ -17,6 +17,7 @@ const languageMeta = {
   batchfile: { icon: '⌨️', color: '#4d4d4d' },
   powershell: { icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/powershell/powershell-original.svg', color: '#012456' },
   'q#': { icon: '⚛️', color: '#0078d4' },
+  quantum: { icon: '/images/logo.png', color: '#6366f1' },
   r: { icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/r/r-original.svg', color: '#276dc3' },
   csharp: { icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg', color: '#239120' },
   'c#': { icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg', color: '#239120' },
@@ -77,11 +78,8 @@ export default function LanguageSelectPage({ onLanguageSelect, continueLanguage 
   if (loading) {
     return (
       <div className="language-select-page-wrapper">
-        <div className="loading">
-          <div className="spinner-container">
-            <div className="spinner" />
-            <div className="spinner-inner" />
-          </div>
+        <div className="loading-section">
+          <div className="spinner" aria-hidden="true" />
           <p>Discovering available languages…</p>
         </div>
       </div>
@@ -156,7 +154,7 @@ export default function LanguageSelectPage({ onLanguageSelect, continueLanguage 
                 <div className="lang-icon-wrapper" style={{
                   transform: isHovered ? 'scale(1.15) rotate(8deg)' : 'scale(1) rotate(0deg)'
                 }}>
-                  {meta.icon.startsWith('http') ? (
+                  {meta.icon.startsWith('http') || meta.icon.startsWith('/') ? (
                     <img src={meta.icon} alt={language} />
                   ) : (
                     <span style={{ fontSize: '2.5rem' }}>{meta.icon}</span>
