@@ -2,24 +2,24 @@
 
 export const FASTAPI_LESSON_OUTCOMES = {
   "fastapi-0": [
-    "Explain what an API and FastAPI are in everyday language",
-    "Describe how a client (app/browser) talks to a server",
-    "Spot where REST APIs appear in real apps you use",
+    "Explain why APIs exist and what problem they solve",
+    "Describe client, server, API, and database responsibilities",
+    "Trace a request from user action through to JSON response",
   ],
   "fastapi-1": [
-    "Name common HTTP methods (GET, POST, PUT, DELETE)",
-    "Read status codes like 200, 201, 404, and 422",
-    "Match the right method to create, read, update, or delete",
+    "Explain why different HTTP methods exist and how they map to CRUD",
+    "Match GET, POST, PUT, DELETE to real-world app actions",
+    "Read typical status codes like 200, 201, and 204",
   ],
   "fastapi-2": [
-    "Turn Python dicts into JSON strings and back",
-    "See why APIs send JSON instead of raw Python",
-    "Build a small payload a FastAPI route could return",
+    "Explain why APIs use JSON and why serialization is required",
+    "Serialize Python dicts with `json.dumps` and parse with `json.loads`",
+    "Trace data flow: Python Object → JSON → Client and back",
   ],
   "fastapi-3": [
-    "Create a `FastAPI()` app and a GET route",
-    "Test routes in code with `TestClient` (no browser needed)",
-    "Return JSON from a path function",
+    "Explain what a framework is and why FastAPI exists",
+    "Describe how Starlette, Pydantic, ASGI, and Uvicorn fit together",
+    "Use decorators to define your first GET route and test with `TestClient`",
   ],
   "fastapi-4": [
     "Capture dynamic URL segments with path parameters",

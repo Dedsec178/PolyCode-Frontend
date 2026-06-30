@@ -5,12 +5,12 @@
  */
 
 export const FASTAPI_VIDEO_LINKS = {
-  // Ch 1: API Foundations
+  // Ch 1: API Foundations (through first endpoint)
   "fastapi-0": "",
   "fastapi-1": "",
   "fastapi-2": "",
-  // Ch 2: First App
   "fastapi-3": "",
+  // Ch 2: Routes & Parameters
   "fastapi-4": "",
   "fastapi-5": "",
   // Ch 3: Pydantic & Bodies

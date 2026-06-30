@@ -11,58 +11,135 @@ export const FASTAPI_CHAPTERS = [
     lessons: [
       {
         id: "fastapi-0",
-        title: "What is FastAPI?",
+        title: "Why APIs Exist",
         xp: 10,
         theory: [
           {
             type: "text",
             content:
-              "An **API** is a contract between two programs. Your app asks for data, and a server answers in JSON. **FastAPI** is a Python framework that helps you build those APIs quickly and clearly.",
+              "Before APIs, every app had to build **everything itself** — user accounts, payments, maps, weather. That is slow, expensive, and hard to maintain. Modern software is built from **specialized services** that talk to each other. APIs are the language those services use.",
           },
           {
             type: "scenario",
-            title: "Food delivery app example",
+            title: "The problem without APIs",
             content:
-              "When your food app shows nearby restaurants, it calls an API like `GET /restaurants?city=lahore`. The server returns JSON and the app renders cards on screen.",
+              "Imagine a food delivery startup that stores restaurant data inside its mobile app code. Every menu change requires an app update. A competitor launches new restaurants daily while your team is still waiting for App Store approval. **The problem:** data and logic are trapped inside one program instead of being shared safely.",
+          },
+          {
+            type: "text",
+            content:
+              "An **API** (Application Programming Interface) is a **set of rules** that lets one program ask another program for data or actions. Think of it as a restaurant menu with a kitchen behind it: the menu lists what you can order (endpoints), the kitchen prepares it (server logic), and the waiter brings it back (response).",
+          },
+          {
+            type: "callout",
+            variant: "info",
+            content:
+              "**What problem does an API solve?** It separates the **client** (what users see) from the **server** (where data and business rules live). Multiple clients — mobile app, website, partner integrations — can all use the same API without duplicating logic.",
+          },
+          {
+            type: "scenario",
+            title: "Real-world examples",
+            content:
+              "**Food delivery app:** `GET /restaurants` returns nearby restaurants. **Login system:** `POST /login` sends email + password, server returns a token. **Weather app:** `GET /weather?city=Karachi` returns temperature and forecast. In every case the client sends a **request**, the server runs logic, and sends back a **response** — usually as JSON.",
           },
           {
             type: "table",
-            title: "Client vs server in plain words",
-            columns: ["Part", "What it does", "Example"],
+            title: "Client vs server — roles and responsibilities",
+            columns: ["Role", "What it is", "Responsibilities", "Example"],
             rows: [
-              { label: "Client", values: ["Client","Sends request","Mobile app asks for menu"] },
-              { label: "Server", values: ["Server","Runs business logic","Checks DB for dishes"] },
-              { label: "API", values: ["API","Rules of communication","Route + method + JSON"] },
+              { label: "Client", values: ["Client","The app or browser users interact with","Send requests, show UI, handle user input","Mobile food app on your phone"] },
+              { label: "Server", values: ["Server","A remote program that serves data and logic","Authenticate users, validate input, query database","Python API running on a cloud machine"] },
+              { label: "API", values: ["API","The agreed contract between them","Define URLs, HTTP methods, request/response format","GET /restaurants returns JSON list"] },
+              { label: "Database", values: ["Database","Persistent storage behind the server","Store and retrieve records safely","PostgreSQL with restaurant rows"] },
             ],
           },
           {
             type: "diagram",
-            title: "Basic API flow",
+            title: "Client → API → server → database architecture",
             nodes: [
               {
                 id: "client",
-                label: "Client app",
+                label: "Client",
                 color: "#009688",
-                items: ["Phone", "Web app"],
+                items: ["Mobile / web / desktop", "Sends HTTP requests", "Renders JSON responses"],
               },
               {
                 id: "api",
-                label: "FastAPI server",
+                label: "API layer",
                 color: "#26a69a",
-                items: ["Routes", "Validation"],
+                items: ["Routes like /restaurants", "HTTP methods (GET, POST…)", "Request & response rules"],
               },
               {
-                id: "data",
-                label: "Data source",
+                id: "server",
+                label: "Server logic",
                 color: "#4db6ac",
-                items: ["List", "Database"],
+                items: ["Business rules", "Authentication", "Validation"],
+              },
+              {
+                id: "db",
+                label: "Database",
+                color: "#80cbc4",
+                items: ["Stores users, orders, menus", "Returns query results", "Keeps data persistent"],
+              },
+            ],
+          },
+          {
+            type: "text",
+            content:
+              "**How does a request travel?** When you tap a button in an app, the client builds an HTTP request (URL + method + optional body), sends it over the internet to the API server, the server runs business logic, may read or write the database, then packages the result as a response — typically JSON with a status code like `200 OK`.",
+          },
+          {
+            type: "scenario",
+            title: "Request–response lifecycle: View Restaurants",
+            content:
+              "1. User taps **View Restaurants** in the food app. 2. The mobile **client** sends `GET /restaurants?city=Lahore`. 3. The **API server** receives the request and matches the route. 4. **Business logic** runs — filter by city, check opening hours. 5. The server queries the **database** for matching rows. 6. Results are converted to JSON and sent back with status `200`. 7. The app renders restaurant cards on screen.",
+          },
+          {
+            type: "diagram",
+            title: "Step-by-step request lifecycle",
+            nodes: [
+              {
+                id: "step1",
+                label: "1. User action",
+                color: "#009688",
+                items: ["Tap View Restaurants", "Client builds request"],
+              },
+              {
+                id: "step2",
+                label: "2. Request sent",
+                color: "#26a69a",
+                items: ["GET /restaurants", "Over HTTP to server"],
+              },
+              {
+                id: "step3",
+                label: "3. API receives",
+                color: "#4db6ac",
+                items: ["Route matched", "Headers parsed"],
+              },
+              {
+                id: "step4",
+                label: "4. Business logic",
+                color: "#80cbc4",
+                items: ["Validate city param", "Apply filters"],
+              },
+              {
+                id: "step5",
+                label: "5. Database query",
+                color: "#b2dfdb",
+                items: ["SELECT restaurants", "Return rows"],
+              },
+              {
+                id: "step6",
+                label: "6. JSON response",
+                color: "#009688",
+                items: ["200 OK", "Client displays data"],
               },
             ],
           },
           {
             type: "code",
             lang: "python",
-            label: "JSON-like data in Python",
+            label: "What an API response looks like in Python",
             content: `restaurant = {
     "id": 1,
     "name": "Spice Hub",
@@ -74,139 +151,153 @@ print(restaurant["name"])`,
             type: "callout",
             variant: "success",
             content:
-              "Learning outcomes: explain API basics, identify client/server roles, and read JSON-style response objects.",
+              "You can now explain **why** APIs exist, what problem they solve, and trace a request from the user tap through the server and database back to the screen.",
           },
           {
             type: "quiz",
-            question: "What does an API mainly do?",
+            question: "What problem do APIs mainly solve?",
             options: [
-              "Draw UI buttons",
-              "Send email automatically",
-              "Let programs talk using agreed rules",
-              "Compile Python code",
+              "Making mobile screens brighter",
+              "Letting separate programs share data and actions safely",
+              "Replacing databases with spreadsheets",
+              "Compiling Python to machine code",
             ],
-            answer: 2,
+            answer: 1,
             explanation:
-              "An API is a communication contract between software systems.",
+              "APIs let clients and servers communicate with agreed rules so logic and data are not trapped in one app.",
           },
         ],
         challenge: {
-          title: "Build a simple API-style payload",
+          title: "Model an API response object",
           description:
-            "Create a dictionary `response` with keys `ok`, `message`, and `count`. Convert it to JSON text using `json.dumps()` and print it.",
-          starterCode: `import json
-
-# Create response dict and print JSON string
+            "Create a dictionary `restaurant` with keys `id` (number), `name` (string), and `open` (boolean). Print `restaurant['name']`.",
+          starterCode: `# Create restaurant dict and print its name
 `,
-          solutionCode: `import json
-
-response = {
-    "ok": True,
-    "message": "Welcome to PolyCode API",
-    "count": 3
+          solutionCode: `restaurant = {
+    "id": 1,
+    "name": "Spice Hub",
+    "open": True
 }
-print(json.dumps(response))`,
+print(restaurant["name"])`,
           tests: [
             {
               id: 1,
-              label: "Imports json module",
-              keywords: [{ pattern: "import\\s+json" }],
+              label: "Creates restaurant dictionary",
+              keywords: [{ pattern: "restaurant\\s*=\\s*\\{" }],
             },
             {
               id: 2,
-              label: "Creates response dictionary",
-              keywords: [{ pattern: "response\\s*=\\s*\\{" }],
+              label: "Contains name key",
+              keywords: [{ pattern: '"name"|\'name\'' }],
             },
             {
               id: 3,
-              label: "Uses json.dumps",
-              keywords: [{ pattern: "json\\.dumps\\s*\\(" }],
-            },
-            {
-              id: 4,
-              label: "Prints JSON text",
-              keywords: [{ pattern: "print\\s*\\(" }],
+              label: "Prints restaurant name",
+              keywords: [{ pattern: 'print\\s*\\(\\s*restaurant\\s*\\[\\s*"name"\\s*\\]' }],
             },
           ],
         },
       },
       {
         id: "fastapi-1",
-        title: "HTTP Methods",
+        title: "HTTP Methods & CRUD",
         xp: 10,
         theory: [
           {
             type: "text",
             content:
-              "HTTP methods describe **what action** a request wants. The core set is `GET`, `POST`, `PUT`, and `DELETE`.",
+              "HTTP is the **transport protocol** the web uses to move requests and responses. The **HTTP method** (also called verb) tells the server **what kind of action** the client wants — read data, create something new, update, or delete. Without methods, every URL would mean the same thing and APIs would be ambiguous.",
+          },
+          {
+            type: "callout",
+            variant: "info",
+            content:
+              "**Why do different methods exist?** Real apps need four core operations on data: **Create, Read, Update, Delete** (CRUD). HTTP methods map cleanly to those actions so both client and server agree on intent before any code runs.",
           },
           {
             type: "scenario",
-            title: "School API",
+            title: "Food delivery app — methods in action",
             content:
-              "A school app uses `GET /students` to read data, `POST /students` to add one, `PUT /students/7` to update, and `DELETE /students/7` to remove.",
+              "**GET** `/restaurants` — browse nearby restaurants (read). **POST** `/orders` — place a new order (create). **PUT** `/profile` — update your delivery address (update). **DELETE** `/cart/items/3` — remove an item from cart (delete). Same base URL patterns, different **methods** = different actions.",
           },
           {
             type: "table",
-            title: "Common methods",
-            columns: ["Method", "Use", "Typical status"],
+            title: "HTTP methods, CRUD, and when to use them",
+            columns: ["Method", "CRUD", "Purpose", "Example", "Typical status"],
             rows: [
-              { label: "GET", values: ["GET","Read data","200"] },
-              { label: "POST", values: ["POST","Create data","201"] },
-              { label: "PUT", values: ["PUT","Replace/update data","200"] },
-              { label: "DELETE", values: ["DELETE","Remove data","204 or 200"] },
+              { label: "GET", values: ["GET","Read","Fetch data without changing it","GET /restaurants","200"] },
+              { label: "POST", values: ["POST","Create","Add a new resource","POST /orders","201"] },
+              { label: "PUT", values: ["PUT","Update","Replace or update a resource","PUT /profile","200"] },
+              { label: "DELETE", values: ["DELETE","Delete","Remove a resource","DELETE /cart/items/3","204 or 200"] },
             ],
           },
           {
             type: "diagram",
-            title: "CRUD mapping",
+            title: "CRUD → HTTP method mapping",
             nodes: [
               {
                 id: "c",
                 label: "Create",
                 color: "#009688",
-                items: ["POST"],
+                items: ["POST", "Adds new record", "POST /students"],
               },
               {
                 id: "r",
                 label: "Read",
                 color: "#26a69a",
-                items: ["GET"],
+                items: ["GET", "Fetches existing data", "GET /students"],
               },
               {
                 id: "u",
                 label: "Update",
                 color: "#4db6ac",
-                items: ["PUT"],
+                items: ["PUT / PATCH", "Changes existing record", "PUT /students/7"],
               },
               {
                 id: "d",
                 label: "Delete",
                 color: "#80cbc4",
-                items: ["DELETE"],
+                items: ["DELETE", "Removes record", "DELETE /students/7"],
               },
             ],
           },
           {
+            type: "scenario",
+            title: "School management API",
+            content:
+              "A school portal uses `GET /students` to list students, `POST /students` to enroll a new student, `PUT /students/7` to update student 7's details, and `DELETE /students/7` to remove a record. The URL often stays similar — the **method** changes the behavior.",
+          },
+          {
+            type: "scenario",
+            title: "Login system example",
+            content:
+              "`POST /login` sends credentials in the request body (create a session). `GET /me` reads the current user profile (read). `PUT /me/password` updates the password (update). `DELETE /sessions` logs out everywhere (delete). Choosing the wrong method — like using GET for login — can expose sensitive data in URLs.",
+          },
+          {
             type: "code",
             lang: "python",
-            label: "Method names as plain strings",
-            content: `methods = ["GET", "POST", "PUT", "DELETE"]
-for m in methods:
-    print(m)`,
+            label: "Mapping CRUD actions to method names",
+            content: `method_map = {
+    "create": "POST",
+    "read": "GET",
+    "update": "PUT",
+    "delete": "DELETE"
+}
+print(method_map["read"])
+print(method_map["create"])`,
           },
           {
             type: "callout",
             variant: "success",
             content:
-              "Learning outcomes: pick the right method for CRUD actions and read basic status-code expectations.",
+              "You can now match real-world actions to the right HTTP method and explain the CRUD relationship — the foundation every REST API builds on.",
           },
           {
             type: "quiz",
-            question: "Which method is best for creating a new book record?",
+            question: "A user submits a form to place a new food order. Which HTTP method fits best?",
             options: ["GET", "POST", "PUT", "DELETE"],
             answer: 1,
-            explanation: "POST is the standard method for creating resources.",
+            explanation: "POST is the standard method for creating new resources like orders.",
           },
         ],
         challenge: {
@@ -249,71 +340,133 @@ print(method_map["delete"])`,
       },
       {
         id: "fastapi-2",
-        title: "JSON for APIs",
+        title: "JSON & Serialization",
         xp: 11,
         theory: [
           {
             type: "text",
             content:
-              "**JSON** is the common language for APIs. It looks like Python dictionaries/lists, but uses JSON rules (double quotes, true/false/null).",
+              "**JSON** (JavaScript Object Notation) is the **lingua franca of APIs**. It is text-based, human-readable, and supported by every major language and mobile platform. When a FastAPI route returns a Python dictionary, the framework converts it to JSON before sending it over HTTP.",
           },
           {
-            type: "scenario",
-            title: "Library books API",
+            type: "callout",
+            variant: "info",
             content:
-              "A library endpoint can return `[{'id':1,'title':'...'}]` in Python form, and then serialize it to JSON text for the client.",
+              "**Why do APIs use JSON?** HTTP carries **text** across the network — not Python objects, Java classes, or database rows. JSON is a universal text format both sides can parse. It is lighter than XML and easier to read than binary formats.",
+          },
+          {
+            type: "text",
+            content:
+              "**Why can't Python objects travel directly over HTTP?** A Python `dict` or `list` lives in your server's memory with Python-specific types (`True`, `None`, single-quoted strings). The client's phone or browser does not understand Python — it needs a **serialized** string it can parse into its own data structures.",
+          },
+          {
+            type: "diagram",
+            title: "Serialization: Python → JSON → client",
+            nodes: [
+              {
+                id: "py",
+                label: "Python object",
+                color: "#009688",
+                items: ["dict, list, bool", "Native types", 'e.g. {"open": True}'],
+              },
+              {
+                id: "dump",
+                label: "Serialize (json.dumps)",
+                color: "#26a69a",
+                items: ["Convert to JSON text", "True → true", "None → null"],
+              },
+              {
+                id: "wire",
+                label: "HTTP response body",
+                color: "#4db6ac",
+                items: ['Text over network', '{"open": true}', "Client receives string"],
+              },
+              {
+                id: "client",
+                label: "Client parses JSON",
+                color: "#80cbc4",
+                items: ["JavaScript object", "Swift struct", "Rendered in UI"],
+              },
+            ],
+          },
+          {
+            type: "diagram",
+            title: "Deserialization: client → JSON → Python",
+            nodes: [
+              {
+                id: "client-send",
+                label: "Client sends JSON",
+                color: "#009688",
+                items: ["POST body", '{"title": "Pizza"}', "Text in request"],
+              },
+              {
+                id: "receive",
+                label: "Server receives text",
+                color: "#26a69a",
+                items: ["Raw JSON string", "Not yet a Python dict"],
+              },
+              {
+                id: "load",
+                label: "Deserialize (json.loads)",
+                color: "#4db6ac",
+                items: ["Parse string to dict", "true → True", "null → None"],
+              },
+              {
+                id: "py-use",
+                label: "Python business logic",
+                color: "#80cbc4",
+                items: ["Validate fields", "Save to database", "Return response dict"],
+              },
+            ],
           },
           {
             type: "table",
             title: "Python vs JSON values",
             columns: ["Python", "JSON", "Notes"],
             rows: [
-              { label: "True", values: ["True","true","Boolean lowercase in JSON"] },
-              { label: "None", values: ["None","null","No value"] },
-              { label: "'text'", values: ["'text'","\"text\"","JSON strings use double quotes"] },
+              { label: "True", values: ["True","true","JSON booleans are lowercase"] },
+              { label: "False", values: ["False","false","Same rule as True"] },
+              { label: "None", values: ["None","null","JSON uses null for no value"] },
+              { label: "'text'", values: ["'text' or \"text\"","\"text\"","JSON strings always use double quotes"] },
+              { label: "42", values: ["42","42","Numbers work the same"] },
             ],
           },
           {
-            type: "diagram",
-            title: "Serialization flow",
-            nodes: [
-              {
-                id: "py",
-                label: "Python dict/list",
-                color: "#009688",
-                items: ["Native objects"],
-              },
-              {
-                id: "dump",
-                label: "json.dumps",
-                color: "#26a69a",
-                items: ["Convert to string"],
-              },
-              {
-                id: "wire",
-                label: "HTTP response body",
-                color: "#4db6ac",
-                items: ["Client receives JSON"],
-              },
-            ],
+            type: "scenario",
+            title: "Library books API",
+            content:
+              "Your route builds `books = [{'id': 1, 'title': 'FastAPI Guide'}]` in Python. FastAPI serializes it to `[{\"id\": 1, \"title\": \"FastAPI Guide\"}]` for the client. When a user submits a new book via POST, the client sends JSON text and FastAPI deserializes it back into a Python model you can validate and store.",
           },
           {
             type: "code",
             lang: "python",
-            label: "dumps and loads",
+            label: "json.dumps (serialize) and json.loads (deserialize)",
             content: `import json
 
 payload = {"book": "Python 101", "available": True}
-text = json.dumps(payload)
-back = json.loads(text)
-print(text)
-print(back["book"])`,
+text = json.dumps(payload)       # Python → JSON string
+back = json.loads(text)            # JSON string → Python
+print(text)                        # {"book": "Python 101", "available": true}
+print(back["book"])                # Python 101`,
           },
           {
             type: "callout",
-            variant: "info",
+            variant: "success",
             content:
-              "Learning outcomes: serialize dicts to JSON, parse JSON back, and avoid Python-vs-JSON value confusion.",
+              "You understand **why** JSON is used, **why** serialization is required, and can trace data in both directions: Python Object → JSON → Client and Client JSON → Python Object.",
+          },
+          {
+            type: "quiz",
+            question: "Why must a Python dict be converted before sending over HTTP?",
+            options: [
+              "Python dicts are too large for memory",
+              "HTTP carries text; clients cannot read raw Python objects",
+              "JSON is required by law for all websites",
+              "Databases only accept JSON files",
+            ],
+            answer: 1,
+            explanation:
+              "The network transports text. Serialization converts Python objects into a universal text format clients can parse.",
           },
         ],
         challenge: {
@@ -355,44 +508,144 @@ print(obj["course"])`,
           ],
         },
       },
-    ],
-  },
-  {
-    id: "first-app",
-    title: "Your First App",
-    icon: "🚀",
-    color: "#00a896",
-    lessons: [
       {
         id: "fastapi-3",
-        title: "Hello FastAPI",
+        title: "Introduction to FastAPI",
         xp: 12,
         theory: [
           {
             type: "text",
             content:
-              "Your first FastAPI app starts with `app = FastAPI()`. Then you add route decorators like `@app.get('/')`.",
+              "You now understand APIs, HTTP, and JSON. Next question: **how do you actually build an API in Python?** You could write raw HTTP handling yourself — parsing URLs, reading headers, formatting responses — but that is repetitive and error-prone. That is where a **framework** comes in.",
+          },
+          {
+            type: "callout",
+            variant: "info",
+            content:
+              "A **framework** is a toolkit that handles common plumbing so you focus on **your business logic**. Like building a house: you could forge every nail, or use proven materials and blueprints. Frameworks give you routing, request parsing, validation, and documentation out of the box.",
+          },
+          {
+            type: "text",
+            content:
+              "**Why not pure Python?** Without a framework you would manually read HTTP requests, map URLs to functions, serialize dicts to JSON, validate input by hand, and write API docs separately. A single typo in URL parsing could crash production. Frameworks solve these problems once so thousands of developers benefit.",
+          },
+          {
+            type: "text",
+            content:
+              "**FastAPI** is a modern Python framework for building APIs. It is designed for speed, clear type hints, automatic validation, and interactive documentation. You write Python functions with type annotations; FastAPI handles the rest — routing, JSON conversion, error responses, and OpenAPI docs at `/docs`.",
+          },
+          {
+            type: "table",
+            title: "What FastAPI solves for you",
+            columns: ["Problem", "Without a framework", "With FastAPI"],
+            rows: [
+              { label: "Routing", values: ["Routing","Manual URL parsing","`@app.get('/users')` decorators"] },
+              { label: "Validation", values: ["Validation","Hand-written if/else checks","Pydantic models + type hints"] },
+              { label: "JSON", values: ["JSON","Manual dumps/loads","Auto-serialize return dicts"] },
+              { label: "Docs", values: ["Docs","Write and maintain separately","Auto-generated at /docs"] },
+              { label: "Performance", values: ["Performance","Often blocking, one-at-a-time","ASGI + async support"] },
+            ],
+          },
+          {
+            type: "diagram",
+            title: "FastAPI core architecture — what it is built on",
+            nodes: [
+              {
+                id: "uvicorn",
+                label: "Uvicorn (ASGI server)",
+                color: "#009688",
+                items: ["Runs your Python app", "Handles many connections", "Production entry point"],
+              },
+              {
+                id: "asgi",
+                label: "ASGI protocol",
+                color: "#26a69a",
+                items: ["Async Server Gateway Interface", "Supports async/await", "Higher concurrency than WSGI"],
+              },
+              {
+                id: "starlette",
+                label: "Starlette",
+                color: "#4db6ac",
+                items: ["HTTP routing", "Requests & responses", "Middleware & WebSockets"],
+              },
+              {
+                id: "fastapi",
+                label: "FastAPI (your code)",
+                color: "#80cbc4",
+                items: ["Route decorators", "OpenAPI / docs", "Developer-friendly API"],
+              },
+              {
+                id: "pydantic",
+                label: "Pydantic",
+                color: "#b2dfdb",
+                items: ["Data validation", "Type hints → models", "Clear 422 error messages"],
+              },
+            ],
+          },
+          {
+            type: "text",
+            content:
+              "**Starlette** is the lightweight ASGI toolkit underneath FastAPI. It handles routing (matching URLs to functions), building request/response objects, middleware (code that runs before/after each request), and WebSocket support. FastAPI adds validation, docs, and developer ergonomics on top — you rarely touch Starlette directly, but it powers every request.",
+          },
+          {
+            type: "text",
+            content:
+              "**Pydantic** validates data using Python **type hints**. When a client sends `{\"age\": \"not-a-number\"}`, Pydantic rejects it before your function runs. FastAPI uses Pydantic models for request bodies and query parameters so bad input never reaches your business logic.",
+          },
+          {
+            type: "text",
+            content:
+              "**ASGI and Uvicorn:** Traditional synchronous servers handle **one request at a time** per worker — while waiting for a database, the worker sits idle. **ASGI** enables **async** handling: while one request waits for I/O, the server can work on others. **Uvicorn** is the ASGI server that runs your FastAPI app in production. This is a key reason FastAPI is considered high-performance.",
+          },
+          {
+            type: "table",
+            title: "Why FastAPI is fast and popular",
+            columns: ["Feature", "Benefit", "Compared to older approaches"],
+            rows: [
+              { label: "Async support", values: ["Async support","Handle many I/O-bound requests efficiently","WSGI servers often block per request"] },
+              { label: "Type hints", values: ["Type hints","Editor autocomplete + fewer bugs","Untyped dicts need manual checks"] },
+              { label: "Auto validation", values: ["Auto validation","Reject bad input with clear errors","Hand-written validation scattered in code"] },
+              { label: "Auto docs", values: ["Auto docs","Interactive /docs and /redoc","Separate Swagger maintenance"] },
+              { label: "Performance", values: ["Performance","Among fastest Python frameworks","Comparable to Node and Go for many workloads"] },
+            ],
+          },
+          {
+            type: "text",
+            content:
+              "**Decorators before routes:** In Python, a **decorator** is a function that wraps another function to add behavior. FastAPI uses decorators like `@app.get(\"/\")` to **connect a URL and HTTP method to your Python function**. Analogy: the decorator is a **label on a mailbox** — when mail arrives for `/restaurants`, FastAPI delivers it to the function you labeled.",
+          },
+          {
+            type: "code",
+            lang: "python",
+            label: "Decorator concept (plain Python)",
+            content: `def greet_decorator(func):
+    def wrapper():
+        print("Before request")
+        func()
+        print("After response")
+    return wrapper
+
+@greet_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()`,
+          },
+          {
+            type: "text",
+            content:
+              "`@app.get(\"/\")` works the same way: FastAPI registers your function as the handler for `GET /`. When a client hits that URL, your function runs and its return value becomes the JSON response.",
           },
           {
             type: "scenario",
             title: "Welcome endpoint",
             content:
-              "A new mobile client opens your app and calls `GET /`. Your API returns `{'message': 'Welcome'}` so the app shows a friendly greeting.",
-          },
-          {
-            type: "table",
-            title: "First-app pieces",
-            columns: ["Piece", "Purpose", "Example"],
-            rows: [
-              { label: "FastAPI()", values: ["FastAPI()","Create app instance","app = FastAPI()"] },
-              { label: "@app.get", values: ["@app.get","Bind route to function","@app.get('/')"] },
-              { label: "return dict", values: ["return dict","JSON response body","{'ok': True}"] },
-            ],
+              "A new mobile client opens your app and calls `GET /`. Your API returns `{\"message\": \"Welcome\"}` so the app shows a friendly greeting. You write ~10 lines of Python; FastAPI + Starlette + Pydantic handle routing, serialization, and docs.",
           },
           {
             type: "code",
             lang: "python",
-            label: "Tiny runnable app with TestClient",
+            label: "Your first FastAPI endpoint with TestClient",
             content: `from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
@@ -408,23 +661,34 @@ print(r.status_code)
 print(r.json())`,
           },
           {
+            type: "table",
+            title: "First endpoint building blocks",
+            columns: ["Piece", "Purpose", "Example"],
+            rows: [
+              { label: "FastAPI()", values: ["FastAPI()","Create app instance","app = FastAPI()"] },
+              { label: "@app.get", values: ["@app.get","Bind URL + method to function","@app.get('/')"] },
+              { label: "return dict", values: ["return dict","Becomes JSON response body","{\"ok\": True}"] },
+              { label: "TestClient", values: ["TestClient","Call routes in code without uvicorn","client.get('/')"] },
+            ],
+          },
+          {
             type: "callout",
             variant: "success",
             content:
-              "Learning outcomes: create `FastAPI()` instance, define first GET route, and test locally with `TestClient`.",
+              "You can explain what FastAPI is built on (Starlette, Pydantic, ASGI/Uvicorn), why it exists, how decorators connect URLs to functions, and write your first working endpoint.",
           },
           {
             type: "quiz",
-            question: "Why use `TestClient` in this course?",
+            question: "What does Pydantic mainly provide in a FastAPI app?",
             options: [
-              "It replaces Python",
-              "It lets us test routes without running uvicorn",
-              "It creates database tables",
-              "It is only for frontend apps",
+              "Database migrations",
+              "Data validation from type hints and models",
+              "CSS styling for /docs",
+              "Replacing Uvicorn as the server",
             ],
             answer: 1,
             explanation:
-              "TestClient can call your app directly in code, which is perfect for lesson challenges.",
+              "Pydantic validates incoming and outgoing data using Python type hints and model classes.",
           },
         ],
         challenge: {
@@ -478,6 +742,14 @@ print(r.json())`,
           ],
         },
       },
+    ],
+  },
+  {
+    id: "first-app",
+    title: "Your First App",
+    icon: "🚀",
+    color: "#00a896",
+    lessons: [
       {
         id: "fastapi-4",
         title: "Path Parameters",
