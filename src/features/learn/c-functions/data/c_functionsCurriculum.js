@@ -50,7 +50,7 @@ export const C_FUNCTIONS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Declaring & Calling Functions!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_functions-0-1",
         title: "Return Types & void",
@@ -72,7 +72,7 @@ export const C_FUNCTIONS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Return Types & void!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_functions-0-2",
         title: "Function Prototypes",
@@ -124,7 +124,7 @@ export const C_FUNCTIONS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Pass by Value!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_functions-1-1",
         title: "Multiple Parameters",
@@ -146,7 +146,7 @@ export const C_FUNCTIONS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Multiple Parameters!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_functions-1-2",
         title: "Default-like Patterns",
@@ -198,7 +198,7 @@ export const C_FUNCTIONS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from What is Recursion?!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_functions-2-1",
         title: "Factorial & Fibonacci",
@@ -220,7 +220,7 @@ export const C_FUNCTIONS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Factorial & Fibonacci!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_functions-2-2",
         title: "Tail Recursion",
@@ -272,7 +272,7 @@ export const C_FUNCTIONS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Local vs Global Variables!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_functions-3-1",
         title: "static Variables",
@@ -294,7 +294,7 @@ export const C_FUNCTIONS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from static Variables!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_functions-3-2",
         title: "extern Keyword",
@@ -346,7 +346,7 @@ export const C_FUNCTIONS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Pointers to Functions!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_functions-4-1",
         title: "Callbacks Pattern",
@@ -368,7 +368,7 @@ export const C_FUNCTIONS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Callbacks Pattern!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_functions-4-2",
         title: "Capstone: Command Dispatcher",

@@ -50,7 +50,7 @@ export const C_MEMORY_MANAGEMENT_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Stack vs Heap!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_memory_management-0-1",
         title: "Code, Data, BSS Segments",
@@ -72,7 +72,7 @@ export const C_MEMORY_MANAGEMENT_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Code, Data, BSS Segments!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_memory_management-0-2",
         title: "Memory Addresses",
@@ -124,7 +124,7 @@ export const C_MEMORY_MANAGEMENT_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from malloc — allocate memory!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_memory_management-1-1",
         title: "free — release memory",
@@ -146,7 +146,7 @@ export const C_MEMORY_MANAGEMENT_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from free — release memory!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_memory_management-1-2",
         title: "NULL check after malloc",
@@ -198,7 +198,7 @@ export const C_MEMORY_MANAGEMENT_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from calloc — zero-initialised!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_memory_management-2-1",
         title: "realloc — resize memory",
@@ -220,7 +220,7 @@ export const C_MEMORY_MANAGEMENT_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from realloc — resize memory!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_memory_management-2-2",
         title: "Combining malloc & realloc",
@@ -272,7 +272,7 @@ export const C_MEMORY_MANAGEMENT_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Memory Leaks!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_memory_management-3-1",
         title: "Dangling Pointers",
@@ -294,7 +294,7 @@ export const C_MEMORY_MANAGEMENT_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Dangling Pointers!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_memory_management-3-2",
         title: "Buffer Overflows",
@@ -346,7 +346,7 @@ export const C_MEMORY_MANAGEMENT_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Dynamic Array!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_memory_management-4-1",
         title: "Safe Free Pattern",
@@ -368,7 +368,7 @@ export const C_MEMORY_MANAGEMENT_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Safe Free Pattern!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_memory_management-4-2",
         title: "Capstone: Dynamic String Builder",

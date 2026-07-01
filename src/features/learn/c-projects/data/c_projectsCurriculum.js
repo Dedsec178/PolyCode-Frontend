@@ -50,7 +50,7 @@ export const C_PROJECTS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from C Project Structure!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_projects-0-1",
         title: "Makefiles Basics",
@@ -72,7 +72,7 @@ export const C_PROJECTS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Makefiles Basics!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_projects-0-2",
         title: "Header Guards",
@@ -124,7 +124,7 @@ export const C_PROJECTS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Requirements & Design!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_projects-1-1",
         title: "Parsing User Input",
@@ -146,7 +146,7 @@ export const C_PROJECTS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Parsing User Input!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_projects-1-2",
         title: "Implementing Operations",
@@ -198,7 +198,7 @@ export const C_PROJECTS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Struct Design for Students!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_projects-2-1",
         title: "Add, Remove, Update Records",
@@ -220,7 +220,7 @@ export const C_PROJECTS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Add, Remove, Update Records!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_projects-2-2",
         title: "Save & Load from File",
@@ -272,7 +272,7 @@ export const C_PROJECTS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Task Struct & List!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_projects-3-1",
         title: "Add & Complete Tasks",
@@ -294,7 +294,7 @@ export const C_PROJECTS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Add & Complete Tasks!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_projects-3-2",
         title: "Persist Tasks to File",
@@ -346,7 +346,7 @@ export const C_PROJECTS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Capstone Spec: Library Manager!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_projects-4-1",
         title: "Implementation: Core Logic",
@@ -368,7 +368,7 @@ export const C_PROJECTS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Implementation: Core Logic!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_projects-4-2",
         title: "Polish & Edge Cases",

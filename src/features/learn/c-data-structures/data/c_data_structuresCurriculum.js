@@ -50,7 +50,7 @@ export const C_DATA_STRUCTURES_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from struct in C!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_data_structures-0-1",
         title: "typedef with struct",
@@ -72,7 +72,7 @@ export const C_DATA_STRUCTURES_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from typedef with struct!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_data_structures-0-2",
         title: "Arrays of Structs",
@@ -124,7 +124,7 @@ export const C_DATA_STRUCTURES_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Singly Linked List!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_data_structures-1-1",
         title: "Insert & Delete Nodes",
@@ -146,7 +146,7 @@ export const C_DATA_STRUCTURES_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Insert & Delete Nodes!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_data_structures-1-2",
         title: "Traversal & Search",
@@ -198,7 +198,7 @@ export const C_DATA_STRUCTURES_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Stack with Array!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_data_structures-2-1",
         title: "Queue with Array",
@@ -220,7 +220,7 @@ export const C_DATA_STRUCTURES_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Queue with Array!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_data_structures-2-2",
         title: "Stack & Queue with Linked List",
@@ -272,7 +272,7 @@ export const C_DATA_STRUCTURES_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Binary Tree Basics!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_data_structures-3-1",
         title: "BST Insert & Search",
@@ -294,7 +294,7 @@ export const C_DATA_STRUCTURES_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from BST Insert & Search!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      } ,
       {
         id: "c_data_structures-3-2",
         title: "Tree Traversal",
@@ -346,7 +346,7 @@ export const C_DATA_STRUCTURES_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Bubble Sort!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_data_structures-4-1",
         title: "Selection & Insertion Sort",
@@ -368,7 +368,7 @@ export const C_DATA_STRUCTURES_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Selection & Insertion Sort!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_data_structures-4-2",
         title: "Capstone: Student Grade Book",

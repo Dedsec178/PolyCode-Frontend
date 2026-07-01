@@ -50,7 +50,7 @@ export const C_POINTERS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from What is a Pointer?!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_pointers-0-1",
         title: "Dereferencing with *",
@@ -72,7 +72,7 @@ export const C_POINTERS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Dereferencing with *!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_pointers-0-2",
         title: "NULL Pointer",
@@ -124,7 +124,7 @@ export const C_POINTERS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Incrementing Pointers!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_pointers-1-1",
         title: "Pointer Subtraction",
@@ -146,7 +146,7 @@ export const C_POINTERS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Pointer Subtraction!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_pointers-1-2",
         title: "Comparing Pointers",
@@ -198,7 +198,7 @@ export const C_POINTERS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Array Name as Pointer!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_pointers-2-1",
         title: "Iterating with Pointers",
@@ -220,7 +220,7 @@ export const C_POINTERS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Iterating with Pointers!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_pointers-2-2",
         title: "2D Arrays & Pointers",
@@ -272,7 +272,7 @@ export const C_POINTERS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from char* vs char[]!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_pointers-3-1",
         title: "String Functions & Pointers",
@@ -294,7 +294,7 @@ export const C_POINTERS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from String Functions & Pointers!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_pointers-3-2",
         title: "Array of Strings",
@@ -346,7 +346,7 @@ export const C_POINTERS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Double Pointers (**)!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_pointers-4-1",
         title: "Pointers to Structs",
@@ -368,7 +368,7 @@ export const C_POINTERS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Pointers to Structs!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_pointers-4-2",
         title: "Capstone: Linked List Node",

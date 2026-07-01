@@ -50,7 +50,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from What is C?!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-0-1",
         title: "Your First C Program",
@@ -72,7 +72,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Your First C Program!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-0-2",
         title: "How C Compiles",
@@ -124,7 +124,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from int, float, char, double!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-1-1",
         title: "Constants & #define",
@@ -146,7 +146,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Constants & #define!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-1-2",
         title: "Type Casting",
@@ -198,7 +198,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Arithmetic Operators!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-2-1",
         title: "Relational & Logical",
@@ -220,7 +220,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Relational & Logical!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-2-2",
         title: "Bitwise Operators",
@@ -272,7 +272,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from if / else / else if!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-3-1",
         title: "switch Statement",
@@ -294,7 +294,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from switch Statement!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-3-2",
         title: "while & do-while Loops",
@@ -316,7 +316,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from while & do-while Loops!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-3-3",
         title: "for Loops",
@@ -338,7 +338,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from for Loops!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-3-4",
         title: "break & continue",
@@ -390,7 +390,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from printf & format specifiers!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-4-1",
         title: "scanf & user input",
@@ -412,7 +412,7 @@ export const C_FUNDAMENTALS_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from scanf & user input!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_fundamentals-4-2",
         title: "Capstone: Simple Calculator",

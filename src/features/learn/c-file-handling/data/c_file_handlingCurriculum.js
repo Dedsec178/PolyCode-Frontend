@@ -50,7 +50,7 @@ export const C_FILE_HANDLING_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from What is a File in C?!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_file_handling-0-1",
         title: "fopen & fclose",
@@ -72,7 +72,7 @@ export const C_FILE_HANDLING_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from fopen & fclose!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_file_handling-0-2",
         title: "Error Handling with Files",
@@ -124,7 +124,7 @@ export const C_FILE_HANDLING_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from fgetc & fgets!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_file_handling-1-1",
         title: "fscanf",
@@ -146,7 +146,7 @@ export const C_FILE_HANDLING_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from fscanf!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_file_handling-1-2",
         title: "fread — binary reads",
@@ -198,7 +198,7 @@ export const C_FILE_HANDLING_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from fputc & fputs!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_file_handling-2-1",
         title: "fprintf",
@@ -220,7 +220,7 @@ export const C_FILE_HANDLING_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from fprintf!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_file_handling-2-2",
         title: "fwrite — binary writes",
@@ -272,7 +272,7 @@ export const C_FILE_HANDLING_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from fseek & ftell!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_file_handling-3-1",
         title: "rewind",
@@ -294,7 +294,7 @@ export const C_FILE_HANDLING_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from rewind!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_file_handling-3-2",
         title: "feof & ferror",
@@ -346,7 +346,7 @@ export const C_FILE_HANDLING_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Reading a CSV in C!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_file_handling-4-1",
         title: "Binary File Store",
@@ -368,7 +368,7 @@ export const C_FILE_HANDLING_CHAPTERS = [
           solution: `#include <stdio.h>\n\nint main() {\n    printf("Hello from Binary File Store!\\n");\n    return 0;\n}`,
           tests: [{ id: "t1", label: "Program runs without error", hint: "Make sure main() returns 0." }],
         },
-      }
+      },
       {
         id: "c_file_handling-4-2",
         title: "Capstone: Note Saver App",
