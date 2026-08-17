@@ -26,6 +26,7 @@ import {
 export function languageKey(value = "") {
   const normalized = value.toLowerCase().replace(/\s+/g, "");
   if (normalized === "html&css") return "htmlcss";
+  if (normalized === "q#" || normalized === "qsharp") return "qsharp";
   return normalized;
 }
 
@@ -57,6 +58,13 @@ export const generalCourses = [
 
 /** Interactive courses shown on /language/:language (language-specific only). */
 export const languageCourses = {
+  qsharp: [
+    { title: "Q# Fundamentals", tag: "Core Course", icon: Atom, description: "Learn Q# language basics, operations, functions, qubit allocation, and measurement.", href: "/learn/qsharp-fundamentals", accent: "#0078d4" },
+    { title: "Quantum Programming Basics", tag: "Basics Course", icon: BrainCircuit, description: "Master superposition, state preparation, single-qubit transformations, and qubit registers.", href: "/learn/qsharp-quantum-programming-basics", accent: "#0284c7" },
+    { title: "Quantum Gates", tag: "Core Gates Course", icon: Cpu, description: "Deep dive into Pauli gates (X, Y, Z), rotation gates, phase gates, CNOT, CZ, SWAP, and Toffoli gates.", href: "/learn/qsharp-quantum-gates", accent: "#e11d48" },
+    { title: "Quantum Algorithms", tag: "Algorithms Course", icon: Brain, description: "Implement Deutsch-Jozsa, Bernstein-Vazirani, Grover's Search, and Quantum Phase Estimation in Q#.", href: "/learn/qsharp-quantum-algorithms", accent: "#a855f7" },
+    { title: "Quantum Projects", tag: "Projects Course", icon: Boxes, description: "Build end-to-end Q# quantum applications: Quantum Key Distribution (BB84), Teleportation, QRNG, and VQE Capstone.", href: "/learn/qsharp-quantum-projects", accent: "#ec4899" },
+  ],
   sql: [
     { title: "SQL Fundamentals", tag: "Core Course", icon: Database, description: "Learn database basics, tables, and standard SQL syntax.", href: "/learn/sql-fundamentals", accent: "#00758f" },
     { title: "SQL Queries", tag: "Core Course", icon: Database, description: "Master SELECT, WHERE, ORDER BY, and basic data retrieval.", href: "/learn/sql-queries", accent: "#00758f" },
@@ -1071,6 +1079,12 @@ export const courseStackGroups = [
     languagePath: "/language/Batchfile",
   },
   {
+    id: "qsharp",
+    label: "Q#",
+    accent: "#0078d4",
+    languagePath: "/language/Q%23",
+  },
+  {
     id: "rust",
     label: "Rust",
     accent: "#ce422b",
@@ -1212,12 +1226,20 @@ export const learnNavByLanguage = {
     { label: "Projects", to: "/learn/batchfile-projects" },
     { label: "Windows Scripting", to: "/learn/windows-scripting" },
   ],
+  qsharp: [
+    { label: "Q# Fundamentals", to: "/learn/qsharp-fundamentals" },
+    { label: "Quantum Programming Basics", to: "/learn/qsharp-quantum-programming-basics" },
+    { label: "Quantum Gates", to: "/learn/qsharp-quantum-gates" },
+    { label: "Quantum Algorithms", to: "/learn/qsharp-quantum-algorithms" },
+    { label: "Quantum Projects", to: "/learn/qsharp-quantum-projects" },
+  ],
 };
 
 const learnNavLanguageAliases = {
   "c++": "cpp",
   "c#": "csharp",
   "html&css": "htmlcss",
+  "q#": "qsharp",
 };
 
 function normalizeLearnNavLanguageKey(key = "") {
@@ -1373,6 +1395,15 @@ export function inferLanguageFromLearnPath(pathname = "") {
     pathname.startsWith("/learn/rust-projects")
   ) {
     return "rust";
+  }
+  if (
+    pathname.startsWith("/learn/qsharp-fundamentals") ||
+    pathname.startsWith("/learn/qsharp-quantum-programming-basics") ||
+    pathname.startsWith("/learn/qsharp-quantum-gates") ||
+    pathname.startsWith("/learn/qsharp-quantum-algorithms") ||
+    pathname.startsWith("/learn/qsharp-quantum-projects")
+  ) {
+    return "qsharp";
   }
   return null;
 }

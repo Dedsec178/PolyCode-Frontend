@@ -80,6 +80,12 @@ export const COURSE_PROGRESS_REGISTRY = [
   { courseId: "batchfile-fundamentals", storagePrefix: "batchfile-fundamentals", scoped: false, notes: false },
   { courseId: "batchfile-automation", storagePrefix: "batchfile-automation", scoped: false, notes: false },
   { courseId: "windows-scripting", storagePrefix: "windows-scripting", scoped: false, notes: false },
+  // ─── ADD Q# COURSES ────────────────────────────────────────────────────────
+  { courseId: "qsharp-fundamentals", storagePrefix: "qsharp_fundamentals", scoped: true, notes: false },
+  { courseId: "qsharp-quantum-programming-basics", storagePrefix: "qsharp_quantum_programming_basics", scoped: true, notes: false },
+  { courseId: "qsharp-quantum-gates", storagePrefix: "qsharp_quantum_gates", scoped: true, notes: false },
+  { courseId: "qsharp-quantum-algorithms", storagePrefix: "qsharp_quantum_algorithms", scoped: true, notes: false },
+  { courseId: "qsharp-quantum-projects", storagePrefix: "qsharp_quantum_projects", scoped: true, notes: false },
 ];
 
 export function getCourseRegistryEntry(courseId) {

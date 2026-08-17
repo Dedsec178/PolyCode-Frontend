@@ -93,6 +93,20 @@ const languageMeta = {
     description:
       "Explore quantum computing concepts, circuits, gates, simulators, and hybrid classical-quantum workflows.",
   },
+  qsharp: {
+    name: "Q#",
+    Icon: Sparkles,
+    color: "#0078d4",
+    description:
+      "Master Microsoft's Q# programming language for quantum computing, quantum gates, superposition, and quantum algorithms.",
+  },
+  "q#": {
+    name: "Q#",
+    Icon: Sparkles,
+    color: "#0078d4",
+    description:
+      "Master Microsoft's Q# programming language for quantum computing, quantum gates, superposition, and quantum algorithms.",
+  },
 };
 
 function normalizeLanguage(value = "") {

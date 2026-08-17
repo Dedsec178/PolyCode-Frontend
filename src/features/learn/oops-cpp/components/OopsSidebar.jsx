@@ -7,7 +7,7 @@ import LessonStatusIcon from "../../shared/LessonStatusIcon";
 
 export default function OopsSidebar({
   currentLessonId,
-  progress,
+  progress = {},
   chapters = CHAPTERS,
   basePath = "/learn/oops-cpp",
   title = "OOP in C++",

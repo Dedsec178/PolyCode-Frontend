@@ -1039,6 +1039,86 @@ const LEARN_COURSE_ROUTES = [
     ),
   },
   {
+    slug: "qsharp-fundamentals",
+    language: "Q#",
+    Hub: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/qsharp-fundamentals/pages/QsharpFundamentalsHub"
+        ),
+    ),
+    Lesson: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/qsharp-fundamentals/pages/QsharpFundamentalsLessonPage"
+        ),
+    ),
+  },
+  {
+    slug: "qsharp-quantum-programming-basics",
+    language: "Q#",
+    Hub: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/qsharp-quantum-programming-basics/pages/QsharpQuantumProgrammingBasicsHub"
+        ),
+    ),
+    Lesson: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/qsharp-quantum-programming-basics/pages/QsharpQuantumProgrammingBasicsLessonPage"
+        ),
+    ),
+  },
+  {
+    slug: "qsharp-quantum-gates",
+    language: "Q#",
+    Hub: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/qsharp-quantum-gates/pages/QsharpQuantumGatesHub"
+        ),
+    ),
+    Lesson: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/qsharp-quantum-gates/pages/QsharpQuantumGatesLessonPage"
+        ),
+    ),
+  },
+  {
+    slug: "qsharp-quantum-algorithms",
+    language: "Q#",
+    Hub: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/qsharp-quantum-algorithms/pages/QsharpQuantumAlgorithmsHub"
+        ),
+    ),
+    Lesson: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/qsharp-quantum-algorithms/pages/QsharpQuantumAlgorithmsLessonPage"
+        ),
+    ),
+  },
+  {
+    slug: "qsharp-quantum-projects",
+    language: "Q#",
+    Hub: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/qsharp-quantum-projects/pages/QsharpQuantumProjectsHub"
+        ),
+    ),
+    Lesson: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/qsharp-quantum-projects/pages/QsharpQuantumProjectsLessonPage"
+        ),
+    ),
+  },
+  {
     slug: "csharp-oop",
     language: "C#",
     Hub: lazyWithChunkRetry(
