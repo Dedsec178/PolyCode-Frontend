@@ -300,6 +300,19 @@ def relu(x):
     return _wrap(out, requires_grad=x.requires_grad, parents=[x] if x.requires_grad else [], op="relu")
 
 
+def softmax(x, dim=-1):
+    x = x if isinstance(x, Tensor) else tensor(x)
+    arr = x._data
+    axis = dim if dim >= 0 else arr.ndim + dim
+    if axis != arr.ndim - 1:
+        arr = np.moveaxis(arr, axis, -1)
+        out = _softmax(arr)
+        out = np.moveaxis(out, -1, axis)
+    else:
+        out = _softmax(arr)
+    return _wrap(out, requires_grad=x.requires_grad, parents=[x] if x.requires_grad else [], op="softmax")
+
+
 @contextmanager
 def no_grad():
     yield
@@ -581,6 +594,7 @@ torch.rand = rand
 torch.randn = randn
 torch.from_numpy = from_numpy
 torch.relu = relu
+torch.softmax = softmax
 torch.no_grad = no_grad
 torch.cuda = cuda
 torch.save = save
