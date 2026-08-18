@@ -49,9 +49,6 @@ export default function GoModulesLessonPage() {
   const codeSaveTimer = useRef(null);
 
   const lesson = GO_MODULES_LESSONS.find((item) => item.id === lessonId);
-  const lessonIdx = GO_MODULES_LESSONS.findIndex((item) => item.id === lessonId);
-  const prev = GO_MODULES_LESSONS[lessonIdx - 1];
-  const next = GO_MODULES_LESSONS[lessonIdx + 1];
 
   useLessonAssistantContext({
     course: "Go Modules",
