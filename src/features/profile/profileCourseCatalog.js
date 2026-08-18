@@ -172,6 +172,9 @@ export const COURSE_DISPLAY_NAMES = {
   "sql-stored-procedures": "SQL Stored Procedures",
   "sql-projects": "SQL Projects",
   "go-fundamentals": "Go Fundamentals",
+  "go-functions": "Go Functions",
+  "go-concurrency": "Go Concurrency",
+  "go-modules": "Go Modules",
   "rust-fundamentals": "Rust Fundamentals",
   "java-fundamentals": "Java Fundamentals",
   "java-intermediate": "Java Intermediate",
@@ -182,6 +185,11 @@ export const COURSE_DISPLAY_NAMES = {
   "java-jdbc": "Java JDBC",
   "java-spring-boot": "Java Spring Boot",
   "java-projects": "Java Projects",
+  "qsharp-fundamentals": "Q# Fundamentals",
+  "qsharp-quantum-programming-basics": "Quantum Programming Basics",
+  "qsharp-quantum-gates": "Quantum Gates",
+  "qsharp-quantum-algorithms": "Quantum Algorithms",
+  "qsharp-quantum-projects": "Quantum Projects",
 };
 
 export function slugifyCourseName(name) {
