@@ -596,6 +596,15 @@ export const languageCourses = {
       href: "/learn/csharp-aspnet-basics",
       accent: "#179c24",
     },
+    {
+      title: "C# Projects",
+      tag: "Interactive Course",
+      icon: Brain,
+      description:
+        "Build 4 real, growing projects — a contact book, a persistent todo list, a grade analyzer, and a mini task API — applying everything from Fundamentals to ASP.NET Basics.",
+      href: "/learn/csharp-projects",
+      accent: "#179c24",
+    },
   ],
   "c#": [
     {
@@ -650,6 +659,15 @@ export const languageCourses = {
       description:
         "Minimal APIs, routing, DTOs, dependency injection, and the middleware pipeline — the core patterns behind ASP.NET Core.",
       href: "/learn/csharp-aspnet-basics",
+      accent: "#179c24",
+    },
+    {
+      title: "C# Projects",
+      tag: "Interactive Course",
+      icon: Brain,
+      description:
+        "Build 4 real, growing projects — a contact book, a persistent todo list, a grade analyzer, and a mini task API — applying everything from Fundamentals to ASP.NET Basics.",
+      href: "/learn/csharp-projects",
       accent: "#179c24",
     },
   ],
@@ -1139,6 +1157,7 @@ export const learnNavByLanguage = {
     { label: "C# LINQ", to: "/learn/csharp-linq" },
     { label: "C# File Handling", to: "/learn/csharp-file-handling" },
     { label: "C# ASP.NET Basics", to: "/learn/csharp-aspnet-basics" },
+    { label: "C# Projects", to: "/learn/csharp-projects" },
   ],
   "c#": [
     { label: "C# Basics", to: "/learn/c-sharp-fundamentals" },
@@ -1147,6 +1166,7 @@ export const learnNavByLanguage = {
     { label: "C# LINQ", to: "/learn/csharp-linq" },
     { label: "C# File Handling", to: "/learn/csharp-file-handling" },
     { label: "C# ASP.NET Basics", to: "/learn/csharp-aspnet-basics" },
+    { label: "C# Projects", to: "/learn/csharp-projects" },
   ],
   ruby: [
     { label: "Ruby Basics", to: "/learn/ruby-fundamentals" },
@@ -1290,7 +1310,8 @@ export function inferLanguageFromLearnPath(pathname = "") {
     pathname.startsWith("/learn/csharp-collections") ||
     pathname.startsWith("/learn/csharp-linq") ||
     pathname.startsWith("/learn/csharp-file-handling") ||
-    pathname.startsWith("/learn/csharp-aspnet-basics")
+    pathname.startsWith("/learn/csharp-aspnet-basics") ||
+    pathname.startsWith("/learn/csharp-projects")
   ) {
     return "csharp";
   }
