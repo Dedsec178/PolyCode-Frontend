@@ -82,7 +82,7 @@ ${GO_MAIN_END}`,
 ${GO_MAIN_END}`,
           tests: [
             { id: 1, label: "Prints module ready", keywords: [{ pattern: "module ready" }] },
-            { id: 2, label: "Uses fmt.Println", keywords: [{ pattern: "fmt\.Println" }] },
+            { id: 2, label: "Uses fmt.Println", keywords: [{ pattern: "fmt\\.Println" }] },
           ],
         },
       },
@@ -163,7 +163,7 @@ ${GO_MAIN_END}`,
           solutionCode: `${GO_MAIN}    fmt.Println("go.sum recorded")
 ${GO_MAIN_END}`,
           tests: [
-            { id: 1, label: "Expected output present", keywords: [{ pattern: "go\.sum recorded" }] },
+            { id: 1, label: "Expected output present", keywords: [{ pattern: "go\\.sum recorded" }] },
           ],
         },
       },

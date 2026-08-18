@@ -69,12 +69,6 @@ export default function GoConcurrencyHub() {
     GO_CONCURRENCY_LESSONS[0];
   const resumeLesson =
     GO_CONCURRENCY_LESSONS.find((lesson) => lesson.id === lastLessonId) || nextLesson;
-  const chaptersForStage = GO_CONCURRENCY_CHAPTERS.filter(
-    (chapter) => (chapter.stage || "beginner") === stage,
-  );
-  const completedChapters = chaptersForStage.filter((chapter) =>
-    chapter.lessons.every((lesson) => progress[lesson.id]),
-  ).length;
   const bookmarkedLessons = bookmarks
     .map((id) => GO_CONCURRENCY_LESSONS.find((lesson) => lesson.id === id))
     .filter(Boolean);

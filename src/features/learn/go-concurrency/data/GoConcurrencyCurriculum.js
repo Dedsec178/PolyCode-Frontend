@@ -1,4 +1,4 @@
-﻿// PolyCode — Go Concurrency interactive course
+// PolyCode — Go Concurrency interactive course
 // 6 chapters · 18 lessons · Go concurrency patterns
 
 import { applyLessonVideoLinks } from "../../shared/applyLessonVideoLinks";
@@ -103,9 +103,9 @@ func main() {
     worker("main")
 }`,
           tests: [
-            { id: 1, label: "Defines worker", keywords: [{ pattern: "func\\s+worker\\(name\\s+string\)" }] },
-            { id: 2, label: "Starts goroutine", keywords: [{ pattern: "go\\s+worker\\(\"alpha\"\)" }] },
-            { id: 3, label: "Calls directly\n", keywords: [{ pattern: "worker\\(\"main\"\)" }] },
+            { id: 1, label: "Defines worker", keywords: [{ pattern: "func\\s+worker\\(name\\s+string\\)" }] },
+            { id: 2, label: "Starts goroutine", keywords: [{ pattern: "go\\s+worker\\(\"alpha\"\\)" }] },
+            { id: 3, label: "Calls directly\n", keywords: [{ pattern: "worker\\(\"main\"\\)" }] },
           ],
         },
       },
@@ -201,8 +201,8 @@ func main() {
     fmt.Println("All done")
 }`,
           tests: [
-            { id: 1, label: "Uses WaitGroup", keywords: [{ pattern: "sync\.WaitGroup" }] },
-            { id: 2, label: "Calls Add and Wait", keywords: [{ pattern: "wg\.Add\(1\)|wg\.Wait\(\)" }] },
+            { id: 1, label: "Uses WaitGroup", keywords: [{ pattern: "sync\\.WaitGroup" }] },
+            { id: 2, label: "Calls Add and Wait", keywords: [{ pattern: "wg\\.Add\\(1\\)|wg\\.Wait\\(\\)" }] },
             { id: 3, label: "Prints All done", keywords: [{ pattern: "All done" }] },
           ],
         },
@@ -306,9 +306,9 @@ func main() {
     fmt.Println("counter:", counter)
 }`,
           tests: [
-            { id: 1, label: "Uses Mutex", keywords: [{ pattern: "sync\.Mutex" }] },
-            { id: 2, label: "Locks before increment", keywords: [{ pattern: "mu\.Lock\(\)" }] },
-            { id: 3, label: "Prints final counter", keywords: [{ pattern: "fmt\.Println\(\"counter:\",\s*counter\)" }] },
+            { id: 1, label: "Uses Mutex", keywords: [{ pattern: "sync\\.Mutex" }] },
+            { id: 2, label: "Locks before increment", keywords: [{ pattern: "mu\\.Lock\\(\\)" }] },
+            { id: 3, label: "Prints final counter", keywords: [{ pattern: "fmt\\.Println\\(\"counter:\",\\s*counter\\)" }] },
           ],
         },
       },
@@ -390,9 +390,9 @@ func main() {
     fmt.Println(<-ch)
 }`,
           tests: [
-            { id: 1, label: "Creates channel", keywords: [{ pattern: "make\(chan\s+string\)" }] },
-            { id: 2, label: "Sends value", keywords: [{ pattern: "ch\s*<-\s*\"ready\"" }] },
-            { id: 3, label: "Receives and prints", keywords: [{ pattern: "fmt\.Println\(<-ch\)" }] },
+            { id: 1, label: "Creates channel", keywords: [{ pattern: "make\\(chan\\s+string\\)" }] },
+            { id: 2, label: "Sends value", keywords: [{ pattern: "ch\\s*<-\\s*\"ready\"" }] },
+            { id: 3, label: "Receives and prints", keywords: [{ pattern: "fmt\\.Println\\(<-ch\\)" }] },
           ],
         },
       },
@@ -458,9 +458,9 @@ func main() {
     fmt.Println(<-queue)
 }`,
           tests: [
-            { id: 1, label: "Uses buffered channel", keywords: [{ pattern: "make\(chan\s+string,\s*2\)" }] },
-            { id: 2, label: "Sends two values", keywords: [{ pattern: "queue\s*<-\s*\"first\"|queue\s*<-\s*\"second\"" }] },
-            { id: 3, label: "Prints both", keywords: [{ pattern: "fmt\.Println\(<-queue\)" }] },
+            { id: 1, label: "Uses buffered channel", keywords: [{ pattern: "make\\(chan\\s+string,\\s*2\\)" }] },
+            { id: 2, label: "Sends two values", keywords: [{ pattern: "queue\\s*<-\\s*\"first\"|queue\\s*<-\\s*\"second\"" }] },
+            { id: 3, label: "Prints both", keywords: [{ pattern: "fmt\\.Println\\(<-queue\\)" }] },
           ],
         },
       },
@@ -543,8 +543,8 @@ func main() {
     }
 }`,
           tests: [
-            { id: 1, label: "Uses select", keywords: [{ pattern: "select\s*\{" }] },
-            { id: 2, label: "Uses time.After", keywords: [{ pattern: "time\.After\(100\s*\*\s*time\.Millisecond\)" }] },
+            { id: 1, label: "Uses select", keywords: [{ pattern: "select\\s*\\{" }] },
+            { id: 2, label: "Uses time.After", keywords: [{ pattern: "time\\.After\\(100\\s*\\*\\s*time\\.Millisecond\\)" }] },
             { id: 3, label: "Prints timeout", keywords: [{ pattern: "timeout" }] },
           ],
         },
@@ -652,9 +652,9 @@ func main() {
     fmt.Println("count:", count)
 }`,
           tests: [
-            { id: 1, label: "Uses Mutex", keywords: [{ pattern: "sync\.Mutex" }] },
-            { id: 2, label: "Locks and increments", keywords: [{ pattern: "mu\.Lock\(\).*count\+\+.*mu\.Unlock\(\)" }] },
-            { id: 3, label: "Prints count", keywords: [{ pattern: "fmt\.Println\(\"count:\",\s*count\)" }] },
+            { id: 1, label: "Uses Mutex", keywords: [{ pattern: "sync\\.Mutex" }] },
+            { id: 2, label: "Locks and increments", keywords: [{ pattern: "mu\\.Lock\\(\\).*count\\+\\+.*mu\\.Unlock\\(\\)" }] },
+            { id: 3, label: "Prints count", keywords: [{ pattern: "fmt\\.Println\\(\"count:\",\\s*count\\)" }] },
           ],
         },
       },
@@ -748,9 +748,9 @@ func main() {
     fmt.Println("final:", value)
 }`,
           tests: [
-            { id: 1, label: "Uses RWMutex", keywords: [{ pattern: "sync\.RWMutex" }] },
-            { id: 2, label: "Uses RLock", keywords: [{ pattern: "rw\.RLock\(\)" }] },
-            { id: 3, label: "Uses Lock and Unlock", keywords: [{ pattern: "rw\.Lock\(\)|rw\.Unlock\(\)" }] },
+            { id: 1, label: "Uses RWMutex", keywords: [{ pattern: "sync\\.RWMutex" }] },
+            { id: 2, label: "Uses RLock", keywords: [{ pattern: "rw\\.RLock\\(\\)" }] },
+            { id: 3, label: "Uses Lock and Unlock", keywords: [{ pattern: "rw\\.Lock\\(\\)|rw\\.Unlock\\(\\)" }] },
           ],
         },
       },
@@ -819,9 +819,9 @@ func main() {
     fmt.Println("count:", atomic.LoadInt32(&count))
 }`,
           tests: [
-            { id: 1, label: "Uses AddInt32", keywords: [{ pattern: "atomic\.AddInt32\(" }] },
-            { id: 2, label: "Uses LoadInt32", keywords: [{ pattern: "atomic\.LoadInt32\(" }] },
-            { id: 3, label: "Prints count", keywords: [{ pattern: "fmt\.Println\(\"count:\",\s*atomic\.LoadInt32\(&count\)\)" }] },
+            { id: 1, label: "Uses AddInt32", keywords: [{ pattern: "atomic\\.AddInt32\\(" }] },
+            { id: 2, label: "Uses LoadInt32", keywords: [{ pattern: "atomic\\.LoadInt32\\(" }] },
+            { id: 3, label: "Prints count", keywords: [{ pattern: "fmt\\.Println\\(\"count:\",\\s*atomic\\.LoadInt32\\(&count\\)\\)" }] },
           ],
         },
       },
@@ -946,9 +946,9 @@ func main() {
     }
 }`,
           tests: [
-            { id: 1, label: "Starts 2 workers", keywords: [{ pattern: "for\s+w\s*:=\s*0;\s*w\s*<\s*2;\s*w\+\+" }] },
-            { id: 2, label: "Uses jobs channel", keywords: [{ pattern: "jobs\s*:=\s*make\(chan\s+int" }] },
-            { id: 3, label: "Collects results", keywords: [{ pattern: "fmt\.Println\(<-results\)" }] },
+            { id: 1, label: "Starts 2 workers", keywords: [{ pattern: "for\\s+w\\s*:=\\s*0;\\s*w\\s*<\\s*2;\\s*w\\+\\+" }] },
+            { id: 2, label: "Uses jobs channel", keywords: [{ pattern: "jobs\\s*:=\\s*make\\(chan\\s+int" }] },
+            { id: 3, label: "Collects results", keywords: [{ pattern: "fmt\\.Println\\(<-results\\)" }] },
           ],
         },
       },
@@ -1038,9 +1038,9 @@ func main() {
     }
 }`,
           tests: [
-            { id: 1, label: "Defines square pipeline", keywords: [{ pattern: "func\s+square\(nums\s+\[\]int\)\s+chan\s+int" }] },
-            { id: 2, label: "Sends squared values", keywords: [{ pattern: "out\s*<-\s*n\s*\*\s*n" }] },
-            { id: 3, label: "Prints pipeline output", keywords: [{ pattern: "fmt\.Println\(v\)" }] },
+            { id: 1, label: "Defines square pipeline", keywords: [{ pattern: "func\\s+square\\(nums\\s+\\[\\]int\\)\\s+chan\\s+int" }] },
+            { id: 2, label: "Sends squared values", keywords: [{ pattern: "out\\s*<-\\s*n\\s*\\*\\s*n" }] },
+            { id: 3, label: "Prints pipeline output", keywords: [{ pattern: "fmt\\.Println\\(v\\)" }] },
           ],
         },
       },
@@ -1130,9 +1130,9 @@ func main() {
     }
 }`,
           tests: [
-            { id: 1, label: "Uses context.WithTimeout", keywords: [{ pattern: "context\.WithTimeout\(" }] },
-            { id: 2, label: "Checks ctx.Done", keywords: [{ pattern: "case\s*<-ctx\.Done\(\)" }] },
-            { id: 3, label: "Prints context error", keywords: [{ pattern: "ctx\.Err\(\)" }] },
+            { id: 1, label: "Uses context.WithTimeout", keywords: [{ pattern: "context\\.WithTimeout\\(" }] },
+            { id: 2, label: "Checks ctx.Done", keywords: [{ pattern: "case\\s*<-ctx\\.Done\\(\\)" }] },
+            { id: 3, label: "Prints context error", keywords: [{ pattern: "ctx\\.Err\\(\\)" }] },
           ],
         },
       },
@@ -1221,9 +1221,9 @@ func main() {
     }
 }`,
           tests: [
-            { id: 1, label: "Uses NewTicker", keywords: [{ pattern: "time\.NewTicker\(50\s*\*\s*time\.Millisecond\)" }] },
-            { id: 2, label: "Stops ticker", keywords: [{ pattern: "ticker\.Stop\(\)" }] },
-            { id: 3, label: "Prints tick", keywords: [{ pattern: "fmt\.Println\(\"tick\"\)" }] },
+            { id: 1, label: "Uses NewTicker", keywords: [{ pattern: "time\\.NewTicker\\(50\\s*\\*\\s*time\\.Millisecond\\)" }] },
+            { id: 2, label: "Stops ticker", keywords: [{ pattern: "ticker\\.Stop\\(\\)" }] },
+            { id: 3, label: "Prints tick", keywords: [{ pattern: "fmt\\.Println\\(\"tick\"\\)" }] },
           ],
         },
       },
@@ -1300,8 +1300,8 @@ func main() {
     }
 }`,
           tests: [
-            { id: 1, label: "Uses Ticker", keywords: [{ pattern: "time\.NewTicker\(100\s*\*\s*time\.Millisecond\)" }] },
-            { id: 2, label: "Reads from ticker.C", keywords: [{ pattern: "<-ticker\.C" }] },
+            { id: 1, label: "Uses Ticker", keywords: [{ pattern: "time\\.NewTicker\\(100\\s*\\*\\s*time\\.Millisecond\\)" }] },
+            { id: 2, label: "Reads from ticker.C", keywords: [{ pattern: "<-ticker\\.C" }] },
             { id: 3, label: "Prints sending request", keywords: [{ pattern: "sending request" }] },
           ],
         },
@@ -1377,9 +1377,9 @@ func main() {
     }
 }`,
           tests: [
-            { id: 1, label: "Closes channel", keywords: [{ pattern: "close\(jobs\)" }] },
-            { id: 2, label: "Range over jobs", keywords: [{ pattern: "for\s+job\s*:=\s*range\s+jobs" }] },
-            { id: 3, label: "Prints job values", keywords: [{ pattern: "fmt\.Println\(job\)" }] },
+            { id: 1, label: "Closes channel", keywords: [{ pattern: "close\\(jobs\\)" }] },
+            { id: 2, label: "Range over jobs", keywords: [{ pattern: "for\\s+job\\s*:=\\s*range\\s+jobs" }] },
+            { id: 3, label: "Prints job values", keywords: [{ pattern: "fmt\\.Println\\(job\\)" }] },
           ],
         },
       },
@@ -1494,8 +1494,8 @@ func main() {
     fmt.Println(<-out)
 }`,
           tests: [
-            { id: 1, label: "Uses context.WithCancel", keywords: [{ pattern: "context\.WithCancel\(" }] },
-            { id: 2, label: "Calls cancel", keywords: [{ pattern: "cancel\(\)" }] },
+            { id: 1, label: "Uses context.WithCancel", keywords: [{ pattern: "context\\.WithCancel\\(" }] },
+            { id: 2, label: "Calls cancel", keywords: [{ pattern: "cancel\\(\\)" }] },
             { id: 3, label: "Prints stopped", keywords: [{ pattern: "stopped" }] },
           ],
         },
@@ -1566,9 +1566,9 @@ func main() {
     fmt.Println(<-done)
 }`,
           tests: [
-            { id: 1, label: "Uses channel", keywords: [{ pattern: "make\(chan\s+string,\s*1\)" }] },
-            { id: 2, label: "Sends ok", keywords: [{ pattern: "done\s*<-\s*\"ok\"" }] },
-            { id: 3, label: "Prints result", keywords: [{ pattern: "fmt\.Println\(<-done\)" }] },
+            { id: 1, label: "Uses channel", keywords: [{ pattern: "make\\(chan\\s+string,\\s*1\\)" }] },
+            { id: 2, label: "Sends ok", keywords: [{ pattern: "done\\s*<-\\s*\"ok\"" }] },
+            { id: 3, label: "Prints result", keywords: [{ pattern: "fmt\\.Println\\(<-done\\)" }] },
           ],
         },
       },
@@ -1640,9 +1640,9 @@ func main() {
     }
 }`,
           tests: [
-            { id: 1, label: "Creates channel", keywords: [{ pattern: "make\(chan\s+string,\s*2\)" }] },
-            { id: 2, label: "Closes channel", keywords: [{ pattern: "close\(jobs\)" }] },
-            { id: 3, label: "Prints jobs", keywords: [{ pattern: "fmt\.Println\(job\)" }] },
+            { id: 1, label: "Creates channel", keywords: [{ pattern: "make\\(chan\\s+string,\\s*2\\)" }] },
+            { id: 2, label: "Closes channel", keywords: [{ pattern: "close\\(jobs\\)" }] },
+            { id: 3, label: "Prints jobs", keywords: [{ pattern: "fmt\\.Println\\(job\\)" }] },
           ],
         },
       },
