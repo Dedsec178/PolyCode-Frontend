@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileAvatar from "../../profile/components/ProfileAvatar";
+import { getProfilePathForUser } from "../../../lib/authSession";
 
 export default function LearnProfileMenu({
   user,
@@ -77,7 +78,7 @@ export default function LearnProfileMenu({
           <button
             type="button"
             className="learn-profile-view-btn"
-            onClick={() => navigate(user?.username ? `/@${user.username}` : "/profile")}
+            onClick={() => navigate(getProfilePathForUser(user))}
           >
             View full profile
           </button>
