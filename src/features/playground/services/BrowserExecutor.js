@@ -447,7 +447,10 @@ export async function runPython(code, stdin = '') {
     }
 
     const py = await ensurePyodide();
-    if (usesTorch) {
+    if (usesTorch || usesTransformers) {
+      // The transformers shim's Auto* mock builds its fake tensor output on
+      // top of the torch shim's Tensor class, so it needs torch loaded first
+      // even when the snippet itself never writes `import torch`.
       await ensureTorchBrowserShim(py);
     }
     if (usesTransformers) {
