@@ -364,6 +364,19 @@ print(model.config.num_labels)`,
             explanation:
               `Auto* classes inspect the model name/config and instantiate the matching class for you.`,
           },
+          {
+            type: "quiz",
+            question: `Why do we use the same name with both AutoTokenizer.from_pretrained() and AutoModelForSequenceClassification.from_pretrained()?`,
+            options: [
+              `To download two different models`,
+              `To load the matching tokenizer and model from the same pretrained checkpoint`,
+              `To train the model twice`,
+              `To create two different tokenizers`,
+            ],
+            answer: 1,
+            explanation:
+              `The tokenizer and model must agree on vocabulary and preprocessing — passing the same checkpoint name loads the matched pair they were trained with.`,
+          },
         ],
         challenge: {
           gradeMode: "keywords",
@@ -470,6 +483,19 @@ print(model.config.id2label[label_id])`,
             answer: 1,
             explanation:
               `Softmax exponentiates and normalizes logits so they behave like a probability distribution over classes.`,
+          },
+          {
+            type: "quiz",
+            question: `What does argmax() do in the manual inference process?`,
+            options: [
+              `Converts logits into probabilities`,
+              `Finds the index of the largest probability`,
+              `Downloads the model from Hugging Face`,
+              `Converts text into tokens`,
+            ],
+            answer: 1,
+            explanation:
+              `argmax() returns the index of the highest-scoring class, which id2label then maps to a readable label name.`,
           },
         ],
         challenge: {
