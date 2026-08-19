@@ -155,6 +155,16 @@ function courseIdFromFolder(folderName, registryIds, hookSrc) {
 function analyzeXp(curriculumSrc) {
   if (!curriculumSrc) return { lessonCount: 0, zeroXp: 0, hasXp: false };
   const xpMatches = [...curriculumSrc.matchAll(/\bxp:\s*(\d+)/g)];
+  const factoryXpMatches = [...curriculumSrc.matchAll(
+    /lesson\([^\n]*?,\s*\d+,\s*\n?\s*\"/g,
+  )];
+  if (factoryXpMatches.length > xpMatches.length) {
+    return {
+      lessonCount: factoryXpMatches.length,
+      zeroXp: 0,
+      hasXp: true,
+    };
+  }
   const lessonCount = xpMatches.length;
   const zeroXp = xpMatches.filter((m) => Number(m[1]) === 0).length;
   return {
