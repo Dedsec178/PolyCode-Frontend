@@ -86,6 +86,8 @@ export const COURSE_PROGRESS_REGISTRY = [
   { courseId: "qsharp-quantum-gates", storagePrefix: "qsharp_quantum_gates", scoped: true, notes: false },
   { courseId: "qsharp-quantum-algorithms", storagePrefix: "qsharp_quantum_algorithms", scoped: true, notes: false },
   { courseId: "qsharp-quantum-projects", storagePrefix: "qsharp_quantum_projects", scoped: true, notes: false },
+  // ─── ADD SOFTWARE ENGINEERING COURSES ──────────────────────────────────────
+  { courseId: "software-engineering-fundamentals", storagePrefix: "software_engineering_fundamentals", scoped: false, notes: false },
 ];
 
 export function getCourseRegistryEntry(courseId) {
