@@ -21,6 +21,7 @@ import {
   ScanEye,
   Clock,
   Bot,
+  Workflow,
 } from "lucide-react";
 
 export function languageKey(value = "") {
@@ -989,6 +990,18 @@ export const languageCourses = {
       accent: "#c5c5c5",
     },
   ],
+  // ─── ADD SOFTWARE ENGINEERING TRACK DEFINITION ─────────────────────────────
+  softwareengineering: [
+    {
+      title: "Introduction to Software Engineering",
+      tag: "Core Course",
+      icon: Workflow,
+      description:
+        "Why software engineering exists, the $600B industry behind it, project success/failure rates, the SDLC, and how engineers solve problems by combining smaller solutions into one system.",
+      href: "/learn/software-engineering-fundamentals",
+      accent: "#f59e0b",
+    },
+  ],
 };
 
 /** Ordered stacks for navbar grouping (one row per language, sub-courses inside). */
@@ -1089,6 +1102,12 @@ export const courseStackGroups = [
     label: "Rust",
     accent: "#ce422b",
     languagePath: "/language/Rust",
+  },
+  {
+    id: "softwareengineering",
+    label: "Software Engineering",
+    accent: "#f59e0b",
+    languagePath: "/language/Software%20Engineering",
   },
 ];
 
@@ -1232,6 +1251,9 @@ export const learnNavByLanguage = {
     { label: "Quantum Gates", to: "/learn/qsharp-quantum-gates" },
     { label: "Quantum Algorithms", to: "/learn/qsharp-quantum-algorithms" },
     { label: "Quantum Projects", to: "/learn/qsharp-quantum-projects" },
+  ],
+  softwareengineering: [
+    { label: "Overview", to: "/learn/software-engineering-fundamentals" },
   ],
 };
 
@@ -1404,6 +1426,9 @@ export function inferLanguageFromLearnPath(pathname = "") {
     pathname.startsWith("/learn/qsharp-quantum-projects")
   ) {
     return "qsharp";
+  }
+  if (pathname.startsWith("/learn/software-engineering-fundamentals")) {
+    return "softwareengineering";
   }
   return null;
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowRight, BookOpen, Code2, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Code2, Sparkles, Workflow } from "lucide-react";
 import {
   getLanguageLandingCourses,
   languageKey,
@@ -106,6 +106,13 @@ const languageMeta = {
     color: "#0078d4",
     description:
       "Master Microsoft's Q# programming language for quantum computing, quantum gates, superposition, and quantum algorithms.",
+  },
+  softwareengineering: {
+    name: "Software Engineering",
+    Icon: Workflow,
+    color: "#f59e0b",
+    description:
+      "The foundations behind every language track — how software projects are planned, built, tested, and maintained.",
   },
 };
 

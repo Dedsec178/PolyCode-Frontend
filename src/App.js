@@ -1196,6 +1196,22 @@ const LEARN_COURSE_ROUTES = [
         ),
     ),
   },
+  {
+    slug: "software-engineering-fundamentals",
+    language: "Software Engineering",
+    Hub: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/software-engineering-fundamentals/pages/SoftwareEngineeringFundamentalsHub"
+        ),
+    ),
+    Lesson: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/software-engineering-fundamentals/pages/SoftwareEngineeringFundamentalsLessonPage"
+        ),
+    ),
+  },
 ];
 
 const PageFallback = () => (
