@@ -138,7 +138,7 @@ export default function BatchfileProjectsHub() {
                 className="oops-xp-fill"
                 style={{
                   width: isAuthenticated ? `${pct}%` : "0%",
-                  background: "#f39c12",
+                  background: ACCENT,
                 }}
               />
             </div>

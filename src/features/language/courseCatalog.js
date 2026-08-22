@@ -20,11 +20,14 @@ import {
   Atom,
   ScanEye,
   Clock,
+  Bot,
+  Workflow,
 } from "lucide-react";
 
 export function languageKey(value = "") {
   const normalized = value.toLowerCase().replace(/\s+/g, "");
   if (normalized === "html&css") return "htmlcss";
+  if (normalized === "q#" || normalized === "qsharp") return "qsharp";
   return normalized;
 }
 
@@ -56,6 +59,13 @@ export const generalCourses = [
 
 /** Interactive courses shown on /language/:language (language-specific only). */
 export const languageCourses = {
+  qsharp: [
+    { title: "Q# Fundamentals", tag: "Core Course", icon: Atom, description: "Learn Q# language basics, operations, functions, qubit allocation, and measurement.", href: "/learn/qsharp-fundamentals", accent: "#0078d4" },
+    { title: "Quantum Programming Basics", tag: "Basics Course", icon: BrainCircuit, description: "Master superposition, state preparation, single-qubit transformations, and qubit registers.", href: "/learn/qsharp-quantum-programming-basics", accent: "#0284c7" },
+    { title: "Quantum Gates", tag: "Core Gates Course", icon: Cpu, description: "Deep dive into Pauli gates (X, Y, Z), rotation gates, phase gates, CNOT, CZ, SWAP, and Toffoli gates.", href: "/learn/qsharp-quantum-gates", accent: "#e11d48" },
+    { title: "Quantum Algorithms", tag: "Algorithms Course", icon: Brain, description: "Implement Deutsch-Jozsa, Bernstein-Vazirani, Grover's Search, and Quantum Phase Estimation in Q#.", href: "/learn/qsharp-quantum-algorithms", accent: "#a855f7" },
+    { title: "Quantum Projects", tag: "Projects Course", icon: Boxes, description: "Build end-to-end Q# quantum applications: Quantum Key Distribution (BB84), Teleportation, QRNG, and VQE Capstone.", href: "/learn/qsharp-quantum-projects", accent: "#ec4899" },
+  ],
   sql: [
     { title: "SQL Fundamentals", tag: "Core Course", icon: Database, description: "Learn database basics, tables, and standard SQL syntax.", href: "/learn/sql-fundamentals", accent: "#00758f" },
     { title: "SQL Queries", tag: "Core Course", icon: Database, description: "Master SELECT, WHERE, ORDER BY, and basic data retrieval.", href: "/learn/sql-queries", accent: "#00758f" },
@@ -335,6 +345,15 @@ export const languageCourses = {
         "Tensors, autograd, nn.Module, training loops, and a hands-on deep learning track — 8 chapters, 25 lessons.",
       href: "/learn/pytorch-py",
       accent: "#EE4C2C",
+    },
+    {
+      title: "Hugging Face · py",
+      tag: "NLP & Transformers",
+      icon: Bot,
+      description:
+        "Pipelines, tokenizers, datasets, the Model Hub, fine-tuning, PEFT/LoRA, and quantization — 9 chapters, 25 lessons.",
+      href: "/learn/huggingface-py",
+      accent: "#FF9D00",
     },
     {
       title: "SciPy · py",
@@ -812,6 +831,33 @@ export const languageCourses = {
       href: "/learn/go-functions",
       accent: "#00add8",
     },
+    {
+      title: "Go Concurrency",
+      tag: "Advanced Course",
+      icon: Terminal,
+      description:
+        "Master goroutines, channels, mutexes, context cancellation, worker pools, and production-ready concurrency patterns in Go.",
+      href: "/learn/go-concurrency",
+      accent: "#00add8",
+    },
+    {
+      title: "Go Web Development",
+      tag: "Advanced Course",
+      icon: Terminal,
+      description:
+        "Build reliable Go web services with HTTP, routing, JSON APIs, middleware, persistence, testing, and production operations.",
+      href: "/learn/go-web-development",
+      accent: "#00add8",
+    },
+    {
+      title: "Go Modules",
+      tag: "Advanced Course",
+      icon: Terminal,
+      description:
+        "Learn Go modules, dependency management, versioning, replacements, workspaces, and production-ready module practices.",
+      href: "/learn/go-modules",
+      accent: "#00add8",
+    },
   ],
   powershell: [
     {
@@ -971,6 +1017,18 @@ export const languageCourses = {
       accent: "#c5c5c5",
     },
   ],
+  // ─── ADD SOFTWARE ENGINEERING TRACK DEFINITION ─────────────────────────────
+  softwareengineering: [
+    {
+      title: "Introduction to Software Engineering",
+      tag: "Core Course",
+      icon: Workflow,
+      description:
+        "Why software engineering exists, the $600B industry behind it, project success/failure rates, the SDLC, and how engineers solve problems by combining smaller solutions into one system.",
+      href: "/learn/software-engineering-fundamentals",
+      accent: "#f59e0b",
+    },
+  ],
 };
 
 /** Ordered stacks for navbar grouping (one row per language, sub-courses inside). */
@@ -1061,10 +1119,22 @@ export const courseStackGroups = [
     languagePath: "/language/Batchfile",
   },
   {
+    id: "qsharp",
+    label: "Q#",
+    accent: "#0078d4",
+    languagePath: "/language/Q%23",
+  },
+  {
     id: "rust",
     label: "Rust",
     accent: "#ce422b",
     languagePath: "/language/Rust",
+  },
+  {
+    id: "softwareengineering",
+    label: "Software Engineering",
+    accent: "#f59e0b",
+    languagePath: "/language/Software%20Engineering",
   },
 ];
 
@@ -1112,6 +1182,7 @@ export const learnNavByLanguage = {
     { label: "FastAPI", to: "/learn/fastapi-py" },
     { label: "Matplotlib", to: "/learn/matplotlib-py" },
     { label: "PyTorch", to: "/learn/pytorch-py" },
+    { label: "Hugging Face", to: "/learn/huggingface-py" },
     { label: "SciPy", to: "/learn/scipy-py" },
     { label: "OpenCV", to: "/learn/opencv-py" },
     { label: "AI/ML", to: "/learn/ai_ml-py" },
@@ -1203,12 +1274,23 @@ export const learnNavByLanguage = {
     { label: "Projects", to: "/learn/batchfile-projects" },
     { label: "Windows Scripting", to: "/learn/windows-scripting" },
   ],
+  qsharp: [
+    { label: "Q# Fundamentals", to: "/learn/qsharp-fundamentals" },
+    { label: "Quantum Programming Basics", to: "/learn/qsharp-quantum-programming-basics" },
+    { label: "Quantum Gates", to: "/learn/qsharp-quantum-gates" },
+    { label: "Quantum Algorithms", to: "/learn/qsharp-quantum-algorithms" },
+    { label: "Quantum Projects", to: "/learn/qsharp-quantum-projects" },
+  ],
+  softwareengineering: [
+    { label: "Overview", to: "/learn/software-engineering-fundamentals" },
+  ],
 };
 
 const learnNavLanguageAliases = {
   "c++": "cpp",
   "c#": "csharp",
   "html&css": "htmlcss",
+  "q#": "qsharp",
 };
 
 function normalizeLearnNavLanguageKey(key = "") {
@@ -1261,6 +1343,7 @@ export function inferLanguageFromLearnPath(pathname = "") {
     pathname.startsWith("/learn/fastapi-py") ||
     pathname.startsWith("/learn/matplotlib-py") ||
     pathname.startsWith("/learn/pytorch-py") ||
+    pathname.startsWith("/learn/huggingface-py") ||
     pathname.startsWith("/learn/scipy-py") ||
     pathname.startsWith("/learn/opencv-py") ||
     pathname.startsWith("/learn/ai_ml-py")
@@ -1364,6 +1447,18 @@ export function inferLanguageFromLearnPath(pathname = "") {
     pathname.startsWith("/learn/rust-projects")
   ) {
     return "rust";
+  }
+  if (
+    pathname.startsWith("/learn/qsharp-fundamentals") ||
+    pathname.startsWith("/learn/qsharp-quantum-programming-basics") ||
+    pathname.startsWith("/learn/qsharp-quantum-gates") ||
+    pathname.startsWith("/learn/qsharp-quantum-algorithms") ||
+    pathname.startsWith("/learn/qsharp-quantum-projects")
+  ) {
+    return "qsharp";
+  }
+  if (pathname.startsWith("/learn/software-engineering-fundamentals")) {
+    return "softwareengineering";
   }
   return null;
 }

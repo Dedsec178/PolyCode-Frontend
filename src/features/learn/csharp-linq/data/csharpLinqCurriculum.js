@@ -23,10 +23,6 @@ function text(content, codeBlock = null) {
   return { type: "text", content };
 }
 
-function diagram(title, nodes) {
-  return { type: "diagram", title, nodes };
-}
-
 const RAW_CSHARP_LINQ_CHAPTERS = [
   {
     id: "linq-basics",

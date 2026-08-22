@@ -414,7 +414,7 @@ print(special.gamma(6))`,
           {
             type: "text",
             content:
-              "**Definition:** **`gamma`** extends factorial ideas to more numbers. **`erf`** (error function) shows up in probability and diffusion problems.\n\n**Real-life example:** A quality lab models measurement error with a bell-shaped curve. Values of `erf` help turn math into readable probabilities.",
+              "**Introduction:** SciPy gives you ready-made math helpers so you do not have to invent hard formulas yourself.\n\nTwo useful ones are **`gamma`** and **`erf`**:\n\n• **`gamma`** is connected to the **factorial** idea. For example, `gamma(5)` equals `4!`, which is **24**. When a formula needs a factorial-style value, call `gamma` instead of writing the math by hand.\n• **`erf`** (short for *error function*) shows up in everyday science work — probability, measurement error, heat, and diffusion. You do not need every detail of the formula. SciPy already knows how to compute it.\n• SciPy provides these helpers so beginners can use them without building complicated math from scratch.\n\n**Real-life example:** In a lab, the same measurement is rarely identical every time — small errors appear again and again. Tools like `erf` help scientists work with those small variations.",
           },
           {
             type: "text",
@@ -470,21 +470,61 @@ print(special.erf(0))`,
           {
             type: "text",
             content:
-              "**Definition:** In practice, you pass **arrays** of values into special functions so every item is transformed at once.\n\n**Real-life example:** A teacher converts a list of z-scores through a smooth curve to show relative standing. Array-friendly helpers keep the code short.",
+              "**Introduction:** In the last topics you used helpers like `gamma` and `erf` on **one number**. In real projects you often have **many numbers** at once — a list of scores, temperatures, or sensor readings.\n\nGood news: SciPy special functions work with **NumPy arrays**. You pass in a whole group of values, and SciPy updates **every item** for you. No writing a loop by hand.\n\nHere is the simple idea:\n\n• Put your numbers in a NumPy array with `np.array([...])`\n• Call a helper such as `special.erf(x)` or `special.expit(x)`\n• SciPy returns a new array with the answers, one for each input\n• Print the result to check your work\n\n**Real-life example:** A teacher has three student scores. Instead of changing each score one by one, they put all three in an array and run one SciPy function. The code stays short and easy to read.",
           },
           {
             type: "text",
             content:
-              "**In this topic you will learn:**\n\n• Apply special functions to NumPy arrays\n• Combine `np` + `special`\n• Print a small report",
+              "**In this topic you will learn:**\n\n• How to use special functions on a NumPy array\n• How to combine `import numpy as np` with `from scipy import special`\n• How to print a small, clear report of the results",
+          },
+          {
+            type: "scenario",
+            title: "Think of it like this",
+            content:
+              "Imagine a stamp that prints the same pattern on every page of a stack. An array is the stack of pages. A special function is the stamp — one press updates every page.",
+          },
+          {
+            type: "table",
+            title: "Practice checklist",
+            columns: ["Step", "What you do", "Why it helps"],
+            rows: [
+              {
+                label: "1",
+                values: [
+                  "Make an array",
+                  "`x = np.array([0.0, 0.5, 1.0])`",
+                  "Holds many numbers together",
+                ],
+              },
+              {
+                label: "2",
+                values: [
+                  "Call a helper",
+                  "`special.erf(x)`",
+                  "Transforms every value at once",
+                ],
+              },
+              {
+                label: "3",
+                values: [
+                  "Print the output",
+                  "`print(...)`",
+                  "Lets you see and check the answers",
+                ],
+              },
+            ],
           },
           {
             type: "code",
             lang: "python",
-            label: "Array in, array out",
+            label: "Try it: array in, array out",
             content: `import numpy as np
 from scipy import special
 
+# Three numbers in one array
 x = np.array([0.0, 0.5, 1.0])
+
+# SciPy updates each value
 print("erf(x) =", special.erf(x))
 print("expit(x) =", special.expit(x))`,
           },
@@ -492,7 +532,13 @@ print("expit(x) =", special.expit(x))`,
             type: "callout",
             variant: "tip",
             content:
-              "**Tip:** Start with one number. When that works, pass a whole array.",
+              "**Tip:** Always start with **one number** first. When that works, put several numbers in an array and run the same function again.",
+          },
+          {
+            type: "callout",
+            variant: "info",
+            content:
+              "**Remember:** `erf` and `expit` are still the same helpers — arrays just let you use them on many values in one line.",
           },
           quiz(
             "Special functions in SciPy can…",
@@ -503,7 +549,7 @@ print("expit(x) =", special.expit(x))`,
               "Replace the Python language",
             ],
             1,
-            "They accept arrays and return transformed values.",
+            "They accept arrays and return a transformed value for each number.",
           ),
         ],
         challenge: challenge(
@@ -511,6 +557,7 @@ print("expit(x) =", special.expit(x))`,
           "Create x = np.array([0.0, 1.0]). Print special.erf(x).",
           `import numpy as np
 from scipy import special
+# create the array, then print erf(x)
 `,
           `import numpy as np
 from scipy import special
@@ -539,12 +586,18 @@ print(special.erf(x))`,
           {
             type: "text",
             content:
-              "**Definition:** **Numerical integration** means estimating the **area under a curve** using computer-friendly steps when a neat pencil-and-paper antiderivative is hard.\n\n**Real-life example:** A river sensor records flow every hour. Total water for the day is the area under that flow curve.",
+              "**Introduction:** Sometimes you need the **total** of something that changes over time — like how much water flowed past a sensor, or how much energy a house used.\n\nOn a graph, that total is the **area under the curve**. When the math on paper is hard, the computer can **estimate** that area for you. That estimate is called **numerical integration**.\n\nIn plain words:\n\n• You have a curve (a function) that goes up and down\n• You choose a start and an end (the limits)\n• SciPy adds up the area between those limits\n• You get a total, plus a small error estimate\n\n**Real-life example:** A river sensor records water flow every hour. The **total water for the day** is the area under that flow curve. SciPy can estimate it without you drawing the graph by hand.",
           },
           {
             type: "text",
             content:
-              "**In this topic you will learn:**\n\n• What “area under the curve” means\n• Why SciPy helps\n• The idea behind `quad`",
+              "**In this topic you will learn:**\n\n• What “area under the curve” means in everyday language\n• Why SciPy is useful for this job\n• The basic idea behind `integrate.quad`",
+          },
+          {
+            type: "scenario",
+            title: "Think of it like this",
+            content:
+              "Imagine stacking thin strips of paper under a curved line until they fill the space. Numerical integration is the computer stacking those strips for you — fast and carefully.",
           },
           {
             type: "diagram",
@@ -552,36 +605,44 @@ print(special.erf(x))`,
             nodes: [
               {
                 id: "curve",
-                label: "Curve y = f(x)",
+                label: "Your curve",
                 color: "#06b6d4",
-                items: ["Height at each x"],
+                items: ["A function f(x)", "Height at each x"],
               },
               {
                 id: "area",
-                label: "Area between limits",
+                label: "Area to find",
                 color: "#0d9488",
-                items: ["From a to b", "Total quantity"],
+                items: ["From start a to end b", "The total you want"],
               },
               {
                 id: "quad",
                 label: "SciPy quad",
                 color: "#14b8a6",
-                items: ["Estimate", "Error size"],
+                items: ["Estimates the area", "Also reports error"],
               },
             ],
           },
           {
             type: "code",
             lang: "python",
-            label: "Area of a constant",
+            label: "Try it: area of a flat line",
             content: `from scipy import integrate
 
+# A flat line at height 2
 def flat(x):
     return 2
 
+# Area from 0 to 3 should be 2 * 3 = 6
 area, err = integrate.quad(flat, 0, 3)
-print("Area:", area)  # 2 * 3 = 6
-print("Err:", err)`,
+print("Area:", area)
+print("Error estimate:", err)`,
+          },
+          {
+            type: "callout",
+            variant: "tip",
+            content:
+              "**Tip:** Start with an easy case you can check by hand (like a flat line). When that looks right, try harder curves.",
           },
           quiz(
             "Numerical integration estimates…",
@@ -592,13 +653,14 @@ print("Err:", err)`,
               "Website traffic only",
             ],
             1,
-            "It estimates area (or total) under a function between limits.",
+            "It estimates the area (or total) under a function between two limits.",
           ),
         ],
         challenge: challenge(
           "Flat area",
           "Define f(x)=5. Print integrate.quad(f, 0, 2)[0].",
           `from scipy import integrate
+# define f, then print the area with quad
 `,
           `from scipy import integrate
 
@@ -620,31 +682,69 @@ print(integrate.quad(f, 0, 2)[0])`,
           {
             type: "text",
             content:
-              "**Definition:** **`integrate.quad(f, a, b)`** estimates the integral of `f` from `a` to `b`. It returns `(result, error_estimate)`.\n\n**Real-life example:** Power usage over 8 hours — integrate the power curve to get energy.",
+              "**Introduction:** The main SciPy tool for this chapter is **`integrate.quad`**. You give it:\n\n• A Python function for your curve, like `f(x)`\n• A start limit `a`\n• An end limit `b`\n\nThen SciPy estimates the area from `a` to `b`.\n\n**Important:** `quad` returns **two values**:\n\n• The **area** (the answer you usually want)\n• An **error estimate** (how unsure the computer is)\n\nSo you often write: `area, err = integrate.quad(f, a, b)`\n\n**Real-life example:** Power use over 8 hours is a curve. Integrating that curve gives **total energy** used — like reading a smart meter for the whole morning.",
           },
           {
             type: "text",
             content:
-              "**In this topic you will learn:**\n\n• Write a Python function for f(x)\n• Call `quad` with limits\n• Print the area",
+              "**In this topic you will learn:**\n\n• How to write a simple `f(x)` in Python\n• How to call `integrate.quad(f, a, b)`\n• How to print the area (and optionally the error)",
+          },
+          {
+            type: "table",
+            title: "quad in three steps",
+            columns: ["Step", "What you write", "What it means"],
+            rows: [
+              {
+                label: "1",
+                values: [
+                  "Define f(x)",
+                  "`def f(x): return x ** 2`",
+                  "Your curve formula",
+                ],
+              },
+              {
+                label: "2",
+                values: [
+                  "Call quad",
+                  "`integrate.quad(f, 0, 1)`",
+                  "Area from 0 to 1",
+                ],
+              },
+              {
+                label: "3",
+                values: [
+                  "Read the result",
+                  "`area, err = ...`",
+                  "Answer + confidence check",
+                ],
+              },
+            ],
           },
           {
             type: "code",
             lang: "python",
-            label: "Integrate x squared",
+            label: "Try it: integrate x squared",
             content: `from scipy import integrate
 
 def f(x):
     return x ** 2
 
 area, err = integrate.quad(f, 0, 1)
-print("∫ x² dx from 0 to 1 ≈", area)
-print("True value is 1/3 ≈", 1 / 3)`,
+print("Area from 0 to 1 ≈", area)
+print("True value is 1/3 ≈", 1 / 3)
+print("Error estimate:", err)`,
           },
           {
             type: "callout",
             variant: "info",
             content:
-              "**Remember:** `quad` returns two values. Use `[0]` when you only need the area.",
+              "**Remember:** If you only need the area, you can use `integrate.quad(f, a, b)[0]`. Index `0` is the result; index `1` is the error.",
+          },
+          {
+            type: "callout",
+            variant: "tip",
+            content:
+              "**Tip:** Compare SciPy’s answer with a known true value when you can (like `1/3` above). That builds trust in your code.",
           },
           quiz(
             "integrate.quad(f, 0, 1) returns…",
@@ -655,13 +755,14 @@ print("True value is 1/3 ≈", 1 / 3)`,
               "A dictionary of colors",
             ],
             1,
-            "quad returns the estimated integral and an error estimate.",
+            "quad returns the estimated area and an error estimate.",
           ),
         ],
         challenge: challenge(
           "Quad x²",
           "Integrate x**2 from 0 to 2 with quad and print the result (index 0).",
           `from scipy import integrate
+# define f(x) = x**2, then print quad(...)[0]
 `,
           `from scipy import integrate
 
@@ -684,27 +785,54 @@ print(integrate.quad(f, 0, 2)[0])`,
           {
             type: "text",
             content:
-              "**Definition:** A **reliable integral** uses the right limits, a clear function, and a quick sanity check (rough mental estimate or known answer).\n\n**Real-life example:** If rainfall is about 2 mm/hour for 5 hours, the total near 10 mm should match your integral — if SciPy says 10,000, you swapped units or limits.",
+              "**Introduction:** Getting a number from `quad` is easy. Getting a **trustworthy** number takes a few careful habits.\n\nA reliable integral means:\n\n• You used the **correct start and end** limits\n• Your function matches the real situation (clear units)\n• You glanced at the **error estimate**\n• You did a quick **sanity check** (does the size look reasonable?)\n\n**Real-life example:** If rain is about 2 mm each hour for 5 hours, the total should be near **10 mm**. If SciPy prints `10000`, something is wrong — maybe limits or units got mixed up.",
           },
           {
             type: "text",
             content:
-              "**In this topic you will learn:**\n\n• Check limits a < b intentionally\n• Read the error estimate\n• Compare with a simple known case",
+              "**In this topic you will learn:**\n\n• How to check that limits make sense\n• How to read the error estimate from `quad`\n• How to compare with a simple known case",
+          },
+          {
+            type: "scenario",
+            title: "Think of it like this",
+            content:
+              "A kitchen scale can show a weight, but you still glance to see if it looks right. Same with `quad`: print the answer, then ask “Does this look sensible?”",
           },
           {
             type: "table",
             title: "Sanity checklist",
-            columns: ["Check", "Why"],
+            columns: ["Check", "Ask yourself", "Why it matters"],
             rows: [
-              { label: "1", values: ["Limits correct?", "Wrong window → wrong total"] },
-              { label: "2", values: ["Function units clear?", "Hours vs minutes mix-ups"] },
-              { label: "3", values: ["Error tiny?", "Huge error → investigate"] },
+              {
+                label: "1",
+                values: [
+                  "Limits",
+                  "Did I start and end in the right place?",
+                  "Wrong window → wrong total",
+                ],
+              },
+              {
+                label: "2",
+                values: [
+                  "Units",
+                  "Hours vs minutes? mm vs m?",
+                  "Unit mix-ups make huge errors",
+                ],
+              },
+              {
+                label: "3",
+                values: [
+                  "Error size",
+                  "Is the error estimate tiny?",
+                  "Huge error → investigate",
+                ],
+              },
             ],
           },
           {
             type: "code",
             lang: "python",
-            label: "Check error too",
+            label: "Try it: print area and error",
             content: `from scipy import integrate
 
 def f(x):
@@ -713,7 +841,19 @@ def f(x):
 area, err = integrate.quad(f, 0, 4)
 print("Area:", area)
 print("Error estimate:", err)
-print("Expected:", 8.0)`,
+print("Expected by hand:", 8.0)  # triangle area 0.5*4*4 = 8`,
+          },
+          {
+            type: "callout",
+            variant: "warning",
+            content:
+              "**Watch out:** A huge error estimate is a warning light. Do not ignore it — check your function and limits first.",
+          },
+          {
+            type: "callout",
+            variant: "tip",
+            content:
+              "**Tip:** Keep a known easy example nearby (like integrating `f(x)=x`). If that fails, fix your setup before trusting harder problems.",
           },
           quiz(
             "If the error estimate is huge, you should…",
@@ -724,13 +864,14 @@ print("Expected:", 8.0)`,
               "Only use strings",
             ],
             1,
-            "A large error estimate is a warning to double-check your setup.",
+            "A large error estimate means you should double-check your setup.",
           ),
         ],
         challenge: challenge(
           "Print area and err",
           "For f(x)=x from 1 to 3, unpack area, err = integrate.quad(...). Print both.",
           `from scipy import integrate
+# define f, call quad, print area and err
 `,
           `from scipy import integrate
 
@@ -762,31 +903,68 @@ print(err)`,
           {
             type: "text",
             content:
-              "**Definition:** **Optimization** means searching for the **best** value of something — often the lowest cost or highest score — by adjusting inputs.\n\n**Real-life example:** A delivery app wants the cheapest route fuel cost. It tries settings until the cost function is as small as possible.",
+              "**Introduction:** **Optimization** means searching for the **best** choice — often the **lowest cost** or the **highest score** — by trying different inputs.\n\nIn plain words:\n\n• You write a function that scores how good (or bad) a choice is\n• You ask SciPy to search for a better input\n• SciPy keeps adjusting until the score looks as good as it can\n• You read the best input it found\n\n**Real-life example:** A delivery app wants the cheapest fuel cost for a route. It tries different settings until the cost function is as small as possible.",
           },
           {
             type: "text",
             content:
-              "**In this topic you will learn:**\n\n• What minimize means\n• Why we give a starting guess\n• Where `scipy.optimize` fits",
+              "**In this topic you will learn:**\n\n• What “minimize” means in everyday language\n• Why we give SciPy a starting guess\n• That `scipy.optimize` is the toolbox for this job",
           },
           {
             type: "scenario",
-            title: "Valley hike",
+            title: "Think of it like this",
             content:
-              "Imagine standing on a hilly path in fog. Optimization is carefully stepping downhill until you reach the valley floor — the minimum.",
+              "Imagine standing on a foggy hillside. Optimization is carefully stepping downhill until you reach the valley floor — the lowest (best) cost.",
+          },
+          {
+            type: "table",
+            title: "Optimization words",
+            columns: ["Word", "Simple meaning", "Example"],
+            rows: [
+              {
+                label: "1",
+                values: [
+                  "Cost / score",
+                  "A number that says how good a choice is",
+                  "`(x - 3) ** 2`",
+                ],
+              },
+              {
+                label: "2",
+                values: [
+                  "Minimize",
+                  "Make that number as small as possible",
+                  "Find the cheapest route",
+                ],
+              },
+              {
+                label: "3",
+                values: [
+                  "Starting guess",
+                  "Where the search begins",
+                  "`x0 = 0`",
+                ],
+              },
+            ],
           },
           {
             type: "code",
             lang: "python",
-            label: "Import the toolbox",
+            label: "Try it: a simple cost function",
             content: `from scipy import optimize
-import numpy as np
 
 def cost(x):
     return (x - 3) ** 2
 
 print("Cost at 0:", cost(0))
-print("Cost at 3:", cost(3))`,
+print("Cost at 3:", cost(3))
+print("Smaller cost is better in this example")`,
+          },
+          {
+            type: "callout",
+            variant: "tip",
+            content:
+              "**Tip:** First print a few cost values by hand. When you understand the goal, let SciPy search for the best input.",
           },
           quiz(
             "Optimization often means…",
@@ -803,7 +981,8 @@ print("Cost at 3:", cost(3))`,
         challenge: challenge(
           "Cost at a point",
           "Define cost(x)=(x-2)**2. Print cost(5).",
-          `import numpy as np
+          `from scipy import optimize
+# define cost, then print cost(5)
 `,
           `def cost(x):
     return (x - 2) ** 2
@@ -823,17 +1002,48 @@ print(cost(5))`,
           {
             type: "text",
             content:
-              "**Definition:** **`optimize.minimize(fun, x0)`** starts at guess `x0` and searches for an input that makes `fun` small.\n\n**Real-life example:** Set thermostat-related energy cost `fun`, start near today’s setting, let SciPy walk toward a cheaper point.",
+              "**Introduction:** The main tool here is **`optimize.minimize`**. You give it:\n\n• A cost function (what you want to make small)\n• A starting guess `x0`\n\nSciPy then searches for a better input.\n\nAfter it finishes, read two useful parts of the result:\n\n• **`result.x`** — the best input it found\n• **`result.fun`** — the cost at that best input\n\n**Real-life example:** You want a cheaper energy setting. Start near today’s value (`x0`), and let SciPy walk toward a lower cost.",
           },
           {
             type: "text",
             content:
-              "**In this topic you will learn:**\n\n• Call `minimize`\n• Read `.x` (best input) and `.fun` (best value)\n• Use a 1D example first",
+              "**In this topic you will learn:**\n\n• How to call `optimize.minimize(fun, x0)`\n• How to read `.x` and `.fun`\n• How to try a simple one-number example first",
+          },
+          {
+            type: "table",
+            title: "minimize in three steps",
+            columns: ["Step", "What you write", "What it means"],
+            rows: [
+              {
+                label: "1",
+                values: [
+                  "Define cost",
+                  "`def cost(x): return (x - 3) ** 2`",
+                  "Smaller is better",
+                ],
+              },
+              {
+                label: "2",
+                values: [
+                  "Call minimize",
+                  "`optimize.minimize(cost, x0=0.0)`",
+                  "Start searching from 0",
+                ],
+              },
+              {
+                label: "3",
+                values: [
+                  "Read the answer",
+                  "`result.x[0]`, `result.fun`",
+                  "Best input and best cost",
+                ],
+              },
+            ],
           },
           {
             type: "code",
             lang: "python",
-            label: "Minimize a parabola",
+            label: "Try it: minimize a parabola",
             content: `from scipy import optimize
 
 def cost(x):
@@ -847,7 +1057,13 @@ print("Best cost ≈", result.fun)`,
             type: "callout",
             variant: "tip",
             content:
-              "**Tip:** A bad starting guess can land in the wrong valley. Try a sensible `x0`.",
+              "**Tip:** A bad starting guess can land in the wrong valley. Pick a sensible `x0` close to where you think the answer should be.",
+          },
+          {
+            type: "callout",
+            variant: "info",
+            content:
+              "**Remember:** For one-number problems, use `result.x[0]` to print the best value clearly.",
           },
           quiz(
             "After minimize, result.x is…",
@@ -858,13 +1074,14 @@ print("Best cost ≈", result.fun)`,
               "The error message",
             ],
             0,
-            "result.x holds the optimizing input values.",
+            "result.x holds the best input values SciPy found.",
           ),
         ],
         challenge: challenge(
           "Minimize (x-4)**2",
           "Minimize (x-4)**2 starting at x0=0. Print result.x[0].",
           `from scipy import optimize
+# define cost, call minimize, print result.x[0]
 `,
           `from scipy import optimize
 
@@ -888,24 +1105,75 @@ print(result.x[0])`,
           {
             type: "text",
             content:
-              "**Definition:** A **root** is where a function crosses zero. **Curve fitting** finds parameters so a model curve matches data points.\n\n**Real-life example:** Find when a cooling drink reaches room temperature (root of temperature − room). Or fit a growth curve to plant height data.",
+              "**Introduction:** Optimization tools can also help with two other everyday jobs:\n\n• **Finding a root** — where a function crosses **zero** (`f(x) = 0`)\n• **Curve fitting** — choosing model settings so a curve matches measured data\n\nYou do not need hard theory to start. For roots, SciPy’s `root_scalar` is a friendly first tool.\n\n**Real-life examples:**\n\n• A cooling drink reaches room temperature (find when the difference hits zero)\n• Plant height data is fitted with a simple growth curve",
           },
           {
             type: "text",
             content:
-              "**In this topic you will learn:**\n\n• Find a root with `root_scalar`\n• Meet `curve_fit` at a gentle level\n• Keep examples tiny and printable",
+              "**In this topic you will learn:**\n\n• What a root means in plain words\n• How to use `optimize.root_scalar` with a bracket\n• What curve fitting means at a gentle beginner level",
+          },
+          {
+            type: "scenario",
+            title: "Think of it like this",
+            content:
+              "A root is the crossing point on a bridge between above-zero and below-zero. Curve fitting is choosing the best rubber-band shape so it stretches through your data points.",
+          },
+          {
+            type: "table",
+            title: "Root finding checklist",
+            columns: ["Step", "What you do", "Why"],
+            rows: [
+              {
+                label: "1",
+                values: [
+                  "Write f(x)",
+                  "`return x ** 2 - 4`",
+                  "Defines the equation",
+                ],
+              },
+              {
+                label: "2",
+                values: [
+                  "Give a bracket",
+                  "`bracket=[0, 3]`",
+                  "Search between two sides",
+                ],
+              },
+              {
+                label: "3",
+                values: [
+                  "Read sol.root",
+                  "`print(sol.root)`",
+                  "The x where f(x) ≈ 0",
+                ],
+              },
+            ],
           },
           {
             type: "code",
             lang: "python",
-            label: "Find a root",
+            label: "Try it: find a root",
             content: `from scipy import optimize
 
 def f(x):
     return x ** 2 - 4
 
+# Look for a root between 0 and 3
 sol = optimize.root_scalar(f, bracket=[0, 3])
-print("Root ≈", sol.root)`,
+print("Root ≈", sol.root)
+print("Check f(root) ≈", f(sol.root))`,
+          },
+          {
+            type: "callout",
+            variant: "info",
+            content:
+              "**Remember:** A **bracket** is two ends where the function changes sign (one side positive, one side negative). That helps SciPy find the crossing.",
+          },
+          {
+            type: "callout",
+            variant: "tip",
+            content:
+              "**Tip:** After finding a root, print `f(sol.root)`. A value near zero means your answer looks good.",
           },
           quiz(
             "A root of f is a value where…",
@@ -918,6 +1186,7 @@ print("Root ≈", sol.root)`,
           "Root of x**2 - 9",
           "Use optimize.root_scalar on f(x)=x**2-9 with bracket=[0, 5]. Print sol.root.",
           `from scipy import optimize
+# define f, call root_scalar, print sol.root
 `,
           `from scipy import optimize
 

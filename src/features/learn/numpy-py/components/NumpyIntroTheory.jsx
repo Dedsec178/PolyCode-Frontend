@@ -36,6 +36,47 @@ function InlineText({ text }) {
   );
 }
 
+/** Renders theory copy with paragraphs and bullet lists (• / - / *). */
+function FormattedTheoryText({ text, className = "numpy-step-text" }) {
+  const paragraphs = String(text ?? "")
+    .split(/\n\n+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  if (!paragraphs.length) return null;
+
+  return (
+    <div className={`numpy-formatted-text${className ? ` ${className}` : ""}`}>
+      {paragraphs.map((paragraph, index) => {
+        const lines = paragraph
+          .split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean);
+        const isList =
+          lines.length > 0 && lines.every((line) => /^[•\-*]\s+/.test(line));
+
+        if (isList) {
+          return (
+            <ul key={index} className="numpy-theory-bullets">
+              {lines.map((line, lineIndex) => (
+                <li key={lineIndex}>
+                  <InlineText text={line.replace(/^[•\-*]\s+/, "")} />
+                </li>
+              ))}
+            </ul>
+          );
+        }
+
+        return (
+          <p key={index} className="numpy-theory-paragraph">
+            <InlineText text={lines.join(" ")} />
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
 function NumpyMatrixGrid({
   label,
   data = [],
@@ -439,9 +480,7 @@ function NumpyTheoryBlock({ block, step, accentColor }) {
             {block.code ? "Learn & try" : "In simple words"}
           </span>
         </div>
-        <p className="numpy-step-text">
-          <InlineText text={block.content} />
-        </p>
+        <FormattedTheoryText text={block.content} className="numpy-step-text" />
         {block.code && (
           <div className="numpy-concept-code">
             {block.code.label && (
@@ -706,13 +745,16 @@ export default function NumpyIntroTheory({
             {activeLesson.title}
           </h2>
           <p className="numpy-lesson-intro-label">Introduction</p>
-          <p className="numpy-lesson-hook">
-            {introText?.content ? (
-              <InlineText text={introText.content} />
-            ) : (
-              "We'll explain this idea in plain English — no jargon overload."
-            )}
-          </p>
+          {introText?.content ? (
+            <FormattedTheoryText
+              text={introText.content}
+              className="numpy-lesson-hook"
+            />
+          ) : (
+            <p className="numpy-lesson-hook">
+              We'll explain this idea in plain English — no jargon overload.
+            </p>
+          )}
         </header>
       ) : null}
 

@@ -23,10 +23,6 @@ function text(content, codeBlock = null) {
   return { type: "text", content };
 }
 
-function diagram(title, nodes) {
-  return { type: "diagram", title, nodes };
-}
-
 const RAW_CSHARP_FILE_HANDLING_CHAPTERS = [
   {
     id: "reading-writing-files",

@@ -10450,6 +10450,40 @@ body {
   margin: 0;
 }
 
+.numpy-formatted-text.numpy-lesson-hook,
+.numpy-formatted-text.numpy-step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.numpy-formatted-text .numpy-theory-paragraph {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+.numpy-theory-bullets {
+  margin: 0;
+  padding: 0 0 0 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  list-style: disc;
+}
+
+.numpy-theory-bullets li {
+  margin: 0;
+  padding-left: 0.15rem;
+  line-height: 1.55;
+  color: inherit;
+}
+
+.numpy-theory-bullets li::marker {
+  color: var(--numpy-accent, var(--scipy-accent, #0d9488));
+}
+
 .numpy-lesson-intro-label {
   margin: 0 0 8px;
   font-size: 0.72rem;

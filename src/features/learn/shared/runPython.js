@@ -5,6 +5,7 @@ import {
   codeUsesMatplotlib,
 } from "./pythonPlotOutput";
 import { codeUsesTorch } from "./torchBrowserShim";
+import { codeUsesTransformers } from "./transformersBrowserShim";
 
 // Each hop must be bounded, otherwise a slow API or a stalled Pyodide download
 // leaves the challenge stuck on "Running…" with no result.
@@ -221,10 +222,12 @@ async function runPythonWithBrowserFirst(source) {
 }
 
 export async function runPythonCode(source) {
-  // Torch isn't on the server or real Pyodide wheels — use browser teaching shim.
-  // Matplotlib + SciPy: production Vercel backend has no Python, so prefer Pyodide.
+  // Torch and transformers aren't on the server or real Pyodide wheels — use
+  // browser teaching shims. Matplotlib + SciPy: production Vercel backend has
+  // no Python, so prefer Pyodide.
   if (
     codeUsesTorch(source) ||
+    codeUsesTransformers(source) ||
     codeUsesMatplotlib(source) ||
     codeUsesScipy(source)
   ) {

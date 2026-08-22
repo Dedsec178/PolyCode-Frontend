@@ -17,6 +17,10 @@ import {
   TORCH_BROWSER_SHIM,
   codeUsesTorch,
 } from "../../learn/shared/torchBrowserShim";
+import {
+  TRANSFORMERS_BROWSER_SHIM,
+  codeUsesTransformers,
+} from "../../learn/shared/transformersBrowserShim";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -143,6 +147,7 @@ let pyodideInitPromise = null;
 const pyodideLoadedPackages = new Set();
 let matplotlibPyodideReady = false;
 let torchShimReady = false;
+let transformersShimReady = false;
 
 const MATPLOTLIB_PYODIDE_SETUP = `
 import matplotlib
@@ -389,15 +394,44 @@ async function ensureTorchBrowserShim(py) {
   torchShimReady = true;
 }
 
+async function ensureTransformersBrowserShim(py) {
+  if (transformersShimReady) return;
+  py.runPython(TRANSFORMERS_BROWSER_SHIM);
+  transformersShimReady = true;
+}
+
+const HEAVY_ML_MODULE_NOTES = {
+  datasets: "downloads real dataset files from the Hugging Face Hub",
+  huggingface_hub: "talks to the real Hugging Face Hub API (auth, uploads, model listings)",
+  peft: "wraps a real PyTorch model with real LoRA adapter weights",
+};
+
 export async function runPython(code, stdin = '') {
   try {
     const usesTorch = codeUsesTorch(code);
+    const usesTransformers = codeUsesTransformers(code);
     const blocked = getImportedModules(code).filter((moduleName) => {
       if (usesTorch && moduleName === "torch") return false;
+      if (usesTransformers && moduleName === "transformers") return false;
       return !isAllowedPythonModule(moduleName);
     });
     if (blocked.length) {
       const importedModule = blocked[0];
+      const heavyNote = HEAVY_ML_MODULE_NOTES[importedModule];
+      if (heavyNote) {
+        return {
+          stdout: '',
+          stderr: [
+            `⚠️  '${importedModule}' needs a real Python environment.`,
+            '',
+            `💡 '${importedModule}' ${heavyNote} — that needs real network access and a full Python install, which this in-browser demo (Pyodide) can't provide.`,
+            '',
+            `✅ This browser demo simulates transformers.pipeline() only (sentiment-analysis, text-generation, question-answering, summarization, zero-shot-classification, ner, fill-mask).`,
+            `▶️  Try this exact code with: pip install ${importedModule} transformers — locally, or on Google Colab.`,
+          ].join('\n'),
+          error: `Module '${importedModule}' needs a real Python environment (not available in this browser demo).`,
+        };
+      }
       return {
         stdout: '',
         stderr: [
@@ -405,7 +439,7 @@ export async function runPython(code, stdin = '') {
           '',
           '💡 This playground runs Python with Pyodide (WebAssembly).',
           '',
-          '✅ Available: stdlib, numpy, pandas, matplotlib, scipy, scikit-learn, joblib, micropip, torch (teaching shim)',
+          '✅ Available: stdlib, numpy, pandas, matplotlib, scipy, scikit-learn, joblib, micropip, torch (teaching shim), transformers (teaching shim, pipeline() only)',
           '❌ Not available: requests, socket, threading, subprocess, etc.',
         ].join('\n'),
         error: `Module '${importedModule}' is not available in the browser.`,
@@ -413,8 +447,14 @@ export async function runPython(code, stdin = '') {
     }
 
     const py = await ensurePyodide();
-    if (usesTorch) {
+    if (usesTorch || usesTransformers) {
+      // The transformers shim's Auto* mock builds its fake tensor output on
+      // top of the torch shim's Tensor class, so it needs torch loaded first
+      // even when the snippet itself never writes `import torch`.
       await ensureTorchBrowserShim(py);
+    }
+    if (usesTransformers) {
+      await ensureTransformersBrowserShim(py);
     }
     await ensurePyodidePackages(py, code);
     const usesMatplotlib = codeUsesMatplotlib(code);
@@ -449,6 +489,9 @@ export async function runPython(code, stdin = '') {
     const stderr = py.runPython('sys.stderr.getvalue()');
     if (usesTorch && !error) {
       stdout = `[PolyCode browser demo · teaching torch shim]\n${stdout || ""}`;
+    }
+    if (usesTransformers && !error) {
+      stdout = `[PolyCode browser demo · teaching transformers shim — not real model inference]\n${stdout || ""}`;
     }
     const plotImages =
       usesMatplotlib && matplotlibPyodideReady ? extractPyodidePlotImages(py) : [];

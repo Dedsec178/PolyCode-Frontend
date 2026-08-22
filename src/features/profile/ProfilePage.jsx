@@ -20,6 +20,8 @@ import { FASTAPI_LESSONS } from "../learn/fastapi-py/data/fastapiCurriculum";
 import useFastapiProgress from "../learn/fastapi-py/hooks/useFastapiProgress";
 import { PYTORCH_LESSONS } from "../learn/pytorch-py/data/pytorchCurriculum";
 import usePytorchProgress from "../learn/pytorch-py/hooks/usePytorchProgress";
+import { HUGGINGFACE_LESSONS } from "../learn/huggingface-py/data/huggingfaceCurriculum";
+import useHuggingfaceProgress from "../learn/huggingface-py/hooks/useHuggingfaceProgress";
 import { SCIPY_LESSONS } from "../learn/scipy-py/data/scipyCurriculum";
 import useScipyProgress from "../learn/scipy-py/hooks/useScipyProgress";
 import { OPENCV_LESSONS } from "../learn/opencv-py/data/opencvCurriculum";
@@ -282,6 +284,7 @@ export default function ProfilePage() {
   const pandas = usePandasProgress();
   const fastapi = useFastapiProgress();
   const pytorch = usePytorchProgress();
+  const huggingface = useHuggingfaceProgress();
   const scipy = useScipyProgress();
   const opencv = useOpencvProgress();
   const remoteLearn = useProfileLearnProgress({
@@ -311,6 +314,9 @@ export default function ProfilePage() {
       remoteLearn.byCourseId["fastapi-py"]?.completedMap || fastapi.completedMap,
     "pytorch-py":
       remoteLearn.byCourseId["pytorch-py"]?.completedMap || pytorch.completedMap,
+    "huggingface-py":
+      remoteLearn.byCourseId["huggingface-py"]?.completedMap ||
+      huggingface.completedMap,
     "scipy-py":
       remoteLearn.byCourseId["scipy-py"]?.completedMap || scipy.completedMap,
     "opencv-py":
@@ -329,6 +335,9 @@ export default function ProfilePage() {
       remoteLearn.byCourseId["fastapi-py"]?.bookmarks || fastapi.bookmarks,
     "pytorch-py":
       remoteLearn.byCourseId["pytorch-py"]?.bookmarks || pytorch.bookmarks,
+    "huggingface-py":
+      remoteLearn.byCourseId["huggingface-py"]?.bookmarks ||
+      huggingface.bookmarks,
     "scipy-py":
       remoteLearn.byCourseId["scipy-py"]?.bookmarks || scipy.bookmarks,
     "opencv-py":
@@ -346,6 +355,7 @@ export default function ProfilePage() {
     PANDAS_LESSONS.length +
     FASTAPI_LESSONS.length +
     PYTORCH_LESSONS.length +
+    HUGGINGFACE_LESSONS.length +
     SCIPY_LESSONS.length +
     OPENCV_LESSONS.length;
   const totalPct = Math.round((totalCompleted / totalLessons) * 100) || 0;

@@ -20,6 +20,10 @@ import {
   PYTORCH_TOTAL_XP,
 } from "../learn/pytorch-py/data/pytorchCurriculum";
 import {
+  HUGGINGFACE_LESSONS,
+  HUGGINGFACE_TOTAL_XP,
+} from "../learn/huggingface-py/data/huggingfaceCurriculum";
+import {
   SCIPY_LESSONS,
   SCIPY_TOTAL_XP,
 } from "../learn/scipy-py/data/scipyCurriculum";
@@ -89,6 +93,16 @@ export const PROFILE_FEATURED_TRACKS = [
     accent: "#EE4C2C",
   },
   {
+    courseId: "huggingface-py",
+    courseName: "Hugging Face for Python",
+    hubTitle: "Hugging Face · py",
+    subtitle: "Python NLP & transformers track",
+    lessons: HUGGINGFACE_LESSONS,
+    totalXP: HUGGINGFACE_TOTAL_XP,
+    href: "/learn/huggingface-py",
+    accent: "#FF9D00",
+  },
+  {
     courseId: "scipy-py",
     courseName: "SciPy for Python",
     hubTitle: "SciPy · py",
@@ -118,6 +132,7 @@ export const COURSE_DISPLAY_NAMES = {
   "pandas-py": "Pandas for Python",
   "fastapi-py": "FastAPI for Python",
   "pytorch-py": "PyTorch for Python",
+  "huggingface-py": "Hugging Face for Python",
   "scipy-py": "SciPy for Python",
   "opencv-py": "OpenCV for Python",
   "python-fundamentals": "Python Fundamentals",
@@ -157,6 +172,10 @@ export const COURSE_DISPLAY_NAMES = {
   "sql-stored-procedures": "SQL Stored Procedures",
   "sql-projects": "SQL Projects",
   "go-fundamentals": "Go Fundamentals",
+  "go-functions": "Go Functions",
+  "go-concurrency": "Go Concurrency",
+  "go-web-development": "Go Web Development",
+  "go-modules": "Go Modules",
   "rust-fundamentals": "Rust Fundamentals",
   "java-fundamentals": "Java Fundamentals",
   "java-intermediate": "Java Intermediate",
@@ -167,6 +186,11 @@ export const COURSE_DISPLAY_NAMES = {
   "java-jdbc": "Java JDBC",
   "java-spring-boot": "Java Spring Boot",
   "java-projects": "Java Projects",
+  "qsharp-fundamentals": "Q# Fundamentals",
+  "qsharp-quantum-programming-basics": "Quantum Programming Basics",
+  "qsharp-quantum-gates": "Quantum Gates",
+  "qsharp-quantum-algorithms": "Quantum Algorithms",
+  "qsharp-quantum-projects": "Quantum Projects",
 };
 
 export function slugifyCourseName(name) {

@@ -10,6 +10,7 @@ export const COURSE_PROGRESS_REGISTRY = [
   { courseId: "pandas-py", storagePrefix: "pandas_py", scoped: true, notes: false },
   { courseId: "fastapi-py", storagePrefix: "fastapi_py", scoped: true, notes: false },
   { courseId: "pytorch-py", storagePrefix: "pytorch_py", scoped: true, notes: false },
+  { courseId: "huggingface-py", storagePrefix: "huggingface_py", scoped: true, notes: false },
   { courseId: "scipy-py", storagePrefix: "scipy_py", scoped: true, notes: false },
   { courseId: "opencv-py", storagePrefix: "opencv_py", scoped: true, notes: false },
   { courseId: "python-fundamentals", storagePrefix: "python_fundamentals", scoped: false, notes: false },
@@ -56,6 +57,9 @@ export const COURSE_PROGRESS_REGISTRY = [
   { courseId: "sql-projects", storagePrefix: "sqlprojects", scoped: false, notes: false },
   { courseId: "go-fundamentals", storagePrefix: "go_fundamentals", scoped: false, notes: true },
   { courseId: "go-functions", storagePrefix: "go_functions", scoped: false, notes: true },
+  { courseId: "go-concurrency", storagePrefix: "go_concurrency", scoped: false, notes: true },
+  { courseId: "go-web-development", storagePrefix: "go_web_development", scoped: false, notes: true },
+  { courseId: "go-modules", storagePrefix: "go_modules", scoped: false, notes: true },
   { courseId: "rust-fundamentals", storagePrefix: "rust_fundamentals", scoped: false, notes: true },
   { courseId: "java-fundamentals", storagePrefix: "java_fundamentals", scoped: false, notes: true },
   { courseId: "java-intermediate", storagePrefix: "java_intermediate", scoped: false, notes: true },
@@ -78,6 +82,14 @@ export const COURSE_PROGRESS_REGISTRY = [
   { courseId: "batchfile-fundamentals", storagePrefix: "batchfile-fundamentals", scoped: false, notes: false },
   { courseId: "batchfile-automation", storagePrefix: "batchfile-automation", scoped: false, notes: false },
   { courseId: "windows-scripting", storagePrefix: "windows-scripting", scoped: false, notes: false },
+  // ─── ADD Q# COURSES ────────────────────────────────────────────────────────
+  { courseId: "qsharp-fundamentals", storagePrefix: "qsharp_fundamentals", scoped: true, notes: false },
+  { courseId: "qsharp-quantum-programming-basics", storagePrefix: "qsharp_quantum_programming_basics", scoped: true, notes: false },
+  { courseId: "qsharp-quantum-gates", storagePrefix: "qsharp_quantum_gates", scoped: true, notes: false },
+  { courseId: "qsharp-quantum-algorithms", storagePrefix: "qsharp_quantum_algorithms", scoped: true, notes: false },
+  { courseId: "qsharp-quantum-projects", storagePrefix: "qsharp_quantum_projects", scoped: true, notes: false },
+  // ─── ADD SOFTWARE ENGINEERING COURSES ──────────────────────────────────────
+  { courseId: "software-engineering-fundamentals", storagePrefix: "software_engineering_fundamentals", scoped: false, notes: false },
 ];
 
 export function getCourseRegistryEntry(courseId) {

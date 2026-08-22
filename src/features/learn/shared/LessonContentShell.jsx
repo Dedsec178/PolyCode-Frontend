@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import LessonAnnotator from "./LessonAnnotator";
-import LessonVideo from "./LessonVideo";
 import { useAuth } from "../../auth/context/AuthContext";
 import { upsertLessonEngagement } from "./courseProgressApi";
 import {
@@ -26,15 +25,13 @@ function resolveCourseAndLesson(storageKey = "") {
 }
 
 /**
- * Wraps theory/challenge content with optional YouTube video + markup tools.
+ * Wraps theory/challenge content with markup tools.
  * storageKey should be unique per lesson (e.g. course:lessonId).
  * Pass tab ("theory" | "challenge") so notes/drawings stay on that tab only.
  */
 export default function LessonContentShell({
   storageKey,
   tab,
-  videoUrl,
-  videoTitle,
   children,
 }) {
   const { token, isAuthenticated } = useAuth();
@@ -76,7 +73,7 @@ export default function LessonContentShell({
 
   return (
     <ChallengeTelemetryContext.Provider value={reportChallengeResult}>
-      <div className={`oops-lesson-content${videoUrl ? " has-lesson-video" : ""}`}>
+      <div className="oops-lesson-content">
         <LessonAnnotator
           storageKey={annotationKey}
           courseId={courseId}
@@ -85,9 +82,6 @@ export default function LessonContentShell({
         >
           {children}
         </LessonAnnotator>
-        {videoUrl ? (
-          <LessonVideo url={videoUrl} title={videoTitle} placement="end" />
-        ) : null}
       </div>
     </ChallengeTelemetryContext.Provider>
   );
