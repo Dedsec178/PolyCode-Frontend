@@ -903,6 +903,16 @@ const LEARN_COURSE_ROUTES = [
     ),
   },
   {
+    slug: "go-web-development",
+    language: "Go",
+    Hub: lazyWithChunkRetry(
+      () => import("./features/learn/go-web-development/pages/GoWebDevelopmentHub"),
+    ),
+    Lesson: lazyWithChunkRetry(
+      () => import("./features/learn/go-web-development/pages/GoWebDevelopmentLessonPage"),
+    ),
+  },
+  {
     slug: "go-modules",
     language: "Go",
     Hub: lazyWithChunkRetry(

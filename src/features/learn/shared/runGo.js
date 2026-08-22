@@ -49,12 +49,15 @@ export function getGoRuntimeError(result) {
   }
 
   // 2. Check for Runtime Panics (e.g., index out of bounds)
-  // Panics are often returned as stderr events in the Go Playground
+    // The Playground also uses stderr for normal log output, so only treat
+    // panic-shaped stderr as a failed run.
   if (result.Events && Array.isArray(result.Events)) {
     const stderrEvents = result.Events.filter((e) => e.Kind === "stderr");
     if (stderrEvents.length > 0) {
       const panicText = stderrEvents.map((e) => e.Message).join("");
-      return cleanGoErrorOutput(panicText);
+        if (/panic:|fatal error:|runtime error:/i.test(panicText)) {
+          return cleanGoErrorOutput(panicText);
+        }
     }
   }
 
@@ -73,8 +76,12 @@ export function formatGoOutput(result) {
   }
   
   // Filter for stdout events and combine their messages
-  const stdoutEvents = result.Events.filter((e) => e.Kind === "stdout");
-  const outputString = stdoutEvents.map((e) => e.Message).join("");
+    // Include stderr because Go's standard logger writes there. Runtime panic
+    // text is removed by getGoRuntimeError before this formatter is called.
+    const outputEvents = result.Events.filter(
+      (e) => e.Kind === "stdout" || e.Kind === "stderr",
+    );
+  const outputString = outputEvents.map((e) => e.Message).join("");
   
   // Return the combined output, stripping trailing newlines for clean UI matching
   return outputString.trim();

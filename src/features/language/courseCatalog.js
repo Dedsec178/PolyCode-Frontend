@@ -823,6 +823,15 @@ export const languageCourses = {
       accent: "#00add8",
     },
     {
+      title: "Go Web Development",
+      tag: "Advanced Course",
+      icon: Terminal,
+      description:
+        "Build reliable Go web services with HTTP, routing, JSON APIs, middleware, persistence, testing, and production operations.",
+      href: "/learn/go-web-development",
+      accent: "#00add8",
+    },
+    {
       title: "Go Modules",
       tag: "Advanced Course",
       icon: Terminal,
