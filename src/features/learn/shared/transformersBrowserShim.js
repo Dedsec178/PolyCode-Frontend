@@ -3,11 +3,16 @@
  * Simulates `pipeline()` for the tasks used across the PolyCode huggingface-py
  * lessons (sentiment-analysis, text-generation, question-answering,
  * summarization, zero-shot-classification, ner, fill-mask) using deterministic
- * heuristics — not real model inference. `AutoTokenizer`, `AutoModel*`,
- * `Trainer`, `TrainingArguments`, and `BitsAndBytesConfig` stay importable so
- * code doesn't crash on `from transformers import X`, but using them raises a
- * clear "needs a real Python environment" error, since real weights/training
- * can't run in a browser sandbox.
+ * heuristics — not real model inference. `AutoTokenizer` and
+ * `AutoModelForSequenceClassification` are also simulated (tokenize/encode/
+ * decode, `.config.num_labels`/`.id2label`, `.name_or_path`, `.parameters()`/
+ * `.half()`, and a sentiment-biased forward pass) so the AutoModel/AutoTokenizer
+ * lessons run end to end in the browser. `AutoModel`, `AutoConfig`,
+ * `AutoModelForCausalLM`, `Trainer`, `TrainingArguments`, and
+ * `BitsAndBytesConfig` stay importable so code doesn't crash on
+ * `from transformers import X`, but using them raises a clear "needs a real
+ * Python environment" error, since real weights/training/quantization can't
+ * run in a browser sandbox.
  */
 
 export const TRANSFORMERS_BROWSER_SHIM = `
@@ -242,6 +247,228 @@ def pipeline(task, model=None, **kwargs):
     return _PolycodePipeline(task, model=model, **kwargs)
 
 
+_POLYCODE_SPECIAL_IDS = {"[PAD]": 0, "[UNK]": 100, "[CLS]": 101, "[SEP]": 102}
+_POLYCODE_ID_TO_SPECIAL = {v: k for k, v in _POLYCODE_SPECIAL_IDS.items()}
+_POLYCODE_TOK_VOCAB = {}
+
+_POLYCODE_KNOWN_PARAM_COUNTS = {
+    "distilbert-base-uncased-finetuned-sst-2-english": 66955010,
+    "distilbert-base-uncased": 66362880,
+    "bert-base-uncased": 109482240,
+    "bert-base-cased": 108310272,
+    "roberta-base": 124645632,
+    "gpt2": 124439808,
+}
+
+
+def _polycode_token_id(token):
+    if token in _POLYCODE_SPECIAL_IDS:
+        return _POLYCODE_SPECIAL_IDS[token]
+    tid = 1000 + int(_polycode_stable_unit(token, "vocab") * 28000)
+    _POLYCODE_TOK_VOCAB[tid] = token
+    return tid
+
+
+def _polycode_flatten_ids(ids):
+    if hasattr(ids, "_data"):
+        ids = ids.numpy().tolist()
+    elif hasattr(ids, "tolist"):
+        ids = ids.tolist()
+    out = []
+
+    def _walk(x):
+        if isinstance(x, (list, tuple)):
+            for item in x:
+                _walk(item)
+        else:
+            out.append(int(x))
+
+    _walk(ids if isinstance(ids, (list, tuple)) else [ids])
+    return out
+
+
+def _polycode_param_count_for(name):
+    base = str(name).rstrip("/").split("/")[-1]
+    if base in _POLYCODE_KNOWN_PARAM_COUNTS:
+        return _POLYCODE_KNOWN_PARAM_COUNTS[base]
+    unit = _polycode_stable_unit(base, "paramcount")
+    return int(20_000_000 + unit * 100_000_000)
+
+
+class _PolycodeAutoConfig:
+    def __init__(self, name, num_labels=None):
+        base = str(name).rstrip("/").split("/")[-1]
+        is_sst2 = "sst-2" in base or "sst2" in base
+        self.num_labels = num_labels if num_labels is not None else 2
+        if is_sst2 and self.num_labels == 2:
+            self.id2label = {0: "NEGATIVE", 1: "POSITIVE"}
+        else:
+            self.id2label = {i: f"LABEL_{i}" for i in range(self.num_labels)}
+        self.label2id = {v: k for k, v in self.id2label.items()}
+        self.model_type = base.split("-")[0] if base else "model"
+
+    def __repr__(self):
+        return f"PolycodeAutoConfig(num_labels={self.num_labels})"
+
+
+class _PolycodeFakeParam:
+    def __init__(self, n, dtype="float32"):
+        self._numel = n
+        self.dtype = dtype
+        self.requires_grad = True
+
+    def numel(self):
+        return self._numel
+
+    def __repr__(self):
+        return f"Parameter(numel={self._numel}, dtype={self.dtype})"
+
+
+class _PolycodeSequenceClassifierOutput:
+    def __init__(self, logits):
+        self.logits = logits
+
+    def __getitem__(self, key):
+        if key in (0, "logits"):
+            return self.logits
+        raise KeyError(key)
+
+
+def _polycode_bias_logits_from_ids(input_ids, num_labels, id2label):
+    flat = [t for t in _polycode_flatten_ids(input_ids) if t not in _POLYCODE_ID_TO_SPECIAL]
+    words = [_POLYCODE_TOK_VOCAB.get(t, "").lstrip("#") for t in flat]
+    text = " ".join(w for w in words if w)
+    pos_idx = next((k for k, v in id2label.items() if v == "POSITIVE"), None)
+    neg_idx = next((k for k, v in id2label.items() if v == "NEGATIVE"), None)
+    if num_labels == 2 and pos_idx is not None and neg_idx is not None:
+        label, score = _polycode_sentiment_label_score(text)
+        hi = 2.0 + 3.0 * score
+        vals = [0.0, 0.0]
+        vals[pos_idx if label == "POSITIVE" else neg_idx] = hi
+        vals[neg_idx if label == "POSITIVE" else pos_idx] = -hi
+        return vals
+    seed = sum(flat) or 1
+    return [
+        round((_polycode_stable_unit(f"{seed}:{i}", "logits") - 0.5) * 4, 4)
+        for i in range(num_labels)
+    ]
+
+
+class _PolycodeAutoModelForSequenceClassification:
+    def __init__(self, name, num_labels=None):
+        self.name_or_path = str(name)
+        self.config = _PolycodeAutoConfig(name, num_labels=num_labels)
+        self._fake_params = [_PolycodeFakeParam(_polycode_param_count_for(name))]
+
+    def parameters(self):
+        return iter(self._fake_params)
+
+    def half(self):
+        for p in self._fake_params:
+            p.dtype = "float16"
+        return self
+
+    def eval(self):
+        return self
+
+    def train(self, mode=True):
+        return self
+
+    def to(self, device):
+        return self
+
+    def __call__(self, *args, input_ids=None, attention_mask=None, **kwargs):
+        if input_ids is None and args:
+            first = args[0]
+            input_ids = first.get("input_ids") if isinstance(first, dict) else first
+        vals = _polycode_bias_logits_from_ids(
+            input_ids, self.config.num_labels, self.config.id2label
+        )
+        try:
+            logits = Tensor([vals])
+        except NameError as e:
+            raise ImportError(
+                "Calling a transformers model in this browser demo needs \`import torch\` "
+                "(the teaching torch shim provides the tensor output)."
+            ) from e
+        return _PolycodeSequenceClassifierOutput(logits)
+
+
+class _PolycodeAutoTokenizer:
+    def __init__(self, name):
+        self.name_or_path = str(name)
+
+    def tokenize(self, text):
+        pieces = re.findall(r"[A-Za-z]+|[0-9]+|[^\\sA-Za-z0-9]", str(text))
+        tokens = []
+        for w in pieces:
+            if w.isalpha() and len(w) > 6:
+                cut = max(2, len(w) // 2)
+                tokens.append(w[:cut].lower())
+                tokens.append("##" + w[cut:].lower())
+            else:
+                tokens.append(w.lower())
+        return tokens
+
+    def convert_tokens_to_ids(self, tokens):
+        return [_polycode_token_id(t) for t in tokens]
+
+    def encode(self, text, add_special_tokens=True, **kwargs):
+        ids = self.convert_tokens_to_ids(self.tokenize(text))
+        if add_special_tokens:
+            ids = [_POLYCODE_SPECIAL_IDS["[CLS]"]] + ids + [_POLYCODE_SPECIAL_IDS["[SEP]"]]
+        return ids
+
+    def decode(self, ids, skip_special_tokens=False, **kwargs):
+        words = []
+        for tid in _polycode_flatten_ids(ids):
+            if tid in _POLYCODE_ID_TO_SPECIAL:
+                if not skip_special_tokens:
+                    words.append(_POLYCODE_ID_TO_SPECIAL[tid])
+                continue
+            tok = _POLYCODE_TOK_VOCAB.get(tid, "[UNK]")
+            if tok.startswith("##") and words:
+                words[-1] = words[-1] + tok[2:]
+            elif len(tok) == 1 and not tok.isalnum() and words:
+                words[-1] = words[-1] + tok
+            else:
+                words.append(tok)
+        return " ".join(words)
+
+    def __call__(
+        self,
+        text,
+        return_tensors=None,
+        add_special_tokens=True,
+        padding=False,
+        truncation=False,
+        **kwargs,
+    ):
+        ids = self.encode(text, add_special_tokens=add_special_tokens)
+        mask = [1] * len(ids)
+        if return_tensors == "pt":
+            try:
+                return {"input_ids": Tensor([ids]), "attention_mask": Tensor([mask])}
+            except NameError as e:
+                raise ImportError(
+                    'tokenizer(..., return_tensors="pt") needs \`import torch\` in this '
+                    "browser demo (the teaching torch shim provides the tensor output)."
+                ) from e
+        return {"input_ids": ids, "attention_mask": mask}
+
+
+class _PolycodeAutoTokenizerFactory:
+    @staticmethod
+    def from_pretrained(name, *args, **kwargs):
+        return _PolycodeAutoTokenizer(name)
+
+
+class _PolycodeAutoModelForSequenceClassificationFactory:
+    @staticmethod
+    def from_pretrained(name, *args, num_labels=None, **kwargs):
+        return _PolycodeAutoModelForSequenceClassification(name, num_labels=num_labels)
+
+
 class _PolycodeUnsupportedTransformersAPI:
     """Stands in for AutoTokenizer / Trainer / etc. so \`from transformers import X\`
     keeps working, but any real use raises one clear, friendly error instead of a
@@ -253,9 +480,12 @@ class _PolycodeUnsupportedTransformersAPI:
     def _polycode_boom(self, *_args, **_kwargs):
         raise ImportError(
             f"transformers.{self._polycode_name} needs a real Python environment — this "
-            f"browser demo only simulates pipeline() (sentiment-analysis, text-generation, "
-            f"question-answering, summarization, zero-shot-classification, ner, fill-mask). "
-            f"Try this code with \`pip install transformers\` locally or on Google Colab."
+            f"browser demo simulates pipeline() (sentiment-analysis, text-generation, "
+            f"question-answering, summarization, zero-shot-classification, ner, fill-mask) "
+            f"plus AutoTokenizer/AutoModelForSequenceClassification, but not "
+            f"{self._polycode_name} (real weights/training/quantization can't run in a "
+            f"browser sandbox). Try this code with \`pip install transformers\` locally or "
+            f"on Google Colab."
         )
 
     def __call__(self, *args, **kwargs):
@@ -270,11 +500,13 @@ class _PolycodeUnsupportedTransformersAPI:
 _polycode_transformers_mod = types.ModuleType("transformers")
 _polycode_transformers_mod.__version__ = "4.x-polycode-browser-demo"
 _polycode_transformers_mod.pipeline = pipeline
+_polycode_transformers_mod.AutoTokenizer = _PolycodeAutoTokenizerFactory
+_polycode_transformers_mod.AutoModelForSequenceClassification = (
+    _PolycodeAutoModelForSequenceClassificationFactory
+)
 for _polycode_name in (
-    "AutoTokenizer",
     "AutoModel",
     "AutoConfig",
-    "AutoModelForSequenceClassification",
     "AutoModelForCausalLM",
     "AutoModelForTokenClassification",
     "AutoModelForQuestionAnswering",

@@ -45,6 +45,7 @@ export const COURSE_PROGRESS_REGISTRY = [
   { courseId: "csharp-linq", storagePrefix: "csharp_linq", scoped: false, notes: false },
   { courseId: "csharp-file-handling", storagePrefix: "csharp_file_handling", scoped: false, notes: false },
   { courseId: "csharp-aspnet-basics", storagePrefix: "csharp_aspnet_basics", scoped: false, notes: false },
+  { courseId: "csharp-projects", storagePrefix: "csharp_projects", scoped: false, notes: false },
   { courseId: "sql-fundamentals", storagePrefix: "sqlfundamentals", scoped: false, notes: false },
   { courseId: "sql-queries", storagePrefix: "sqlqueries", scoped: false, notes: false },
   { courseId: "sql-joins", storagePrefix: "sqljoins", scoped: false, notes: false },
@@ -88,6 +89,8 @@ export const COURSE_PROGRESS_REGISTRY = [
   { courseId: "qsharp-quantum-gates", storagePrefix: "qsharp_quantum_gates", scoped: true, notes: false },
   { courseId: "qsharp-quantum-algorithms", storagePrefix: "qsharp_quantum_algorithms", scoped: true, notes: false },
   { courseId: "qsharp-quantum-projects", storagePrefix: "qsharp_quantum_projects", scoped: true, notes: false },
+  // ─── ADD SOFTWARE ENGINEERING COURSES ──────────────────────────────────────
+  { courseId: "software-engineering-fundamentals", storagePrefix: "software_engineering_fundamentals", scoped: false, notes: false },
 ];
 
 export function getCourseRegistryEntry(courseId) {

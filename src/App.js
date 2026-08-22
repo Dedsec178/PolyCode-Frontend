@@ -1216,6 +1216,20 @@ const LEARN_COURSE_ROUTES = [
         ),
     ),
   },
+  {
+    slug: "csharp-projects",
+    language: "C#",
+    Hub: lazyWithChunkRetry(
+      () =>
+        import("./features/learn/csharp-projects/pages/CsharpProjectsHub"),
+    ),
+    Lesson: lazyWithChunkRetry(
+      () =>
+        import(
+          "./features/learn/csharp-projects/pages/CsharpProjectsLessonPage"
+        ),
+    ),
+  },
 ];
 
 const PageFallback = () => (

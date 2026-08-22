@@ -21,6 +21,7 @@ import {
   ScanEye,
   Clock,
   Bot,
+  Workflow,
 } from "lucide-react";
 
 export function languageKey(value = "") {
@@ -614,6 +615,15 @@ export const languageCourses = {
       href: "/learn/csharp-aspnet-basics",
       accent: "#179c24",
     },
+    {
+      title: "C# Projects",
+      tag: "Interactive Course",
+      icon: Brain,
+      description:
+        "Build 4 real, growing projects — a contact book, a persistent todo list, a grade analyzer, and a mini task API — applying everything from Fundamentals to ASP.NET Basics.",
+      href: "/learn/csharp-projects",
+      accent: "#179c24",
+    },
   ],
   "c#": [
     {
@@ -668,6 +678,15 @@ export const languageCourses = {
       description:
         "Minimal APIs, routing, DTOs, dependency injection, and the middleware pipeline — the core patterns behind ASP.NET Core.",
       href: "/learn/csharp-aspnet-basics",
+      accent: "#179c24",
+    },
+    {
+      title: "C# Projects",
+      tag: "Interactive Course",
+      icon: Brain,
+      description:
+        "Build 4 real, growing projects — a contact book, a persistent todo list, a grade analyzer, and a mini task API — applying everything from Fundamentals to ASP.NET Basics.",
+      href: "/learn/csharp-projects",
       accent: "#179c24",
     },
   ],
@@ -1007,6 +1026,18 @@ export const languageCourses = {
       accent: "#c5c5c5",
     },
   ],
+  // ─── ADD SOFTWARE ENGINEERING TRACK DEFINITION ─────────────────────────────
+  softwareengineering: [
+    {
+      title: "Introduction to Software Engineering",
+      tag: "Core Course",
+      icon: Workflow,
+      description:
+        "Why software engineering exists, the $600B industry behind it, project success/failure rates, the SDLC, and how engineers solve problems by combining smaller solutions into one system.",
+      href: "/learn/software-engineering-fundamentals",
+      accent: "#f59e0b",
+    },
+  ],
 };
 
 /** Ordered stacks for navbar grouping (one row per language, sub-courses inside). */
@@ -1108,6 +1139,12 @@ export const courseStackGroups = [
     accent: "#ce422b",
     languagePath: "/language/Rust",
   },
+  {
+    id: "softwareengineering",
+    label: "Software Engineering",
+    accent: "#f59e0b",
+    languagePath: "/language/Software%20Engineering",
+  },
 ];
 
 /** Navbar learn links per language (mirrors languageCourses). */
@@ -1200,6 +1237,7 @@ export const learnNavByLanguage = {
     { label: "C# LINQ", to: "/learn/csharp-linq" },
     { label: "C# File Handling", to: "/learn/csharp-file-handling" },
     { label: "C# ASP.NET Basics", to: "/learn/csharp-aspnet-basics" },
+    { label: "C# Projects", to: "/learn/csharp-projects" },
   ],
   "c#": [
     { label: "C# Basics", to: "/learn/c-sharp-fundamentals" },
@@ -1208,6 +1246,7 @@ export const learnNavByLanguage = {
     { label: "C# LINQ", to: "/learn/csharp-linq" },
     { label: "C# File Handling", to: "/learn/csharp-file-handling" },
     { label: "C# ASP.NET Basics", to: "/learn/csharp-aspnet-basics" },
+    { label: "C# Projects", to: "/learn/csharp-projects" },
   ],
   ruby: [
     { label: "Ruby Basics", to: "/learn/ruby-fundamentals" },
@@ -1250,6 +1289,9 @@ export const learnNavByLanguage = {
     { label: "Quantum Gates", to: "/learn/qsharp-quantum-gates" },
     { label: "Quantum Algorithms", to: "/learn/qsharp-quantum-algorithms" },
     { label: "Quantum Projects", to: "/learn/qsharp-quantum-projects" },
+  ],
+  softwareengineering: [
+    { label: "Overview", to: "/learn/software-engineering-fundamentals" },
   ],
 };
 
@@ -1360,7 +1402,8 @@ export function inferLanguageFromLearnPath(pathname = "") {
     pathname.startsWith("/learn/csharp-collections") ||
     pathname.startsWith("/learn/csharp-linq") ||
     pathname.startsWith("/learn/csharp-file-handling") ||
-    pathname.startsWith("/learn/csharp-aspnet-basics")
+    pathname.startsWith("/learn/csharp-aspnet-basics") ||
+    pathname.startsWith("/learn/csharp-projects")
   ) {
     return "csharp";
   }
@@ -1422,6 +1465,9 @@ export function inferLanguageFromLearnPath(pathname = "") {
     pathname.startsWith("/learn/qsharp-quantum-projects")
   ) {
     return "qsharp";
+  }
+  if (pathname.startsWith("/learn/software-engineering-fundamentals")) {
+    return "softwareengineering";
   }
   return null;
 }
