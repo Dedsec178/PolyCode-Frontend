@@ -45,6 +45,7 @@ export const COURSE_PROGRESS_REGISTRY = [
   { courseId: "csharp-linq", storagePrefix: "csharp_linq", scoped: false, notes: false },
   { courseId: "csharp-file-handling", storagePrefix: "csharp_file_handling", scoped: false, notes: false },
   { courseId: "csharp-aspnet-basics", storagePrefix: "csharp_aspnet_basics", scoped: false, notes: false },
+  { courseId: "csharp-projects", storagePrefix: "csharp_projects", scoped: false, notes: false },
   { courseId: "sql-fundamentals", storagePrefix: "sqlfundamentals", scoped: false, notes: false },
   { courseId: "sql-queries", storagePrefix: "sqlqueries", scoped: false, notes: false },
   { courseId: "sql-joins", storagePrefix: "sqljoins", scoped: false, notes: false },

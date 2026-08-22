@@ -1207,18 +1207,16 @@ const LEARN_COURSE_ROUTES = [
     ),
   },
   {
-    slug: "software-engineering-fundamentals",
-    language: "Software Engineering",
+    slug: "csharp-projects",
+    language: "C#",
     Hub: lazyWithChunkRetry(
       () =>
-        import(
-          "./features/learn/software-engineering-fundamentals/pages/SoftwareEngineeringFundamentalsHub"
-        ),
+        import("./features/learn/csharp-projects/pages/CsharpProjectsHub"),
     ),
     Lesson: lazyWithChunkRetry(
       () =>
         import(
-          "./features/learn/software-engineering-fundamentals/pages/SoftwareEngineeringFundamentalsLessonPage"
+          "./features/learn/csharp-projects/pages/CsharpProjectsLessonPage"
         ),
     ),
   },
