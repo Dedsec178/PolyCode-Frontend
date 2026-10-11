@@ -22,6 +22,7 @@ import {
   Clock,
   Bot,
   Workflow,
+  Smartphone,
 } from "lucide-react";
 
 export function languageKey(value = "") {
@@ -1108,6 +1109,17 @@ export const languageCourses = {
       accent: "#f59e0b",
     },
   ],
+  flutter: [
+    {
+      title: "Flutter Development: Zero to Real Apps",
+      tag: "Core Track",
+      icon: Smartphone,
+      description:
+        "Learn Dart, build beautiful interfaces, connect APIs, and create complete Android applications — from absolute beginner to production skills.",
+      href: "/learn/flutter-app",
+      accent: "#02569b",
+    },
+  ],
 };
 
 /** Ordered stacks for navbar grouping (one row per language, sub-courses inside). */
@@ -1214,6 +1226,12 @@ export const courseStackGroups = [
     label: "Software Engineering",
     accent: "#f59e0b",
     languagePath: "/language/Software%20Engineering",
+  },
+  {
+    id: "flutter",
+    label: "Flutter",
+    accent: "#02569b",
+    languagePath: "/language/Flutter",
   },
 ];
 
@@ -1333,6 +1351,9 @@ export const learnNavByLanguage = {
   ],
   // ─── ADD GO NAVIGATION ENTRIES ─────────────────────────────────────────────
   go: [{ label: "Go Basics", to: "/learn/golang-fundamentals" }],
+  flutter: [
+    { label: "Flutter Zero to Real Apps", to: "/learn/flutter-app" },
+  ],
   powershell: [
     { label: "Fundamentals", to: "/learn/powershell-fundamentals" },
     { label: "Scripting", to: "/learn/powershell-scripting" },
@@ -1491,6 +1512,9 @@ export function inferLanguageFromLearnPath(pathname = "") {
     pathname.startsWith("/learn/go-functions")
   ) {
     return "go";
+  }
+  if (pathname.startsWith("/learn/flutter-app")) {
+    return "flutter";
   }
   if (
     pathname.startsWith("/learn/powershell-fundamentals") ||

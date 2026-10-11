@@ -191,6 +191,12 @@ const ScipyHub = lazyWithChunkRetry(
 const ScipyLessonPage = lazyWithChunkRetry(
   () => import("./features/learn/scipy-py/pages/ScipyLessonPage"),
 );
+const FlutterAppHub = lazyWithChunkRetry(
+  () => import("./features/learn/flutter-app/pages/FlutterAppHub"),
+);
+const FlutterAppLessonPage = lazyWithChunkRetry(
+  () => import("./features/learn/flutter-app/pages/FlutterAppLessonPage"),
+);
 const OpencvHub = lazyWithChunkRetry(
   () => import("./features/learn/opencv-py/pages/OpencvHub"),
 );
@@ -1707,6 +1713,8 @@ function AppRoutes() {
       path.startsWith("/learn/opencv-py")
     ) {
       handleLanguageSelect("Python", { stay: true });
+    } else if (path.startsWith("/learn/flutter-app")) {
+      handleLanguageSelect("Flutter", { stay: true });
     } else if (
       path.startsWith("/learn/rust-fundamentals") ||
       path.startsWith("/learn/rust-concurrency") ||
@@ -2364,6 +2372,37 @@ function AppRoutes() {
                 selectedLanguage={selectedLanguage}
               >
                 <ScipyLessonPage />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        {/* Flutter Course Routes */}
+        <Route
+          path="/learn/flutter-app"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <FlutterAppHub />
+              </LearnShell>
+            </ThemedShell>
+          }
+        />
+        <Route
+          path="/learn/flutter-app/lesson/:lessonId"
+          element={
+            <ThemedShell theme={theme}>
+              <LearnShell
+                theme={theme}
+                onThemeChange={handleThemeChange}
+                onGoToStackPicker={goToStackPicker}
+                selectedLanguage={selectedLanguage}
+              >
+                <FlutterAppLessonPage />
               </LearnShell>
             </ThemedShell>
           }

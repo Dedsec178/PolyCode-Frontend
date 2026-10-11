@@ -14,6 +14,7 @@ export const COURSE_PROGRESS_REGISTRY = [
   { courseId: "pytorch-py", storagePrefix: "pytorch_py", scoped: true, notes: false },
   { courseId: "huggingface-py", storagePrefix: "huggingface_py", scoped: true, notes: false },
   { courseId: "scipy-py", storagePrefix: "scipy_py", scoped: true, notes: false },
+  { courseId: "flutter-app", storagePrefix: "flutter_app", scoped: true, notes: false },
   { courseId: "opencv-py", storagePrefix: "opencv_py", scoped: true, notes: false },
   { courseId: "python-fundamentals", storagePrefix: "python_fundamentals", scoped: false, notes: false },
   { courseId: "python-oop-py", storagePrefix: "python_oop_py", scoped: false, notes: false },
