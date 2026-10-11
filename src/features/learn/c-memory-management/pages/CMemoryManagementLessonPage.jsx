@@ -4,7 +4,7 @@ import NumpyIntroTheory from "../../numpy-py/components/NumpyIntroTheory";
 import OopsSidebar from "../../oops-cpp/components/OopsSidebar";
 import LearnProfileMenu from "../../shared/LearnProfileMenu";
 import LessonContentShell from "../../shared/LessonContentShell";
-import CMemoryManagementCodeChallenge from "../components/CMemoryManagementCodeChallenge";
+import CCodeChallenge from "../../shared/CCodeChallenge";
 import {
   C_MEMORY_MANAGEMENT_CHAPTERS,
   C_MEMORY_MANAGEMENT_LESSONS,
@@ -187,8 +187,10 @@ export default function CMemoryManagementLessonPage() {
               onGoChallenge={goToChallenge}
             />
           ) : (
-            <CMemoryManagementCodeChallenge
+            <CCodeChallenge
               challenge={lesson.challenge}
+              lessonId={lessonId}
+              lessonTitle={lesson.title}
               accentColor="#8e44ad"
               isCompleted={isCompleted}
               onComplete={handleChallengeComplete}

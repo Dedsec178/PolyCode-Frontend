@@ -26,8 +26,6 @@ c-file-handling/
 ├── data/
 │   ├── c_file_handlingCurriculum.js      ← lessons, theory, quizzes, challenges
 │   └── c_file_handlingVideoLinks.js      ← YouTube URLs (keyed by lesson id)
-├── components/
-│   └── CFileHandlingCodeChallenge.jsx ← C editor + run/submit
 ├── hooks/
 │   └── useCFileHandlingProgress.js  ← localStorage progress
 └── pages/
@@ -54,4 +52,5 @@ Add `"c"` key entries to `languageCourses`, `learnNavByLanguage`, `courseStackGr
 
 1. Lesson ids follow the pattern `c_file_handling-<chapter>-<lesson>` (e.g. `c_file_handling-0-0`)  
 2. Add YouTube video URLs to `c_file_handlingVideoLinks.js` keyed by lesson id  
-3. The C compiler endpoint is `/challenges/run-c` — same pattern as `/challenges/run-cpp`
+3. Challenges use the shared `../shared/CCodeChallenge.jsx` (Monaco editor, Run & Submit, Solution, tests). Code runs on the backend through `../shared/runC.js` → `POST /api/challenges/run-c` (gcc)  
+4. Challenge tests can check output (`expectedOutput` for an exact match, `outputIncludes` for substrings) and/or source (`keywords`). A test with no checks passes once the program compiles and exits with code 0. Optional `stdin` on the challenge is passed to the program

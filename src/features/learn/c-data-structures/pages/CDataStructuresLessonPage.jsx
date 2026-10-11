@@ -4,7 +4,7 @@ import NumpyIntroTheory from "../../numpy-py/components/NumpyIntroTheory";
 import OopsSidebar from "../../oops-cpp/components/OopsSidebar";
 import LearnProfileMenu from "../../shared/LearnProfileMenu";
 import LessonContentShell from "../../shared/LessonContentShell";
-import CDataStructuresCodeChallenge from "../components/CDataStructuresCodeChallenge";
+import CCodeChallenge from "../../shared/CCodeChallenge";
 import {
   C_DATA_STRUCTURES_CHAPTERS,
   C_DATA_STRUCTURES_LESSONS,
@@ -187,8 +187,10 @@ export default function CDataStructuresLessonPage() {
               onGoChallenge={goToChallenge}
             />
           ) : (
-            <CDataStructuresCodeChallenge
+            <CCodeChallenge
               challenge={lesson.challenge}
+              lessonId={lessonId}
+              lessonTitle={lesson.title}
               accentColor="#2980b9"
               isCompleted={isCompleted}
               onComplete={handleChallengeComplete}

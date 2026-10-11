@@ -4,7 +4,7 @@ import NumpyIntroTheory from "../../numpy-py/components/NumpyIntroTheory";
 import OopsSidebar from "../../oops-cpp/components/OopsSidebar";
 import LearnProfileMenu from "../../shared/LearnProfileMenu";
 import LessonContentShell from "../../shared/LessonContentShell";
-import CFileHandlingCodeChallenge from "../components/CFileHandlingCodeChallenge";
+import CCodeChallenge from "../../shared/CCodeChallenge";
 import {
   C_FILE_HANDLING_CHAPTERS,
   C_FILE_HANDLING_LESSONS,
@@ -187,8 +187,10 @@ export default function CFileHandlingLessonPage() {
               onGoChallenge={goToChallenge}
             />
           ) : (
-            <CFileHandlingCodeChallenge
+            <CCodeChallenge
               challenge={lesson.challenge}
+              lessonId={lessonId}
+              lessonTitle={lesson.title}
               accentColor="#27ae60"
               isCompleted={isCompleted}
               onComplete={handleChallengeComplete}
