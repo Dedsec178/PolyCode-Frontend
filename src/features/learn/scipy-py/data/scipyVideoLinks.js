@@ -17,7 +17,7 @@ export const SCIPY_VIDEO_LINKS = {
   "scipy-0": "https://youtu.be/0zroO8xh46E?si=3raCLgrM5KGDXUZe", // What is SciPy?
   "scipy-1": "https://youtu.be/7x5mbzmkYLY?si=O5qj36XPc9RUwSMW", // Why Scientists Love SciPy
   "scipy-2": "https://youtu.be/RIW4amx4sr4?si=R8gLH8193g0f1IBn", // SciPy and NumPy Together
-  "scipy-3": "", // Your First SciPy Import
+  "scipy-3": "https://youtu.be/mPe2uO0zNRI?si=rdLwhF2z6AnTiKCg", // Your First SciPy Import
 
   // ── Ch 2: Special Functions ──────────────────────────────────────────
   "scipy-4": "", // What Are Special Functions?

@@ -114,6 +114,13 @@ const languageMeta = {
     description:
       "The foundations behind every language track — how software projects are planned, built, tested, and maintained.",
   },
+  flutter: {
+    name: "Flutter",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg",
+    color: "#02569b",
+    description:
+      "Learn Dart and Flutter to build beautiful Android apps — from widgets and forms to APIs, auth, chat, and release builds.",
+  },
 };
 
 function normalizeLanguage(value = "") {

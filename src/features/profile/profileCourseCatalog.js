@@ -31,6 +31,10 @@ import {
   OPENCV_LESSONS,
   OPENCV_TOTAL_XP,
 } from "../learn/opencv-py/data/opencvCurriculum";
+import {
+  FLUTTER_APP_LESSONS,
+  FLUTTER_APP_TOTAL_XP,
+} from "../learn/flutter-app/data/flutterCurriculum";
 
 /** Featured profile tracks with full curricula (for cards + certificates). */
 export const PROFILE_FEATURED_TRACKS = [
@@ -122,6 +126,16 @@ export const PROFILE_FEATURED_TRACKS = [
     href: "/learn/opencv-py",
     accent: "#5CBF2A",
   },
+  {
+    courseId: "flutter-app",
+    courseName: "Flutter Development",
+    hubTitle: "Flutter · apps",
+    subtitle: "Dart & Flutter track",
+    lessons: FLUTTER_APP_LESSONS,
+    totalXP: FLUTTER_APP_TOTAL_XP,
+    href: "/learn/flutter-app",
+    accent: "#02569b",
+  },
 ];
 
 /** Display names for certificates from Mongo progress without local curriculum. */
@@ -135,6 +149,7 @@ export const COURSE_DISPLAY_NAMES = {
   "huggingface-py": "Hugging Face for Python",
   "scipy-py": "SciPy for Python",
   "opencv-py": "OpenCV for Python",
+  "flutter-app": "Flutter Development",
   "python-fundamentals": "Python Fundamentals",
   "python-oop-py": "Python OOP",
   "python-file-handling-py": "Python File Handling",
