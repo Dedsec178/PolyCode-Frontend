@@ -7560,6 +7560,8 @@ body {
 
 .oops-theory-pane {
   max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* NumPy lesson — centered content column */
