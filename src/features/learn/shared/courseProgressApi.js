@@ -73,6 +73,7 @@ export async function getLearnDashboard(token) {
   return {
     overview: data.overview || {},
     courses: data.courses || [],
+    activity: data.activity || [],
   };
 }
 
@@ -88,6 +89,7 @@ export async function getPublicLearnDashboard(username) {
   return {
     overview: data.overview || {},
     courses: data.courses || [],
+    activity: data.activity || [],
   };
 }
 

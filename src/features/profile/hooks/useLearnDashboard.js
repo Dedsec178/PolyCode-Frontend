@@ -4,7 +4,7 @@ import {
   getPublicLearnDashboard,
 } from "../../learn/shared/courseProgressApi";
 
-const EMPTY = { overview: {}, courses: [] };
+const EMPTY = { overview: {}, courses: [], activity: [] };
 
 /**
  * Learner dashboard aggregates (all CourseProgress + DailyXp summary).
@@ -45,6 +45,7 @@ export default function useLearnDashboard({
         setData({
           overview: payload.overview || {},
           courses: Array.isArray(payload.courses) ? payload.courses : [],
+          activity: Array.isArray(payload.activity) ? payload.activity : [],
         });
       })
       .catch((err) => {
@@ -64,6 +65,7 @@ export default function useLearnDashboard({
   return {
     overview: data.overview,
     courses: data.courses,
+    activity: data.activity,
     loading,
     error,
     refresh: () => setVersion((v) => v + 1),
