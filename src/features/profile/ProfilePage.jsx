@@ -350,7 +350,7 @@ export default function ProfilePage() {
     0,
   );
   const [activityWidth, setActivityWidth] = React.useState(0);
-  const activityWrapRef = React.useRef(null);
+  const [activityWrapNode, setActivityWrapNode] = React.useState(null);
   const activityDayCount = getResponsiveActivityDays(activityWidth);
   const activityDays = React.useMemo(() => {
     if (isOwnProfile && isAuthenticated) {
@@ -359,12 +359,16 @@ export default function ProfilePage() {
         dailyXp.data?.days || [],
       );
     }
-    return buildActivityDaysFromCounts(activityDayCount);
+    return buildActivityDaysFromDailyXp(
+      activityDayCount,
+      learnDashboard.activity,
+    );
   }, [
     activityDayCount,
     dailyXp.data,
     isAuthenticated,
     isOwnProfile,
+    learnDashboard.activity,
   ]);
   const completedCertificates = profileCertificates.certificates;
   const certificateOwnerPath = `/@${routeUsername || signedInUsername || profileUser?.username}`;
@@ -440,8 +444,10 @@ export default function ProfilePage() {
     };
   }, [token, routeUsername, signedInUsername]);
 
+  // The wrapper mounts only after the loading/not-found early returns, so
+  // observe it via a callback ref rather than a ref read once on mount.
   React.useEffect(() => {
-    const node = activityWrapRef.current;
+    const node = activityWrapNode;
     if (!node) return undefined;
 
     let animationFrame = 0;
@@ -462,7 +468,7 @@ export default function ProfilePage() {
       window.cancelAnimationFrame(animationFrame);
       observer.disconnect();
     };
-  }, [isOwnProfile]);
+  }, [activityWrapNode]);
 
   if (loading || profileLoading) {
     return (
@@ -601,11 +607,9 @@ export default function ProfilePage() {
         />
       ) : null}
 
-      {isOwnProfile ? (
-        <div ref={activityWrapRef}>
-          <ActivityGraph days={activityDays} />
-        </div>
-      ) : null}
+      <div ref={setActivityWrapNode}>
+        <ActivityGraph days={activityDays} />
+      </div>
 
       <div className="profile-track-grid">
         {PROFILE_FEATURED_TRACKS.map((track) => (
