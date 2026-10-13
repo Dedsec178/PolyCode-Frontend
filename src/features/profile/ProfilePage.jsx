@@ -26,6 +26,8 @@ import { SCIPY_LESSONS } from "../learn/scipy-py/data/scipyCurriculum";
 import useScipyProgress from "../learn/scipy-py/hooks/useScipyProgress";
 import { OPENCV_LESSONS } from "../learn/opencv-py/data/opencvCurriculum";
 import useOpencvProgress from "../learn/opencv-py/hooks/useOpencvProgress";
+import { FLUTTER_APP_LESSONS } from "../learn/flutter-app/data/flutterCurriculum";
+import useFlutterAppProgress from "../learn/flutter-app/hooks/useFlutterAppProgress";
 import CourseCertificate from "../learn/shared/CourseCertificate";
 import useProfileLearnProgress from "./hooks/useProfileLearnProgress";
 import { PROFILE_FEATURED_TRACKS } from "./profileCourseCatalog";
@@ -267,6 +269,7 @@ export default function ProfilePage() {
   const huggingface = useHuggingfaceProgress();
   const scipy = useScipyProgress();
   const opencv = useOpencvProgress();
+  const flutter = useFlutterAppProgress();
   const remoteLearn = useProfileLearnProgress({
     enabled: Boolean(profileUser?.username || isOwnProfile),
     isOwnProfile,
@@ -304,6 +307,9 @@ export default function ProfilePage() {
       remoteLearn.byCourseId["scipy-py"]?.completedMap || scipy.completedMap,
     "opencv-py":
       remoteLearn.byCourseId["opencv-py"]?.completedMap || opencv.completedMap,
+    "flutter-app":
+      remoteLearn.byCourseId["flutter-app"]?.completedMap ||
+      flutter.completedMap,
   };
   const trackBookmarks = {
     "oops-cpp":
@@ -325,6 +331,8 @@ export default function ProfilePage() {
       remoteLearn.byCourseId["scipy-py"]?.bookmarks || scipy.bookmarks,
     "opencv-py":
       remoteLearn.byCourseId["opencv-py"]?.bookmarks || opencv.bookmarks,
+    "flutter-app":
+      remoteLearn.byCourseId["flutter-app"]?.bookmarks || flutter.bookmarks,
   };
 
   const totalCompleted = Object.values(trackMaps).reduce(
@@ -340,7 +348,8 @@ export default function ProfilePage() {
     PYTORCH_LESSONS.length +
     HUGGINGFACE_LESSONS.length +
     SCIPY_LESSONS.length +
-    OPENCV_LESSONS.length;
+    OPENCV_LESSONS.length +
+    FLUTTER_APP_LESSONS.length;
   const totalPct = Math.round((totalCompleted / totalLessons) * 100) || 0;
   const totalStreak = Math.max(
     learnDashboard.overview?.activeStreak || 0,

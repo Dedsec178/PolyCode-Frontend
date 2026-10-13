@@ -10439,6 +10439,21 @@ body {
   color: var(--lesson-overview-accent, var(--accent, var(--acid)));
 }
 
+.lesson-topic-w3-practice-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lesson-topic-w3-practice-link:hover strong,
+.lesson-topic-w3-practice-link:focus-visible strong {
+  text-decoration: underline;
+}
+
 .numpy-intro-theory--w3 .numpy-path-label {
   margin-top: 4px;
 }
@@ -13149,4 +13164,327 @@ body {
   background-color: #5391fe;
   border-color: #5391fe;
   color: #0f172a;
+}
+
+/* -- Flutter course (studio look) ------------------------------------------- */
+.flutter-hub .flutter-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(125deg, rgba(2, 86, 155, 0.32), transparent 42%),
+    linear-gradient(200deg, rgba(19, 185, 253, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(1, 117, 194, 0.12), transparent 70%),
+    var(--vscode-panel, #252526);
+  border: 1px solid rgba(2, 86, 155, 0.28);
+  box-shadow: 0 0 0 1px rgba(19, 185, 253, 0.08) inset;
+}
+
+.flutter-hub .oops-hero-accent {
+  background: linear-gradient(90deg, #13b9fd, #54c5f8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.flutter-hero-orbit {
+  position: absolute;
+  right: 6%;
+  top: 18%;
+  width: 160px;
+  height: 160px;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.flutter-hero-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(19, 185, 253, 0.4);
+  animation: scipy-orbit-spin 18s linear infinite;
+}
+
+.flutter-hero-ring-b {
+  inset: 18px;
+  border-color: rgba(2, 86, 155, 0.45);
+  animation-direction: reverse;
+  animation-duration: 12s;
+}
+
+.flutter-hero-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: #13b9fd;
+  box-shadow: 0 0 18px rgba(19, 185, 253, 0.65);
+}
+
+.flutter-hero-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.flutter-hero-badge {
+  background: rgba(2, 86, 155, 0.35) !important;
+  border-color: rgba(19, 185, 253, 0.45) !important;
+  color: #bae6fd !important;
+}
+
+.flutter-level-chip {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #e0f2fe;
+  background: rgba(19, 185, 253, 0.16);
+  border: 1px solid rgba(19, 185, 253, 0.35);
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+}
+
+.flutter-module-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.85rem 0 1rem;
+}
+
+.flutter-module-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  color: #bae6fd;
+  background: rgba(2, 86, 155, 0.28);
+  border: 1px solid rgba(19, 185, 253, 0.28);
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+}
+
+.flutter-xp-fill {
+  background: linear-gradient(90deg, #02569b, #13b9fd) !important;
+}
+
+.flutter-learn-path {
+  margin: 1.5rem 0;
+}
+
+.flutter-path-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.flutter-path-label span {
+  font-weight: 800;
+  color: var(--txt-0, #f0f0ff);
+}
+
+.flutter-path-label small {
+  color: var(--txt-2, #6e7891);
+}
+
+.flutter-path-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.85rem;
+}
+
+.flutter-path-card {
+  border: 1px solid color-mix(in srgb, var(--stage-color, #02569b) 35%, transparent);
+  border-radius: 1rem;
+  padding: 1rem;
+  background:
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--stage-color, #02569b) 18%, transparent),
+      transparent 55%
+    ),
+    var(--vscode-panel, #252526);
+}
+
+.flutter-path-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.flutter-path-level {
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #e0f2fe;
+}
+
+.flutter-path-pct {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #042f2e;
+  background: var(--stage-color, #13b9fd);
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+}
+
+.flutter-path-summary {
+  margin: 0 0 0.65rem;
+  font-size: 0.84rem;
+  color: var(--txt-1, #c0c8e0);
+  line-height: 1.45;
+}
+
+.flutter-path-chapters {
+  list-style: none;
+  margin: 0 0 0.85rem;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.flutter-path-chapters li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--txt-1, #c0c8e0);
+}
+
+.flutter-path-cta {
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--stage-color, #02569b) 45%, transparent);
+  border-radius: 0.65rem;
+  padding: 0.55rem 0.75rem;
+  background: color-mix(in srgb, var(--stage-color, #02569b) 22%, transparent);
+  color: #e0f2fe;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.flutter-path-cta:hover {
+  background: color-mix(in srgb, var(--stage-color, #02569b) 40%, transparent);
+}
+
+.flutter-studio-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0 0 1.1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 1rem;
+  background:
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--flutter-accent, #02569b) 26%, transparent),
+      rgba(19, 185, 253, 0.12)
+    );
+  border: 1px solid color-mix(in srgb, var(--flutter-accent, #02569b) 40%, transparent);
+}
+
+.flutter-studio-banner-orbit {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.flutter-orbit-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px dashed color-mix(in srgb, var(--flutter-accent, #02569b) 70%, white);
+  animation: scipy-orbit-spin 10s linear infinite;
+}
+
+.flutter-orbit-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: var(--flutter-accent, #02569b);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--flutter-accent, #02569b) 70%, transparent);
+}
+
+.flutter-studio-banner-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.flutter-studio-pill {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #042f2e;
+  background: #13b9fd;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+}
+
+.flutter-studio-banner-copy strong {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.flutter-studio-banner-copy p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.flutter-lesson-page {
+  --lesson-accent: var(--flutter-accent, #02569b);
+}
+
+.flutter-chapter-tag {
+  background: color-mix(in srgb, var(--flutter-accent, #02569b) 24%, transparent) !important;
+  color: #bae6fd !important;
+}
+
+.flutter-tabs .oops-tab.active {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--flutter-accent, #02569b) 45%, transparent);
+}
+
+.flutter-nav-next {
+  background: linear-gradient(135deg, #02569b, #13b9fd) !important;
+  border: none !important;
+  color: #fff !important;
+}
+
+.app.theme-light .flutter-hub .flutter-hero {
+  background:
+    linear-gradient(125deg, rgba(2, 86, 155, 0.1), transparent 42%),
+    linear-gradient(200deg, rgba(19, 185, 253, 0.08), transparent 55%),
+    #ffffff !important;
+  border: 1px solid rgba(2, 86, 155, 0.2) !important;
+}
+
+.app.theme-light .flutter-hub .oops-hero-title,
+.app.theme-light .flutter-hub .flutter-path-label span {
+  color: #0f172a !important;
+}
+
+.app.theme-light .flutter-hub .oops-hero-sub,
+.app.theme-light .flutter-path-summary,
+.app.theme-light .flutter-path-chapters li {
+  color: #475569 !important;
+}
+
+.app.theme-light .flutter-studio-banner-copy strong {
+  color: #0f172a !important;
+}
+
+.app.theme-light .flutter-studio-banner-copy p {
+  color: #475569 !important;
 }
