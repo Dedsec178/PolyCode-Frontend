@@ -5,6 +5,7 @@ import { useAuth } from "../../auth/context/AuthContext";
 import { useSiteMonacoTheme } from "../../../shared/hooks/useSiteMonacoTheme";
 import { getVSCodeEditorOptions } from "../../../shared/utils/monacoTheme";
 import { formatCppOutput, getCppRuntimeError, runCppCode } from "./runCpp";
+import { formatCOutput, getCRuntimeError, runCCode } from "./runC";
 import {
   formatJavaScriptOutput,
   getJavaScriptRuntimeError,
@@ -35,6 +36,7 @@ import {
 function normalizeLang(lang = "python") {
   const value = lang.toLowerCase();
   if (value === "c++" || value === "cpp") return "cpp";
+  if (value === "c") return "c";
   if (value === "javascript" || value === "js") return "javascript";
   if (value === "csharp" || value === "c#") return "csharp";
   if (value === "ruby") return "ruby";
@@ -47,6 +49,7 @@ function normalizeLang(lang = "python") {
 
 function monacoLanguage(lang) {
   if (lang === "cpp") return "cpp";
+  if (lang === "c") return "c";
   if (lang === "javascript") return "javascript";
   if (lang === "html") return "html";
   if (lang === "css") return "css";
@@ -63,6 +66,9 @@ function monacoLanguage(lang) {
 async function executeTheoryCode(source, lang, block = {}) {
   if (lang === "cpp") {
     return runCppCode(source);
+  }
+  if (lang === "c") {
+    return { result: await runCCode(source, block.stdin || ""), runtime: "server" };
   }
   if (lang === "javascript") {
     return runJavaScriptCode(source);
@@ -139,6 +145,7 @@ function formatTheoryOutput(result, lang) {
     return notes ? `${notes}\n\n${css}` : css;
   }
   if (lang === "cpp") return formatCppOutput(result);
+  if (lang === "c") return formatCOutput(result);
   if (lang === "javascript") return formatJavaScriptOutput(result);
   if (lang === "csharp") return formatCsharpOutput(result);
   if (lang === "ruby") return formatRubyOutput(result);
@@ -154,6 +161,7 @@ function getTheoryRuntimeError(result, lang) {
     return result?.error || result?.stderr || "";
   }
   if (lang === "cpp") return getCppRuntimeError(result);
+  if (lang === "c") return getCRuntimeError(result);
   if (lang === "javascript") return getJavaScriptRuntimeError(result);
   if (lang === "csharp") return getCsharpRuntimeError(result);
   if (lang === "ruby") return getRubyRuntimeError(result);
