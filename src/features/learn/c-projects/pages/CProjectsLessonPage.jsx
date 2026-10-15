@@ -4,7 +4,7 @@ import NumpyIntroTheory from "../../numpy-py/components/NumpyIntroTheory";
 import OopsSidebar from "../../oops-cpp/components/OopsSidebar";
 import LearnProfileMenu from "../../shared/LearnProfileMenu";
 import LessonContentShell from "../../shared/LessonContentShell";
-import CProjectsCodeChallenge from "../components/CProjectsCodeChallenge";
+import CCodeChallenge from "../../shared/CCodeChallenge";
 import {
   C_PROJECTS_CHAPTERS,
   C_PROJECTS_LESSONS,
@@ -187,8 +187,10 @@ export default function CProjectsLessonPage() {
               onGoChallenge={goToChallenge}
             />
           ) : (
-            <CProjectsCodeChallenge
+            <CCodeChallenge
               challenge={lesson.challenge}
+              lessonId={lessonId}
+              lessonTitle={lesson.title}
               accentColor="#f39c12"
               isCompleted={isCompleted}
               onComplete={handleChallengeComplete}

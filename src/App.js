@@ -1323,9 +1323,10 @@ const LEARN_COURSE_ROUTES = [
 ];
 
 const PageFallback = () => (
-  <div className="loading">
+  <div className="loading" role="status" aria-label="Loading">
     <div className="spinner-container">
       <div className="spinner" />
+      <div className="spinner-inner" />
     </div>
   </div>
 );
