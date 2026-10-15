@@ -259,6 +259,7 @@ const PYTHON_STDLIB_PREFIXES = [
   'string', 'textwrap', 'unicodedata', 'struct', 'codecs', 'copy',
   'pprint', 'reprlib', 'enum', 'graphlib', 'contextlib', 'abc',
   'io', 'pickle', 'pathlib', 'warnings', 'builtins',
+  'csv', 'shutil', 'logging', 'dataclasses',
 ];
 
 /** Pyodide wheels available via loadPackage (used by learn + playground). */
