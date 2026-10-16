@@ -244,6 +244,10 @@
   color: #dc2626 !important;
 }
 
+.app.theme-light .lesson-read-gate-timer {
+  color: #6d28d9 !important;
+}
+
 .app.theme-light .lesson-confidence-options button,
 .app.theme-light .numpy-confidence-options button {
   background: var(--poly-surface-muted) !important;
