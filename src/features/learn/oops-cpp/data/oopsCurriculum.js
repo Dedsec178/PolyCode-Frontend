@@ -1855,10 +1855,10 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "area(r) computes circle area" },
-            { id: 2, label: "area(w,h) computes rectangle area" },
-            { id: 3, label: "area(a,b,c) uses Heron's formula" },
-            { id: 4, label: "All three overloads compile and run" },
+            { id: 1, label: "area(r) computes circle area", keywords: [{ pattern: "double\\s+area\\s*\\(\\s*double\\s+\\w+\\s*\\)" }, { pattern: "M_PI|3\\.14|acos\\s*\\(" }] },
+            { id: 2, label: "area(w,h) computes rectangle area", keywords: [{ pattern: "double\\s+area\\s*\\(\\s*double\\s+\\w+\\s*,\\s*double\\s+\\w+\\s*\\)" }] },
+            { id: 3, label: "area(a,b,c) uses Heron's formula", keywords: [{ pattern: "double\\s+area\\s*\\(\\s*double\\s+\\w+\\s*,\\s*double\\s+\\w+\\s*,\\s*double\\s+\\w+\\s*\\)" }, { pattern: "sqrt\\s*\\(" }] },
+            { id: 4, label: "All three overloads compile and run", keywords: [{ pattern: "area\\s*\\(\\s*[\\d.]+\\s*\\)" }, { pattern: "area\\s*\\(\\s*[\\d.]+\\s*,\\s*[\\d.]+\\s*\\)" }, { pattern: "area\\s*\\(\\s*[\\d.]+\\s*,\\s*[\\d.]+\\s*,\\s*[\\d.]+\\s*\\)" }] },
           ],
         },
       },

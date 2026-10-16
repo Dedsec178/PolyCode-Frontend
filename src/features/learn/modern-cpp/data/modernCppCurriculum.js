@@ -76,7 +76,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "auto variables print 10 Modern 3" },
+            { id: 1, label: "auto variables print 10 Modern 3", keywords: [{ pattern: "auto\\s+\\w+\\s*=\\s*10\\b" }, { pattern: "auto\\s+\\w+\\s*=\\s*(std::)?string" }, { pattern: "auto\\s+\\w+\\s*=\\s*(std::)?vector" }] },
           ],
         },
       },
@@ -142,7 +142,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Sum output is 15" },
+            { id: 1, label: "Sum output is 15", keywords: [{ pattern: "for\\s*\\(\\s*(const\\s+)?auto\\s*&?\\s*\\w+\\s*:\\s*\\w+\\s*\\)" }, { pattern: "\\+=" }] },
           ],
         },
       },
@@ -210,7 +210,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Unpacked values print correctly" },
+            { id: 1, label: "Unpacked values print correctly", keywords: [{ pattern: "auto\\s*&?\\s*\\[\\s*\\w+\\s*,\\s*\\w+\\s*,\\s*\\w+\\s*\\]" }] },
           ],
         },
       },
@@ -273,7 +273,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "unique_ptr moved and prints 7" },
+            { id: 1, label: "unique_ptr moved and prints 7", keywords: [{ pattern: "make_unique\\s*<\\s*int\\s*>" }, { pattern: "\\bmove\\s*\\(" }] },
           ],
         },
       },
@@ -332,7 +332,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "weak_ptr expired after reset" },
+            { id: 1, label: "weak_ptr expired after reset", keywords: [{ pattern: "weak_ptr\\s*<" }, { pattern: "\\.reset\\s*\\(\\s*\\)" }, { pattern: "\\.expired\\s*\\(\\s*\\)" }] },
           ],
         },
       },
@@ -404,7 +404,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "count_if returns 3" },
+            { id: 1, label: "count_if returns 3", keywords: [{ pattern: "count_if\\s*\\(" }, { pattern: "\\[[^\\]]*\\]\\s*\\(" }, { pattern: "%\\s*2\\s*(!=\\s*0|==\\s*1)" }] },
           ],
         },
       },
@@ -468,7 +468,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Output is 6 12 18" },
+            { id: 1, label: "Output is 6 12 18", keywords: [{ pattern: "transform\\s*\\(" }, { pattern: "\\*\\s*3\\b|\\b3\\s*\\*" }] },
           ],
         },
       },
@@ -537,7 +537,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "constexpr add returns 11" },
+            { id: 1, label: "constexpr add returns 11", keywords: [{ pattern: "constexpr\\s+int\\s+add\\s*\\([^)]*\\)\\s*\\{[^}]*return\\s+\\w+\\s*\\+\\s*\\w+" }, { pattern: "constexpr\\s+int\\s+\\w+\\s*=\\s*add\\s*\\(" }] },
           ],
         },
       },
@@ -603,7 +603,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Value prints 42" },
+            { id: 1, label: "Value prints 42", keywords: [{ pattern: "consteval\\s+int\\s+buildValue\\s*\\(\\s*\\)\\s*\\{[^}]*return\\s+[^;]+;" }, { pattern: "constinit\\s+int\\s+\\w+\\s*=\\s*buildValue\\s*\\(" }] },
           ],
         },
       },
@@ -686,7 +686,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "No name prints when optional is empty" },
+            { id: 1, label: "No name prints when optional is empty", keywords: [{ pattern: "optional\\s*<\\s*(std::)?string\\s*>" }, { pattern: "nullopt" }, { pattern: "No name" }] },
           ],
         },
       },
@@ -753,7 +753,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Variant prints 5" },
+            { id: 1, label: "Variant prints 5", keywords: [{ pattern: "variant\\s*<\\s*int\\s*,\\s*(std::)?string\\s*>" }, { pattern: "visit\\s*\\(|get\\s*<\\s*int\\s*>|holds_alternative" }] },
           ],
         },
       },
@@ -816,7 +816,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Message prints Hello world" },
+            { id: 1, label: "Message prints Hello world", keywords: [{ pattern: "void\\s+printMessage\\s*\\(\\s*(std::)?string_view\\s+(\\w+)\\s*\\)\\s*\\{[^}]*cout\\s*<<\\s*\\2\\b" }] },
           ],
         },
       },
@@ -879,7 +879,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Moved string prints ready and original size 0" },
+            { id: 1, label: "Moved string prints ready and original size 0", keywords: [{ pattern: "\\bmove\\s*\\(\\s*\\w+\\s*\\)" }, { pattern: "\\.size\\s*\\(\\s*\\)" }] },
           ],
         },
       },
@@ -958,7 +958,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Wrapper preserves lvalue and rvalue categories" },
+            { id: 1, label: "Wrapper preserves lvalue and rvalue categories", keywords: [{ pattern: "template\\s*<\\s*(typename|class)\\s+\\w+\\s*>" }, { pattern: "\\w+\\s*&&\\s*\\w+" }, { pattern: "forward\\s*<\\s*\\w+\\s*>\\s*\\(" }] },
           ],
         },
       },
@@ -1027,7 +1027,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Thread prints Task done" },
+            { id: 1, label: "Thread prints Task done", keywords: [{ pattern: "thread\\s+\\w+\\s*[({]\\s*\\w+" }, { pattern: "\\.join\\s*\\(\\s*\\)" }] },
           ],
         },
       },
@@ -1073,7 +1073,7 @@ int main() {
 using namespace std;
 
 int counter = 0;
-mutex lock;
+mutex counterMutex;
 
 void increment() {
     // TODO: protect counter increment with lock_guard
@@ -1094,10 +1094,10 @@ int main() {
 using namespace std;
 
 int counter = 0;
-mutex lock;
+mutex counterMutex;
 
 void increment() {
-    lock_guard<mutex> guard(lock);
+    lock_guard<mutex> guard(counterMutex);
     counter++;
 }
 
@@ -1110,7 +1110,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Counter ends at 2" },
+            { id: 1, label: "Counter ends at 2", keywords: [{ pattern: "lock_guard\\s*<\\s*(std::)?mutex\\s*>" }, { pattern: "\\.join\\s*\\(\\s*\\)" }, { pattern: "counter\\s*\\+\\+|\\+\\+\\s*counter" }] },
           ],
         },
       },
@@ -1176,7 +1176,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Scope closes file automatically" },
+            { id: 1, label: "Scope closes file automatically", keywords: [{ pattern: "\\{\\s*(std::)?ofstream\\s+\\w+" }] },
           ],
         },
       },
@@ -1237,7 +1237,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "formatStatus returns Success" },
+            { id: 1, label: "formatStatus returns Success", keywords: [{ pattern: "(std::)?string\\s+formatStatus\\s*\\(\\s*bool\\s+\\w+\\s*\\)" }, { pattern: "\"Success\"" }, { pattern: "\"Failure\"" }] },
           ],
         },
       },

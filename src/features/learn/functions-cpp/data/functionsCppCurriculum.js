@@ -71,8 +71,8 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "greet function exists" },
-            { id: 2, label: "Output contains Hello, Alice!" },
+            { id: 1, label: "greet function exists", keywords: [{ pattern: "void\\s+greet\\s*\\(\\s*(const\\s+)?(std::)?string" }] },
+            { id: 2, label: "Output contains Hello, Alice!", keywords: [{ pattern: "Hello," }, { pattern: "greet\\s*\\(\\s*\"Alice\"\\s*\\)" }] },
           ],
         },
       },
@@ -130,7 +130,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "maxOfTwo returns 10 for (7,10)" },
+            { id: 1, label: "maxOfTwo returns 10 for (7,10)", keywords: [{ pattern: "int\\s+maxOfTwo\\s*\\(\\s*int\\s+\\w+\\s*,\\s*int\\s+\\w+\\s*\\)" }, { pattern: "return\\s+[^;]*[<>]|max\\s*\\(" }] },
           ],
         },
       },
@@ -193,7 +193,7 @@ int add(int a, int b) {
     return a + b;
 }`,
           tests: [
-            { id: 1, label: "Prototype is used before definition" },
+            { id: 1, label: "Prototype is used before definition", keywords: [{ pattern: "int\\s+add\\s*\\([^)]*\\)\\s*;[\\s\\S]*int\\s+main[\\s\\S]*int\\s+add\\s*\\([^)]*\\)\\s*\\{" }] },
           ],
         },
       },
@@ -265,7 +265,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Original value remains unchanged" },
+            { id: 1, label: "Original value remains unchanged", keywords: [{ pattern: "void\\s+hideValue\\s*\\(\\s*int\\s+(\\w+)\\s*\\)\\s*\\{[^}]*\\b\\1\\s*=" }, { pattern: "hideValue\\s*\\(\\s*\\w+\\s*\\)\\s*;" }] },
           ],
         },
       },
@@ -331,7 +331,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "swapValues swaps x and y" },
+            { id: 1, label: "swapValues swaps x and y", keywords: [{ pattern: "void\\s+swapValues\\s*\\(\\s*int\\s*&\\s*\\w+\\s*,\\s*int\\s*&\\s*\\w+\\s*\\)\\s*\\{[^}]*(\\bswap\\s*\\(|=)" }] },
           ],
         },
       },
@@ -397,7 +397,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "sum returns 10 for the sample vector" },
+            { id: 1, label: "sum returns 10 for the sample vector", keywords: [{ pattern: "int\\s+sum\\s*\\(\\s*const\\s+(std::)?vector\\s*<\\s*int\\s*>\\s*&" }, { pattern: "\\+=|accumulate\\s*\\(" }] },
           ],
         },
       },
@@ -427,7 +427,7 @@ int main() {
 using namespace std;
 
 void greet(string name, int times = 1) {
-    for (int i = 0; i < times; ++i) cout << "Hello, " << name << "!\n";
+    for (int i = 0; i < times; ++i) cout << "Hello, " << name << "!\\n";
 }
 
 int main() {
@@ -459,7 +459,7 @@ int main() {
 using namespace std;
 
 void greet(string name, int times = 1) {
-    for (int i = 0; i < times; ++i) cout << "Hello, " << name << "!\n";
+    for (int i = 0; i < times; ++i) cout << "Hello, " << name << "!\\n";
 }
 
 int main() {
@@ -468,7 +468,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "greet works with one or two arguments" },
+            { id: 1, label: "greet works with one or two arguments", keywords: [{ pattern: "void\\s+greet\\s*\\([^)]*int\\s+(\\w+)\\s*=\\s*\\d+\\s*\\)" }, { pattern: "(for|while)\\s*\\([^)]*\\btimes\\b" }, { pattern: "cout\\s*<<" }, { pattern: "greet\\s*\\(\\s*\"\\w+\"\\s*\\)" }, { pattern: "greet\\s*\\(\\s*\"\\w+\"\\s*,\\s*\\d+\\s*\\)" }] },
           ],
         },
       },
@@ -541,8 +541,8 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Square overload returns 25" },
-            { id: 2, label: "Rectangle overload returns 24" },
+            { id: 1, label: "Square overload returns 25", keywords: [{ pattern: "int\\s+area\\s*\\(\\s*int\\s+(\\w+)\\s*\\)\\s*\\{[^}]*return\\s+[^;]*(\\b\\1\\s*\\*\\s*\\1\\b|pow\\s*\\()" }] },
+            { id: 2, label: "Rectangle overload returns 24", keywords: [{ pattern: "int\\s+area\\s*\\(\\s*int\\s+(\\w+)\\s*,\\s*int\\s+(\\w+)\\s*\\)\\s*\\{[^}]*return\\s+[^;]*(\\b\\1\\s*\\*\\s*\\2\\b|\\b\\2\\s*\\*\\s*\\1\\b)" }] },
           ],
         },
       },
@@ -606,8 +606,8 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Template maxOf returns 8 for ints" },
-            { id: 2, label: "Template maxOf returns 2.5 for doubles" },
+            { id: 1, label: "Template maxOf returns 8 for ints", keywords: [{ pattern: "template\\s*<\\s*(typename|class)\\s+\\w+\\s*>" }, { pattern: "maxOf\\s*\\([^)]*\\)\\s*\\{[^}]*return\\s+[^;]*([<>]|max\\s*\\()" }, { pattern: "maxOf\\s*\\(\\s*\\d+\\s*,\\s*\\d+\\s*\\)" }] },
+            { id: 2, label: "Template maxOf returns 2.5 for doubles", keywords: [{ pattern: "template\\s*<\\s*(typename|class)\\s+\\w+\\s*>" }, { pattern: "maxOf\\s*\\([^)]*\\)\\s*\\{[^}]*return\\s+[^;]*([<>]|max\\s*\\()" }, { pattern: "maxOf\\s*\\(\\s*\\d+\\.\\d+\\s*,\\s*\\d+\\.\\d+\\s*\\)" }] },
           ],
         },
       },
@@ -675,7 +675,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Lambda counts evens correctly" },
+            { id: 1, label: "Lambda counts evens correctly", keywords: [{ pattern: "\\[[^\\]]*\\]\\s*\\(\\s*int\\s+\\w+\\s*\\)" }, { pattern: "%\\s*2\\s*==\\s*0" }, { pattern: "count_if\\s*\\(|\\+\\+|\\+=" }] },
           ],
         },
       },
@@ -703,7 +703,7 @@ void callTwice(function<void()> f) {
 }
 
 int main() {
-    callTwice([](){ cout << "Hi\n"; });
+    callTwice([](){ cout << "Hi\\n"; });
     return 0;
 }`,
           ),
@@ -741,7 +741,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "runNTimes increments counter to 5" },
+            { id: 1, label: "runNTimes increments counter to 5", keywords: [{ pattern: "void\\s+runNTimes\\s*\\(\\s*(std::)?function\\s*<\\s*void\\s*\\(\\s*\\)\\s*>" }, { pattern: "(for|while)\\s*\\(" }, { pattern: "\\[\\s*&" }] },
           ],
         },
       },
@@ -808,7 +808,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Lambda increments count to 3" },
+            { id: 1, label: "Lambda increments count to 3", keywords: [{ pattern: "\\[\\s*&\\s*(count)?\\s*\\]" }, { pattern: "count\\s*\\+\\+|\\+\\+\\s*count|count\\s*\\+=" }] },
           ],
         },
       },
@@ -877,7 +877,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "constexpr square returns 16" },
+            { id: 1, label: "constexpr square returns 16", keywords: [{ pattern: "constexpr\\s+int\\s+square\\s*\\(" }, { pattern: "return\\s+\\w+\\s*\\*\\s*\\w+" }] },
           ],
         },
       },
@@ -945,7 +945,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "math::clamp returns 10 for (12,0,10)" },
+            { id: 1, label: "math::clamp returns 10 for (12,0,10)", keywords: [{ pattern: "namespace\\s+math\\s*\\{" }, { pattern: "int\\s+clamp\\s*\\([^)]*\\)\\s*\\{[^}]*(<|>|\\bmin\\s*\\(|\\bmax\\s*\\(|std::clamp)" }, { pattern: "math::clamp\\s*\\(" }] },
           ],
         },
       },
@@ -1019,7 +1019,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Helper function is used" },
+            { id: 1, label: "Helper function is used", keywords: [{ pattern: "bool\\s+isEven\\s*\\(\\s*int\\s+\\w+\\s*\\)" }, { pattern: "%\\s*2" }, { pattern: "if\\s*\\(\\s*!?\\s*isEven\\s*\\(" }] },
           ],
         },
       },
@@ -1087,8 +1087,8 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "isPrime(7) returns true" },
-            { id: 2, label: "isPrime(8) returns false" },
+            { id: 1, label: "isPrime(7) returns true", keywords: [{ pattern: "bool\\s+isPrime\\s*\\(\\s*int\\s+\\w+\\s*\\)" }, { pattern: "%" }, { pattern: "return\\s+true" }] },
+            { id: 2, label: "isPrime(8) returns false", keywords: [{ pattern: "bool\\s+isPrime\\s*\\(\\s*int\\s+\\w+\\s*\\)" }, { pattern: "(for|while)\\s*\\(" }, { pattern: "return\\s+false" }] },
           ],
         },
       },

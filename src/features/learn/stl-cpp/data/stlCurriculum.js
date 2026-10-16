@@ -50,6 +50,7 @@ int main() {
           title: "Vector Sum",
           description: "Write a function that returns the sum of all elements in a vector<int>.",
           starterCode: `#include <vector>
+#include <iostream>
 using namespace std;
 
 int sumVector(const vector<int>& v) {
@@ -62,6 +63,7 @@ int main() {
     return 0;
 }`,
           solutionCode: `#include <vector>
+#include <iostream>
 using namespace std;
 
 int sumVector(const vector<int>& v) {
@@ -76,7 +78,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "sumVector returns 10 for {1,2,3,4}" },
+            { id: 1, label: "sumVector returns 10 for {1,2,3,4}", keywords: [{ pattern: "int\\s+sumVector\\s*\\(" }, { pattern: "\\+=|accumulate\\s*\\(" }] },
           ],
         },
       },
@@ -131,7 +133,9 @@ int main() {
     if ((int)v.capacity() >= N) cout << 0; else cout << 1;
     return 0;
 }`,
-          tests: [{ id: 1, label: "Capacity >= N after reserve" }],
+          tests: [
+            { id: 1, label: "Capacity >= N after reserve", keywords: [{ pattern: "\\.reserve\\s*\\(" }, { pattern: "\\.capacity\\s*\\(\\s*\\)" }] },
+          ],
         },
       },
       {
@@ -168,7 +172,9 @@ int main() {
     while (!d.empty()) { cout << d.front() << ' '; d.pop_front(); }
     return 0;
 }`,
-          tests: [{ id: 1, label: "Deque outputs sequence 0 1 2" }],
+          tests: [
+            { id: 1, label: "Deque outputs sequence 0 1 2", keywords: [{ pattern: "deque\\s*<" }, { pattern: "push_front\\s*\\(" }, { pattern: "push_back\\s*\\(" }] },
+          ],
         },
       },
     ],
@@ -211,6 +217,7 @@ int main() {
           title: "Iterator Sum",
           description: "Use an iterator to compute the sum of a vector<int>.",
           starterCode: `#include <vector>
+#include <iostream>
 using namespace std;
 
 int sumVectorIter(const vector<int>& v) {
@@ -223,6 +230,7 @@ int main() {
     return 0;
 }`,
           solutionCode: `#include <vector>
+#include <iostream>
 using namespace std;
 
 int sumVectorIter(const vector<int>& v) {
@@ -237,7 +245,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "sumVectorIter returns 15 for {5,5,5}" },
+            { id: 1, label: "sumVectorIter returns 15 for {5,5,5}", keywords: [{ pattern: "int\\s+sumVectorIter\\s*\\(" }, { pattern: "\\.begin\\s*\\(\\s*\\)" }, { pattern: "\\+=\\s*\\*\\s*\\w+|accumulate\\s*\\(" }] },
           ],
         },
       },
@@ -278,7 +286,9 @@ int main() {
     cout << (p == q) << endl;
     return 0;
 }`,
-          tests: [{ id: 1, label: "Pointer may change after push_back" }],
+          tests: [
+            { id: 1, label: "Pointer may change after push_back", keywords: [{ pattern: "&\\s*\\w+\\s*\\[\\s*0\\s*\\]|\\.data\\s*\\(\\s*\\)" }, { pattern: "push_back\\s*\\(" }, { pattern: "\\w+\\s*(==|!=)\\s*\\w+" }] },
+          ],
         },
       },
       {
@@ -316,7 +326,9 @@ int main() {
     for (int x : b) cout << x << ' ';
     return 0;
 }`,
-          tests: [{ id: 1, label: "b is reversed copy of a" }],
+          tests: [
+            { id: 1, label: "b is reversed copy of a", keywords: [{ pattern: "rbegin\\s*\\(|reverse\\s*\\(" }, { pattern: "back_inserter\\s*\\(|copy\\s*\\(|assign\\s*\\(" }] },
+          ],
         },
       },
     ],
@@ -387,7 +399,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "words sorted by length" },
+            { id: 1, label: "words sorted by length", keywords: [{ pattern: "sort\\s*\\(" }, { pattern: "\\.(size|length)\\s*\\(\\s*\\)\\s*[<>]" }] },
           ],
         },
       },
@@ -425,7 +437,9 @@ int main() {
     cout << contains(v,2);
     return 0;
 }`,
-          tests: [{ id: 1, label: "contains returns true for existing element" }],
+          tests: [
+            { id: 1, label: "contains returns true for existing element", keywords: [{ pattern: "bool\\s+contains\\s*\\(" }, { pattern: "\\bfind\\s*\\(|binary_search\\s*\\(|\\bcount\\s*\\(" }] },
+          ],
         },
       },
       {
@@ -465,7 +479,9 @@ int main() {
     cout << squareSum({1,2,3});
     return 0;
 }`,
-          tests: [{ id: 1, label: "squareSum returns 14 for {1,2,3}" }],
+          tests: [
+            { id: 1, label: "squareSum returns 14 for {1,2,3}", keywords: [{ pattern: "int\\s+squareSum\\s*\\(" }, { pattern: "transform\\s*\\(|\\w+\\s*\\*\\s*\\w+" }, { pattern: "accumulate\\s*\\(|\\+=" }] },
+          ],
         },
       },
     ],
@@ -540,7 +556,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Counter outputs 0 1 2" },
+            { id: 1, label: "Counter outputs 0 1 2", keywords: [{ pattern: "(struct|class)\\s+Counter\\b" }, { pattern: "operator\\s*\\(\\s*\\)\\s*\\(" }, { pattern: "\\+\\+" }] },
           ],
         },
       },
@@ -576,7 +592,9 @@ int main() {
     for (auto &p : v) cout << p.first << ':' << p.second << ' ';
     return 0;
 }`,
-          tests: [{ id: 1, label: "Pairs sorted by second element" }],
+          tests: [
+            { id: 1, label: "Pairs sorted by second element", keywords: [{ pattern: "sort\\s*\\(" }, { pattern: "\\.second\\s*[<>]" }] },
+          ],
         },
       },
     ],
@@ -622,6 +640,7 @@ int main() {
           description: "Implement a function that reverses the order of elements in a queue<int> using a stack.",
           starterCode: `#include <queue>
 #include <stack>
+#include <iostream>
 using namespace std;
 
 queue<int> reverseQueue(queue<int> q) {
@@ -641,6 +660,7 @@ int main() {
 }`,
           solutionCode: `#include <queue>
 #include <stack>
+#include <iostream>
 using namespace std;
 
 queue<int> reverseQueue(queue<int> q) {
@@ -668,7 +688,7 @@ int main() {
     return 0;
 }`,
           tests: [
-            { id: 1, label: "Queue reversed" },
+            { id: 1, label: "Queue reversed", keywords: [{ pattern: "stack\\s*<" }, { pattern: "\\.top\\s*\\(\\s*\\)" }, { pattern: "\\.push\\s*\\(" }] },
           ],
         },
       },
@@ -704,7 +724,9 @@ int main() {
     for (int i = 0; i < 3 && !pq.empty(); ++i) { cout << pq.top() << ' '; pq.pop(); }
     return 0;
 }`,
-          tests: [{ id: 1, label: "Top 3 values printed" }],
+          tests: [
+            { id: 1, label: "Top 3 values printed", keywords: [{ pattern: "priority_queue\\s*<" }, { pattern: "\\.top\\s*\\(\\s*\\)" }, { pattern: "\\.pop\\s*\\(\\s*\\)" }] },
+          ],
         },
       },
     ],
@@ -761,7 +783,7 @@ int main() {
     if (v.size() == 10) return 0; else return 1;
 }`,
           tests: [
-            { id: 1, label: "Vector size is 10" },
+            { id: 1, label: "Vector size is 10", keywords: [{ pattern: "vector\\s*<\\s*int\\s*>\\s*\\w+\\s*\\(\\s*10\\s*\\)|\\.resize\\s*\\(\\s*10\\s*\\)" }, { pattern: "\\.size\\s*\\(\\s*\\)" }] },
           ],
         },
       },
@@ -837,7 +859,7 @@ int main() {
     if (src.empty() && dst.size() == 3) return 0; else return 1;
 }`,
           tests: [
-            { id: 1, label: "Source empty after move" },
+            { id: 1, label: "Source empty after move", keywords: [{ pattern: "\\bmove\\s*\\(" }, { pattern: "\\.empty\\s*\\(\\s*\\)" }] },
           ],
         },
       },
@@ -869,7 +891,7 @@ int main() {
 #include <iostream>
 using namespace std;
 
-struct Item { Item(string s){ cout << "constructed\n"; } };
+struct Item { Item(string s){ cout << "constructed\\n"; } };
 
 int main() {
     vector<Item> v;
@@ -877,7 +899,9 @@ int main() {
     v.push_back(Item("b"));
     return 0;
 }`,
-          tests: [{ id: 1, label: "Demonstrate construction messages" }],
+          tests: [
+            { id: 1, label: "Demonstrate construction messages", keywords: [{ pattern: "emplace_back\\s*\\(" }, { pattern: "push_back\\s*\\(" }, { pattern: "cout\\s*<<" }] },
+          ],
         },
       },
     ],
