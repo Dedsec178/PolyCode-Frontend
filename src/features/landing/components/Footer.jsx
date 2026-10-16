@@ -1,6 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BookOpen, Bot, Github, Mail, Shield, Zap } from "lucide-react";
+import { BookOpen, Bot, Github, Mail, MessageCircle, Shield, Zap } from "lucide-react";
+
+function openQuantumChat(event) {
+  event.preventDefault();
+  window.dispatchEvent(new Event("open-polycode-quantumchat"));
+}
 
 function openPolyMentor(event) {
   event.preventDefault();
@@ -59,6 +64,10 @@ export default function Footer() {
                 <Zap size={15} aria-hidden />
                 Playground
               </Link>
+              <a href="https://chat.quantumlogicslimited.com/" onClick={openQuantumChat}>
+                <MessageCircle size={15} aria-hidden />
+                QuantumChat
+              </a>
             </nav>
           </div>
 

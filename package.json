@@ -25,6 +25,8 @@
     "react-scripts": "5.0.1",
     "react-syntax-highlighter": "^16.1.1",
     "remark-gfm": "^4.0.1",
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

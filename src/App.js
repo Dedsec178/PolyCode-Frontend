@@ -18,6 +18,7 @@ import SelectionPins from "./shared/components/SelectionPins";
 import { LearnNavProvider } from "./features/learn/shared/LearnNavContext";
 import GlobalAssistant from "./features/assistant/components/GlobalAssistant";
 import { AssistantProvider } from "./features/assistant/context/AssistantContext";
+import QuantumChatDock from "./features/quantumchat/components/QuantumChatDock";
 import "./App.css";
 import "./styles/theme-light.css";
 import "./styles/theme-palettes.css";
@@ -3203,6 +3204,7 @@ function App() {
             <ScrollToTop />
             <AppRoutes />
             <GlobalAssistant />
+            <QuantumChatDock />
           </AssistantProvider>
         </Router>
       </PlaygroundProvider>
