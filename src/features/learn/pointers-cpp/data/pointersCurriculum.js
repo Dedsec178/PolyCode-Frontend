@@ -1665,7 +1665,7 @@ int main() {
 }`,
           tests: [
             { id: 1, label: "make_shared", keywords: ["make_shared<int>"] },
-            { id: 2, label: "Copy shared_ptr", keywords: ["auto b = a", "shared_ptr"] },
+            { id: 2, label: "Copy shared_ptr", keywords: [{ pattern: "(auto|shared_ptr\\s*<\\s*int\\s*>)\\s+\\w+\\s*=\\s*\\w+\\s*;" }] },
             { id: 3, label: "use_count printed", keywords: ["use_count()"] },
           ],
         },
