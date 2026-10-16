@@ -4303,7 +4303,7 @@ for t, x_t in enumerate(sequence):
     print(f"Step {t}: h = {h.round(4)}")`,
           tests: [
             { id: 1, label: "Uses np.tanh", keywords: ["np.tanh"] },
-            { id: 2, label: "Iterates over sequence", keywords: [{ pattern: "for\\s+\\w+.*in\\s+sequence" }] },
+            { id: 2, label: "Iterates over sequence", keywords: [{ pattern: "for\\s+\\w+.*\\bin\\s+(enumerate\\s*\\(\\s*)?sequence\\b" }] },
             { id: 3, label: "Prints h each step", keywords: [{ pattern: "print\\s*\\(" }] },
           ],
         },
@@ -5263,7 +5263,7 @@ print("Generated mean:", round(samples.mean(), 3))
 print("Generated std:", round(samples.std(), 3))`,
           tests: [
             { id: 1, label: "Defines generator", keywords: [{ pattern: "def\\s+generator\\s*\\(" }] },
-            { id: 2, label: "Applies transformation", keywords: ["z * w", "w * z"] },
+            { id: 2, label: "Applies transformation", keywords: [{ pattern: "\\bz\\s*\\*\\s*w\\b|\\bw\\s*\\*\\s*z\\b" }] },
             { id: 3, label: "Prints mean and std", keywords: [".mean()", ".std()"] },
           ],
         },
