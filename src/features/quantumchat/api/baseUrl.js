@@ -1,43 +1,20 @@
-const LEGACY_PROD_BACKEND = "https://quantum-chat-backend.vercel.app";
-const PROD_BACKEND = "https://quantum-chat-backend-six.vercel.app";
-/** CRA setupProxy.js mounts the QuantumChat API under this path (dev only). */
-const DEV_PROXY_BASE = "/qc-api";
-
-function normalizeApiBaseUrl(url) {
-  const trimmed = String(url || "")
-    .trim()
-    .replace(/\/$/, "");
-  if (trimmed === LEGACY_PROD_BACKEND) return PROD_BACKEND;
-  return trimmed;
-}
-
-function isLocalhostUrl(url) {
-  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/?$/i.test(url);
-}
+/**
+ * Same-origin path that forwards to the QuantumChat backend:
+ * - dev: CRA setupProxy.js
+ * - prod: the `/qc-api` rewrite in vercel.json
+ * Calling the backend directly from the browser is blocked by CORS because
+ * its allowlist does not include this site's origin.
+ */
+const PROXY_BASE = "/qc-api";
 
 export function getApiBaseUrl() {
-  const configured = normalizeApiBaseUrl(
-    process.env.REACT_APP_QUANTUMCHAT_API_URL || "",
-  );
-  if (configured) {
-    if (process.env.NODE_ENV === "production" && isLocalhostUrl(configured)) {
-      return PROD_BACKEND;
-    }
-    // Absolute remote URLs from localhost are blocked by CORS until the
-    // QuantumChat backend allowlist includes this origin — use the CRA proxy instead.
-    if (
-      process.env.NODE_ENV !== "production" &&
-      !isLocalhostUrl(configured) &&
-      !configured.startsWith("/")
-    ) {
-      return DEV_PROXY_BASE;
-    }
-    return configured;
-  }
-  if (process.env.NODE_ENV !== "production") {
-    return DEV_PROXY_BASE;
-  }
-  return PROD_BACKEND;
+  const configured = String(process.env.REACT_APP_QUANTUMCHAT_API_URL || "")
+    .trim()
+    .replace(/\/$/, "");
+  // Allow overriding with another same-origin path; absolute URLs are only
+  // used as the proxy target (setupProxy.js / vercel.json), never fetched directly.
+  if (configured.startsWith("/")) return configured;
+  return PROXY_BASE;
 }
 
 export function getApiUrl() {
