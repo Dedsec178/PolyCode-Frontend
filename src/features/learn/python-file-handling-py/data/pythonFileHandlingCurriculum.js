@@ -1855,6 +1855,7 @@ print(target)`,
 from pathlib import Path
 
 src = Path("input.txt")
+src.write_text("hello\\n")
 backup = Path("backup.txt")
 shutil.copy2(src, backup)
 print("copied")`,
@@ -1884,6 +1885,7 @@ print("copied")`,
 from pathlib import Path
 
 source = Path("source.txt")
+source.write_text("hello\\n")
 dest = Path("dest.txt")
 shutil.copy2(source, dest)
 print("copied")`,
