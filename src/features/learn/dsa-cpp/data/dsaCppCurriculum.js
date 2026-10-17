@@ -136,7 +136,7 @@ int main()
           starterCode: `// Problem: Given sorted array and target, find pair. // Best pattern:`,
           solutionCode: `// Two pointers`,
           tests: [
-            { id: 1, label: "Picked pattern: two-pointers", keywords: [{ pattern: "Two pointers" }, { pattern: "two pointers" }] },
+            { id: 1, label: "Picked pattern: two-pointers", keywords: [{ pattern: "two[\\s-]*pointers?", flags: "i" }] },
           ],
         },
       },
@@ -224,11 +224,7 @@ int main() {
   return 0;
 }`,
           tests: [
-            {
-              id: 1,
-              label: "Uses loop to sum",
-              keywords: [{ pattern: "for\\s*\\(" }, { pattern: "s\\+=" }],
-            },
+            { id: 1, label: "Uses loop to sum", keywords: [{ pattern: "(for|while)\\s*\\(" }, { pattern: "\\w+\\s*\\+=\\s*\\w+" }] },
           ],
         },
       },
@@ -333,15 +329,7 @@ int main() {
   return 0;
 }`,
           tests: [
-            {
-              id: 1,
-              label: "Uses two-pointer approach",
-              keywords: [
-                "l=0",
-                "r=a.size()-1",
-                { pattern: "return\\s*\\{\\s*l\\s*,\\s*r\\s*\\}" },
-              ],
-            },
+            { id: 1, label: "Uses two-pointer approach", keywords: [{ pattern: "\\b\\w+\\s*=\\s*0\\s*;" }, { pattern: "=\\s*(\\(\\s*int\\s*\\)\\s*|static_cast\\s*<\\s*int\\s*>\\s*\\(\\s*)?\\w+\\.size\\s*\\(\\s*\\)\\s*\\)?\\s*-\\s*1" }, { pattern: "while\\s*\\(\\s*\\w+\\s*<\\s*\\w+\\s*\\)" }] },
           ],
         },
       },
@@ -772,7 +760,7 @@ int main() {
   return 0;
 }`,
           tests: [
-            { id:1, label: "Uses recursion or stack", keywords: ["inorder", "stack<"] },
+            { id: 1, label: "Uses recursion or stack", keywords: [{ pattern: "\\w+\\s*\\(\\s*\\w+\\s*->\\s*left\\b|stack\\s*<" }] },
           ],
         },
       },
@@ -974,7 +962,7 @@ int main() {
   return 0;
 }`,
           tests: [
-            { id:1, label: "Uses queue BFS", keywords: ["queue<", "push(", "distance["] },
+            { id: 1, label: "Uses queue BFS", keywords: [{ pattern: "queue\\s*<" }, { pattern: "\\.push\\s*\\(" }, { pattern: "\\.pop\\s*\\(\\s*\\)" }, { pattern: "\\b(dist|distance|visited|seen|level)\\w*\\s*\\[" }] },
           ],
         },
       },
@@ -1187,7 +1175,7 @@ int main() {
   return 0;
 }`,
           tests: [
-            { id:1, label: "Sort by end time", keywords: ["sort(", "end_time", "endTime"] },
+            { id: 1, label: "Sort by end time", keywords: [{ pattern: "sort\\s*\\(" }, { pattern: "\\.second\\s*<\\s*\\w+\\.second|end_?[tT]ime\\s*<" }] },
           ],
         },
       },
